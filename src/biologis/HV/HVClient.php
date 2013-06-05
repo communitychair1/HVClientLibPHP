@@ -27,9 +27,10 @@ class HVClient implements HVClientInterface, LoggerAwareInterface {
    * @param array $session
    *   Session array, in most cases $_SESSION
    */
-  public function __construct($appId, &$session) {
+  public function __construct($appId, &$session, $user) {
     $this->appId = $appId;
     $this->session = & $session;
+    $this->user = $user;
   }
 
   /**
@@ -41,6 +42,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface {
    *   TODO reference to Microsoft documentation for valid countries
    * @param string $languages
    *   TODO reference to Microsoft documentation for valid languages
+   * Mostly replaced in typical workflow, must still be called on initial paring of account.
    */
   public function connect($thumbPrint = NULL, $privateKey = NULL, $country = NULL, $language = NULL) {
     if (!$this->logger) {
@@ -65,17 +67,55 @@ class HVClient implements HVClientInterface, LoggerAwareInterface {
     $this->connector->connect();
   }
 
+    /**
+     * @param null $thumbPrint
+     * @param null $privateKey
+     * @param null $country
+     * @param null $language
+     * Generates Auth Token and Allows for offline access to healthvault.
+     * Replaces connect function in typical workflow
+     */
+    public function offlineConnect($thumbPrint = NULL, $privateKey = NULL, $country = NULL, $language = NULL)
+  {
+    if(!$this->connector)
+    {
+      $this->conenctor = new HVRawConnector($this->appId, $thumbPrint, $privateKey, $this->session);
+      $this->connector->setLogger(($this->logger));
+    }
+
+    $this->connector->setHealthVaultPlatform($this->healthVaultPlatform);
+
+    if ($country) {
+      $this->connector->setCountry($country);
+    }
+
+    if ($language) {
+      $this->connector->setLanguage($language);
+    }
+
+    $this->connector->offlineConnect();
+  }
+
   public function disconnect() {
     unset($this->session['healthVault']);
     unset($this->connector);
     $this->connection = NULL;
   }
 
-  public function getAuthenticationURL($redirectUrl) {
+    /**
+     * @param $redirectUrl
+     * @return string
+     */
+    public function getAuthenticationURL($redirectUrl) {
     return HVRawConnector::getAuthenticationURL($this->appId, $redirectUrl, $this->session, $this->healthVaultAuthInstance);
   }
 
-  public function getPersonInfo() {
+    /**
+     * @return PersonInfo
+     * @throws HVClientNotConnectedException
+     * Only function to still require traditional connect().  Should only be called during initial account pairing.
+     */
+    public function getPersonInfo() {
     if ($this->connector) {
       $this->connector->authenticatedWcRequest('GetPersonInfo');
       $qp = $this->connector->getQueryPathResponse();
@@ -89,7 +129,15 @@ class HVClient implements HVClientInterface, LoggerAwareInterface {
     }
   }
 
-  public function getThings($thingNameOrTypeId, $recordId, $options = array()) {
+    /**
+     * @param $thingNameOrTypeId
+     * @param $recordId
+     * @param array $options
+     * @return array
+     * @throws HVClientNotConnectedException
+     * Modified to Retrieve things through offline access
+     */
+    public function getThings($thingNameOrTypeId, $recordId, $options = array()) {
     if ($this->connector) {
       $typeId = HealthRecordItemFactory::getTypeId($thingNameOrTypeId);
 
@@ -97,11 +145,12 @@ class HVClient implements HVClientInterface, LoggerAwareInterface {
         'group max' => 30,
       );
 
-      $this->connector->authenticatedWcRequest(
+      $this->connector->offlineRequest(
         'GetThings',
         '3',
         '<group max="' . $options['group max'] . '"><filter><type-id>' . $typeId . '</type-id></filter><format><section>core</section><xml/></format></group>',
-        array('record-id' => $recordId)
+        array('record-id' => $recordId),
+        $this->user
       );
 
       $things = array();
@@ -118,7 +167,62 @@ class HVClient implements HVClientInterface, LoggerAwareInterface {
     }
   }
 
-  public function putThings($things, $recordId) {
+    /**
+     * @param $typeId
+     * @param $rootElementType
+     * @param $usr
+     * @return string
+     * @throws HVClientNotConnectedException
+     * Returns base64 string for the personal image in healthvault
+     * @notes need to refactor to make more efficient
+     */
+    public function getPersonalImage($typeId, $rootElementType, $usr)
+    {
+      $options = array();
+
+      if ($this->connector) {
+
+        $options += array(
+          'group max' => 30,
+        );
+
+        $this->connector->offlineRequest(
+          'GetThings',
+          '2',
+          '<group max="' . $options['group max'] . '"><filter><type-id>' . $typeId . '</type-id></filter><format><section>otherdata</section><xml/></format></group>',
+          array('record-id' => $usr->getHvRecordID()),
+          $usr
+        );
+
+        $qp = $this->connector->getQueryPathResponse();
+        $qpThings = $qp->branch()->find('thing');
+        foreach ($qpThings as $qpThing) {
+          $things[] = HealthRecordItemFactory::getThing(qp('<?xml version="1.0"?>' . $qpThing->xml(), NULL, array('use_parser' => 'xml')));
+        }
+        $test = $qp->get('document')->textContent;
+        $test = explode('/', $test);
+        $img = '';
+        for($i = 1; $i < sizeof($test); $i++)
+        {
+          $img .= '/'.$test[$i];
+        }
+
+        //$test = $things[0]->$rootElementType;
+        return 'data:image/jpeg;base64,' . $img;
+
+
+      }else{
+            throw new HVClientNotConnectedException();
+      }
+    }
+
+    /**
+     * @param $things
+     * @param $recordId
+     * @throws HVClientNotConnectedException
+     * Modified to work with offline access
+     */
+    public function putThings($things, $recordId) {
     if ($this->connector) {
       $payload = '';
 
@@ -130,7 +234,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface {
         $payload .= $thing->getItemXml();
       }
 
-      $this->connector->authenticatedWcRequest(
+      $this->connector->offlineRequest(
         'PutThings',
         '1',
         $payload,
@@ -142,26 +246,45 @@ class HVClient implements HVClientInterface, LoggerAwareInterface {
     }
   }
 
-  public function setHealthVaultAuthInstance($healthVaultAuthInstance) {
+    /**
+     * @param $healthVaultAuthInstance
+     */
+    public function setHealthVaultAuthInstance($healthVaultAuthInstance) {
     $this->healthVaultAuthInstance = $healthVaultAuthInstance;
   }
 
+ /**
+  * @return string
+  */
   public function getHealthVaultAuthInstance() {
     return $this->healthVaultAuthInstance;
   }
 
+  /**
+   * @param $healthVaultPlatform
+   */
   public function setHealthVaultPlatform($healthVaultPlatform) {
     $this->healthVaultPlatform = $healthVaultPlatform;
   }
 
+    /**
+     * @return string
+     */
   public function getHealthVaultPlatform() {
     return $this->healthVaultPlatform;
   }
 
+    /**
+     * @param HVRawConnectorInterface $connector
+     */
   public function setConnector(HVRawConnectorInterface $connector) {
     $this->connector = $connector;
   }
 
+    /**
+     * @param LoggerInterface $logger
+     * @return null|void
+     */
   public function setLogger(LoggerInterface $logger) {
     $this->logger = $logger;
   }
