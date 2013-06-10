@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<thing>
+    <type-id name="Personal Demographic Information">92ba621e-66b3-4a01-bd73-74844aed4f5b</type-id>
+    <data-xml>
+        <name>
+            <full />
+            <first />
+            <middle />
+            <last />
+        </name>
+        <birthdate>
+            <date>
+                <y />
+                <m />
+                <d />
+            </date>
+            <time>
+                <h />
+                <m />
+                <s />
+                <f />
+            </time>
+        </birthdate>
+        <blood-type>
+            <text />
+        </blood-type>
+        <ethnicity>
+            <text />
+        </ethnicity>
+    </data-xml>
+</thing>
