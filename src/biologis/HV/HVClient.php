@@ -11,6 +11,7 @@ namespace biologis\HV;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Symfony\Component\DependencyInjection\SimpleXMLElement;
 
 class HVClient implements HVClientInterface, LoggerAwareInterface
 {
@@ -89,8 +90,8 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
 
     public function disconnect()
     {
-        unset($this->session['healthVault']);
-        unset($this->connector);
+        $this->session['healthVault'] = null;
+        $this->connector = null;
         $this->connection = NULL;
     }
 
@@ -234,7 +235,17 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
             foreach ($things as $thing)
             {
                 $payload .= $thing->getItemXml();
+
             }
+            $sxml = new SimpleXMLElement($payload);
+            //print_r($sxml->{'data-xml'}->contact->contact->address->city);
+            $sxml->{'data-xml'}->contact->contact->address->city = "Newark";
+            $sxml->asXML();
+            print_r($payload);
+            echo "<br /><br />";
+            $payload = $sxml->asXML();
+            $payload = substr($sxml->asXml(), 20);
+            print_r($payload);
 
             if($this->online)
             {
@@ -342,6 +353,11 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
     public function setConnector(HVRawConnectorInterface $connector)
     {
         $this->connector = $connector;
+    }
+
+    public function getConnector()
+    {
+        return $this->connector;
     }
 
     /**
