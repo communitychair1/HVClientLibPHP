@@ -221,7 +221,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
      * @throws HVClientNotConnectedException
      * Modified to work with offline access
      */
-    public function putThings($things, $recordId)
+    public function putThings($thing, $recordId)
     {
         if ($this->connector)
         {
@@ -231,7 +231,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
                 $this->connector->authenticatedWcRequest(
                     'PutThings',
                     '1',
-                    $payload,
+                    $thing,
                     array('record-id' => $recordId),
                     $this->personId
                 );
@@ -242,7 +242,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
                 $this->connector->offlineRequest(
                     'PutThings',
                     '1',
-                    $payload,
+                    $thing,
                     array('record-id' => $recordId),
                     $this->personId
                 );
