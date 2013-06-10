@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<thing>
+    <type-id name="Contact">162dd12d-9859-4a66-b75f-96760d67072b</type-id>
+    <data-xml>
+        <contact>
+            <address>
+                <street />
+                <city />
+                <state />
+                <postcode />
+                <country />
+            </address>
+            <phone>
+                <number />
+            </phone>
+            <email>
+                <address />
+            </email>
+        </contact>
+    </data-xml>
+</thing>
