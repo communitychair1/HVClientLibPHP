@@ -225,27 +225,6 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
     {
         if ($this->connector)
         {
-            $payload = '';
-
-            if ($things instanceof HealthRecordItemData)
-            {
-                $things = array($things);
-            }
-
-            foreach ($things as $thing)
-            {
-                $payload .= $thing->getItemXml();
-
-            }
-            $sxml = new SimpleXMLElement($payload);
-            //print_r($sxml->{'data-xml'}->contact->contact->address->city);
-            $sxml->{'data-xml'}->contact->contact->address->city = "Newark";
-            $sxml->asXML();
-            print_r($payload);
-            echo "<br /><br />";
-            $payload = $sxml->asXML();
-            $payload = substr($sxml->asXml(), 20);
-            print_r($payload);
 
             if($this->online)
             {
