@@ -1,9 +1,7 @@
 <?php
 
 /**
- * @copyright Copyright 2013 Markus Kalkbrenner, bio.logis GmbH (https://www.biologis.com)
  * @license GPLv2
- * @author Markus Kalkbrenner <info@bio.logis.de>
  */
 
 namespace biologis\HV;
@@ -139,6 +137,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
      * Normal GetThings Method, Used for anything that returns simple XML data that needs to be parsed
      * Works in both Online and Offline mode, and picks the appropriate request depending on which is active.
      */
+     
     public function getThings($thingNameOrTypeId, $recordId, $options = array(), $base64 = false)
     {
         if ($this->connector)
@@ -221,6 +220,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
      * @throws HVClientNotConnectedException
      * Modified to work with offline access
      */
+     
     public function putThings($thing, $recordId)
     {
         if ($this->connector)
@@ -262,6 +262,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
      * TRUE == Online
      * FALSE == Offline
      */
+     
     public function getOnlineMode()
     {
         return $this->online;
@@ -270,6 +271,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
     /**
      * Closes the current connection and reinitialize it in offline mode
      */
+     
     public function offlineMode()
     {
         if ($this->online)
@@ -284,6 +286,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
     /**
      * Closes the current connection and reinitialize it in online mode
      */
+     
     public function onlineMode()
     {
         if (!$this->online)
@@ -297,6 +300,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
     /**
      * @param $healthVaultAuthInstance
      */
+     
     public function setHealthVaultAuthInstance($healthVaultAuthInstance)
     {
         $this->healthVaultAuthInstance = $healthVaultAuthInstance;
@@ -305,6 +309,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
     /**
      * @return string
      */
+     
     public function getHealthVaultAuthInstance()
     {
         return $this->healthVaultAuthInstance;
@@ -313,6 +318,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
     /**
      * @param $healthVaultPlatform
      */
+     
     public function setHealthVaultPlatform($healthVaultPlatform)
     {
         $this->healthVaultPlatform = $healthVaultPlatform;
@@ -321,6 +327,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
     /**
      * @return string
      */
+     
     public function getHealthVaultPlatform()
     {
         return $this->healthVaultPlatform;
@@ -329,6 +336,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
     /**
      * @param HVRawConnectorInterface $connector
      */
+     
     public function setConnector(HVRawConnectorInterface $connector)
     {
         $this->connector = $connector;
@@ -343,9 +351,107 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
      * @param LoggerInterface $logger
      * @return null|void
      */
+     
     public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
+    }
+    
+     /**
+     * @param $hvItem
+     * @param $usrRecordId
+     * @param $base64
+     * @return SimpleXMLElement
+     *
+     * This function gets an item from healthvault to use as a tempalte and creates a simpleXML Object from it.
+     */
+
+    public function getItemTemplate($hvItem, $usrRecordId, $base64)
+    {
+        $itemObject = $this->getThings($hvItem, $usrRecordId, array(), $base64);
+        $sxml = new SimpleXMLElement($itemObject[0]->getItemXml());
+
+        return $sxml;
+    }
+
+    /**
+     * @param $sxml
+     * @param $elementPath
+     * @param $updateVaule
+     * @throws Exception
+     *
+     * This method will take a SimpleXML object in by reference and update or insert an element on it.
+     */
+
+    public function upsertElementInTemplate(&$sxml, $elementPath, $updateVaule)
+    {
+
+        //TODO - Find a way to get rid of this big messy switch statement
+
+        $splitPath = explode("->", $elementPath);
+
+        $splitPath = array_map('trim', $splitPath);
+        $path_count = count($splitPath);
+        switch($path_count) 
+        {
+            case 1:
+                $sxml->{'data-xml'}->{$splitPath[0]} = $updateVaule;
+                break;
+            case 2:
+                $sxml->{'data-xml'}->{$splitPath[0]}->{$splitPath[1]} = $updateVaule;
+                break;
+            case 3:
+                $sxml->{'data-xml'}->{$splitPath[0]}->{$splitPath[1]}->{$splitPath[2]} = $updateVaule;
+                break;
+            case 4:
+                $sxml->{'data-xml'}->{$splitPath[0]}->{$splitPath[1]}->{$splitPath[2]}->{$splitPath[3]} = $updateVaule;
+                break;
+            case 5:
+                $sxml->{'data-xml'}->{$splitPath[0]}->{$splitPath[1]}->{$splitPath[2]}->{$splitPath[3]}->{$splitPath[4]}= $updateVaule;
+                break;
+            case 6:
+                $sxml->{'data-xml'}->{$splitPath[0]}->{$splitPath[1]}->{$splitPath[2]}->{$splitPath[3]}->{$splitPath[4]}= $updateVaule;
+                break;
+            case 7:
+                $sxml->{'data-xml'}->{$splitPath[0]}->{$splitPath[1]}->{$splitPath[2]}->{$splitPath[3]}->{$splitPath[4]}= $updateVaule;
+                break;
+            case 8:
+                $sxml->{'data-xml'}->{$splitPath[0]}->{$splitPath[1]}->{$splitPath[2]}->{$splitPath[3]}->{$splitPath[4]}= $updateVaule;
+                break;
+            default:
+                throw new Exception('Invalid number of children in XML: ' . $path_count);
+                break;
+        }
+    }
+
+    /**
+     * @param $sxml
+     * @return string
+     * This function will remove the top line from the xml that is passed in. This is needed because
+     * more xml is wrapped around the 'thing' xml later in the request, but the function asXML() automatically
+     * adds an XML header.
+     */
+     
+    public function stripXMLHeader($sxml)
+    {
+
+        $xmlLines = explode("\n", $sxml->asXML());
+
+        $xmlString = "";
+        $flag = false;
+
+        foreach ($xmlLines as $line)
+        {
+            if ($flag == false)
+            {
+                $flag = true; //TODO Refactor this so that we have a smarter way of dropping the first line
+            }
+            else
+            {
+                $xmlString .= $line;
+            }
+        }
+        return $xmlString;
     }
 
 }
