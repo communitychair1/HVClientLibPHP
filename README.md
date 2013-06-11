@@ -162,4 +162,3 @@ Licence
 -------
 
 [GPLv2](https://raw.github.com/mkalkbrenner/HVClientLibPHP/master/LICENSE.txt).
-
