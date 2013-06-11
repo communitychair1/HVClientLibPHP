@@ -410,13 +410,13 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
                 $sxml->{'data-xml'}->{$splitPath[0]}->{$splitPath[1]}->{$splitPath[2]}->{$splitPath[3]}->{$splitPath[4]}= $updateVaule;
                 break;
             case 6:
-                $sxml->{'data-xml'}->{$splitPath[0]}->{$splitPath[1]}->{$splitPath[2]}->{$splitPath[3]}->{$splitPath[4]}= $updateVaule;
+                $sxml->{'data-xml'}->{$splitPath[0]}->{$splitPath[1]}->{$splitPath[2]}->{$splitPath[3]}->{$splitPath[4]}->{$splitPath[5]}= $updateVaule;
                 break;
             case 7:
-                $sxml->{'data-xml'}->{$splitPath[0]}->{$splitPath[1]}->{$splitPath[2]}->{$splitPath[3]}->{$splitPath[4]}= $updateVaule;
+                $sxml->{'data-xml'}->{$splitPath[0]}->{$splitPath[1]}->{$splitPath[2]}->{$splitPath[3]}->{$splitPath[4]}->{$splitPath[5]}->{$splitPath[6]}= $updateVaule;
                 break;
             case 8:
-                $sxml->{'data-xml'}->{$splitPath[0]}->{$splitPath[1]}->{$splitPath[2]}->{$splitPath[3]}->{$splitPath[4]}= $updateVaule;
+                $sxml->{'data-xml'}->{$splitPath[0]}->{$splitPath[1]}->{$splitPath[2]}->{$splitPath[3]}->{$splitPath[4]}->{$splitPath[5]}->{$splitPath[6]}->{$splitPath[7]}= $updateVaule;
                 break;
             default:
                 throw new Exception('Invalid number of children in XML: ' . $path_count);
