@@ -163,10 +163,3 @@ Licence
 
 [GPLv2](https://raw.github.com/mkalkbrenner/HVClientLibPHP/master/LICENSE.txt).
 
-
-Sponsor
--------
-[bio.logis](https://www.biologis.com) offers users of
-[pgsbox.de](https://pgsbox.com)[pgsbox.com] and (https://pgsbox.de) a way to
-upload their diagnostic reports to HealthVault.
-
