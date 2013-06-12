@@ -5,6 +5,7 @@ namespace biologis\HV;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use biologis\HV\HVRawConnector;
 use biologis\HV\HVClient;
+use Symfony\Component\DependencyInjection\SimpleXMLElement;
 
 class HVClientTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,7 +15,9 @@ class HVClientTest extends \PHPUnit_Framework_TestCase
     private $thumbPrint;
     private $privateKey;
     private $logger = null;
-
+    private $elementPath;
+    private $updateValue;
+    private $sxml;
     protected function setUp()
     {
         $baseConfigPath = realpath("../app/Resources/HealthVault/dev");
@@ -25,6 +28,10 @@ class HVClientTest extends \PHPUnit_Framework_TestCase
         $this->personId = '3933614a-92bc-4da5-95c0-6085f7aef4aa';
         $this->recordId = '97cb6d50-8c8e-4aff-8818-483efdfed7d5';
         $this->hv = new HVClient($this->appId, $this->session, $this->personId, false);
+        $this->elementPath = 'test->test->test';
+        $this->updateValue= 'it works';
+        $this->sxml = new SimpleXMLElement('<music>\n<album>Beethoven</album>\n</music>');
+
         //print_r($this->thumbPrint);
     }
 
@@ -101,17 +108,47 @@ class HVClientTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->hv->getOnlineMode());
     }
 
-    public function testOnlineMode()
+//    public function testOnlineMode()
+//    {
+//        $this->hv->onlineMode();
+//        $this->assertTrue($this->hv->getOnlineMode());
+//    }
+
+    public function testSetHealthVaultAuthInstance()
     {
-        //$this->hv->onlineMode();
-        //$this->assertTrue($this->hv->getOnlineMode());
+        $this->hv->setHealthVaultAuthInstance('testing');
+        $this->assertEquals('testing',$this->hv->getHealthVaultAuthInstance(),'Setting the HVAuthInstance does not work');
     }
 
-    public function testGetTypeId()
+    public function testGetThingId()
     {
         $this->hv->connect($this->thumbPrint, $this->privateKey);
         $thingId = $this->hv->getThingId($this->recordId, "92ba621e-66b3-4a01-bd73-74844aed4f5b");
         $this->assertEquals('6de9dbe7-17f2-4016-b372-b6e9bd610554', $thingId[0]);
         $this->assertEquals('3f11ce6c-1f5b-47ab-8550-3ecc55393b46', $thingId[1]);
+    }
+
+    public function testSetHealthVaultPlatform()
+    {
+        $this->hv->setHealthVaultPlatform('testing');
+        $this->assertEquals('testing',$this->hv->getHealthVaultPlatform(),'Setting the HVPlatform does not work');
+    }
+
+    public function testUpsertElementInTemplate()
+    {
+        $xml = $this->sxml;
+        $elementPath = $this->elementPath;
+        $updateValue = $this->updateValue;
+        $this->hv->upsertElementInTemplate($xml, $elementPath, $updateValue);
+
+        $this->assertEquals('it works',$xml->{'data-xml'}->{'test'}->{'test'}->{'test'},'XML Template Update did not work');
+
+    }
+
+    public function testStripXMLHeader()
+    {
+        $xml = simplexml_load_string('<music>\n<album>Beethoven</album>\n</music>');
+        $xml = simplexml_load_string($this->hv->stripXMLHeader($xml));
+        $this->assertObjectNotHasAttribute('music',$xml);
     }
 }
