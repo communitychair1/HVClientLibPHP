@@ -94,13 +94,24 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
     }
 
     /**
+     * This will form the URL to present to the user for them to authorize an application to access their HealthVault records.
+     * See HVRawConnector
+     *
      * @param $redirectUrl
+     * @param string $target
+     * @param array $additionalTargetQSParams
      * @return string
      */
-
-    public function getAuthenticationURL($redirectUrl)
+    public function getAuthenticationURL($redirectUrl, $target = null, $additionalTargetQSParams = null )
     {
-        return HVRawConnector::getAuthenticationURL($this->appId, $redirectUrl, $this->session, $this->healthVaultAuthInstance);
+        return HVRawConnector::getAuthenticationURL(
+            $this->appId,
+            $redirectUrl,
+            $this->session,
+            $this->healthVaultAuthInstance,
+            $target,
+            $additionalTargetQSParams
+        );
     }
 
     /**
