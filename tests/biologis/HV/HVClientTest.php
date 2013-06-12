@@ -106,4 +106,11 @@ class HVClientTest extends \PHPUnit_Framework_TestCase
         //$this->hv->onlineMode();
         //$this->assertTrue($this->hv->getOnlineMode());
     }
+
+    public function testGetTypeId()
+    {
+        $this->hv->connect($this->thumbPrint, $this->privateKey);
+        $thingId = $this->hv->getThingId($this->recordId, "92ba621e-66b3-4a01-bd73-74844aed4f5b");
+        $this->assertEquals('6de9dbe7-17f2-4016-b372-b6e9bd610554', $thingId[0]);
+    }
 }

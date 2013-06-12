@@ -201,7 +201,6 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
                 {
                     $img .= '/' . $imgData[$i];
                 }
-
                 //$test = $things[0]->$rootElementType;
                 return 'data:image/jpeg;base64,' . $img;
             }
@@ -452,6 +451,12 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
             }
         }
         return $xmlString;
+    }
+
+    public function getThingId($recordId, $typeId, $base64 = FALSE)
+    {
+        $sxml = $this->getItemTemplate($typeId, $recordId, $base64);
+        return $sxml->{'thing-id'};
     }
 
 }
