@@ -456,7 +456,15 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
     public function getThingId($recordId, $typeId, $base64 = FALSE)
     {
         $sxml = $this->getItemTemplate($typeId, $recordId, $base64);
-        return $sxml->{'thing-id'};
+        //print_r($sxml->{'thing-id'}->attributes());
+        $array = array();
+        $thingId = $sxml->{'thing-id'};
+        $array[0] = $thingId[0];
+        foreach($thingId->attributes() as $key => $value)
+        {
+            $array[1] = $value;
+        }
+        return $array;
     }
 
 }

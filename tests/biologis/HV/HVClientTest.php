@@ -112,5 +112,6 @@ class HVClientTest extends \PHPUnit_Framework_TestCase
         $this->hv->connect($this->thumbPrint, $this->privateKey);
         $thingId = $this->hv->getThingId($this->recordId, "92ba621e-66b3-4a01-bd73-74844aed4f5b");
         $this->assertEquals('6de9dbe7-17f2-4016-b372-b6e9bd610554', $thingId[0]);
+        $this->assertEquals('3f11ce6c-1f5b-47ab-8550-3ecc55393b46', $thingId[1]);
     }
 }
