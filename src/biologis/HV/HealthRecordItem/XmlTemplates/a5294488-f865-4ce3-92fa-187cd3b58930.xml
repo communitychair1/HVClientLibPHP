@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <thing>
+    <thing-id version-stamp=""></thing-id>
     <type-id name="Personal Image">a5294488-f865-4ce3-92fa-187cd3b58930</type-id>
     <data-other />
 </thing>
