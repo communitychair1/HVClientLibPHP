@@ -120,13 +120,23 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
      * Only function to still require traditional connect().  Should only be called during initial account pairing.
      */
 
-    public function getPersonInfo()
+        public function getPersonInfo()
     {
         if ($this->connector)
         {
-            $this->connector->authenticatedWcRequest('GetPersonInfo');
+
+            if($this->online)
+            {
+                $this->connector->authenticatedWcRequest('GetPersonInfo');
+            }
+            else
+            {
+                $this->connector->offlineRequest('GetPersonInfo', 1, '', NULL, $this->personId);
+            }
+
             $qp = $this->connector->getQueryPathResponse();
             $qpPersonInfo = $qp->find('person-info');
+
             if ($qpPersonInfo)
             {
                 return new PersonInfo(qp('<?xml version="1.0"?>' . $qpPersonInfo->xml(), NULL, array('use_parser' => 'xml')));
