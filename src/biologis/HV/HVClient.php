@@ -30,10 +30,10 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
      * @param $online
      */
 
-    public function __construct($appId, &$session, $personId, $online = true)
+    public function __construct($appId, $personId, $online = true)
     {
         $this->appId = $appId;
-        $this->session = & $session;
+        $this->session = array();
         $this->personId = $personId;
         $this->online = $online;
     }
