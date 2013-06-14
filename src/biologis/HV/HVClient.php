@@ -389,7 +389,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
     public function getItemTemplate($hvItem, $usrRecordId, $base64)
     {
         $itemObject = $this->getThings($hvItem, $usrRecordId, array(), $base64);
-        $sxml = new SimpleXMLElement($itemObject[0]->getItemXml());
+            $sxml = new SimpleXMLElement($itemObject[0]->getItemXml());
 
         return $sxml;
     }
@@ -480,10 +480,10 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
         //print_r($sxml->{'thing-id'}->attributes());
         $array = array();
         $thingId = $sxml->{'thing-id'};
-        $array[0] = $thingId[0];
+        $array[0] = $thingId[0][0];
         foreach($thingId->attributes() as $key => $value)
         {
-            $array[1] = $value;
+            $array[1] = $value[0];
         }
         return $array;
     }
