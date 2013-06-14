@@ -15,27 +15,41 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
 {
 
     private $appId;
-    private $session;
-    private $online;
+    private $config;
     private $connector = NULL;
     private $personId;
     private $logger = NULL;
     private $healthVaultPlatform = 'https://platform.healthvault-ppe.com/platform/wildcat.ashx';
     private $healthVaultAuthInstance = 'https://account.healthvault-ppe.com/redirect.aspx';
+    private $thumbPrint = NULL;
+    private $privateKey = NULL;
 
     /**
+     * @param $thumbPrint
+     * @param $privateKey
      * @param $appId
-     * @param $session
      * @param $personId
-     * @param $online
+     * @param bool $online
+     * @param array $config - Pass in optional items such as recordId, country, language.
      */
-
-    public function __construct($appId, $personId, $online = true)
+    public function __construct($thumbPrint,
+                                $privateKey,
+                                $appId,
+                                $personId = null,
+                                $config = array() )
     {
+
+
+        //$country = NULL,
+        //$language = NULL,
+
+        $this->thumbPrint = $thumbPrint;
+        $this->privateKey = $privateKey;
         $this->appId = $appId;
-        $this->session = array();
         $this->personId = $personId;
-        $this->online = $online;
+        $this->config = $config;
+
+        $this->logger = new NullLogger();
     }
 
     /**
@@ -50,35 +64,19 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
      * Initializes the RawConnecter if there is not already one, and calls it's conncet function
      */
 
-    public function connect($thumbPrint = NULL, $privateKey = NULL, $country = NULL, $language = NULL)
+    public function connect()
     {
-        if (!$this->logger)
-        {
-            $this->logger = new NullLogger();
-        }
-
         //If there is no connector, generate one and set it's logger
         if (!$this->connector)
         {
-            $this->connector = new HVRawConnector($this->appId, $thumbPrint, $privateKey, $this->session, $this->online);
+            $this->connector = new HVRawConnector($this->appId, $this->thumbPrint, $this->privateKey, $this->config);
             $this->connector->setLogger($this->logger);
         }
 
         //Configure connector
         $this->connector->setHealthVaultPlatform($this->healthVaultPlatform);
-
-        if ($country)
-        {
-            $this->connector->setCountry($country);
-        }
-
-        if ($language)
-        {
-            $this->connector->setLanguage($language);
-        }
-
-        $this->connector->connect();
-
+        $authToken = $this->connector->connect();
+        return $authToken;
     }
 
     /**
@@ -88,7 +86,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
 
     public function disconnect()
     {
-        $this->session['healthVault'] = null;
+        $this->config['healthVault'] = null;
         $this->connector = null;
         $this->connection = NULL;
     }
@@ -107,7 +105,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
         return HVRawConnector::getAuthenticationURL(
             $this->appId,
             $redirectUrl,
-            $this->session,
+            $this->config,
             $this->healthVaultAuthInstance,
             $target,
             $additionalTargetQSParams
@@ -119,20 +117,12 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
      * @throws HVClientNotConnectedException
      * Only function to still require traditional connect().  Should only be called during initial account pairing.
      */
-
-        public function getPersonInfo()
+    public function getPersonInfo()
     {
         if ($this->connector)
         {
 
-            if($this->online)
-            {
-                $this->connector->authenticatedWcRequest('GetPersonInfo');
-            }
-            else
-            {
-                $this->connector->offlineRequest('GetPersonInfo', 1, '', NULL, $this->personId);
-            }
+            $this->connector->makeRequest('GetPersonInfo', 1, '', NULL, $this->personId);
 
             $qp = $this->connector->getQueryPathResponse();
             $qpPersonInfo = $qp->find('person-info');
@@ -182,25 +172,14 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
             }
 
 
-            if ($this->online)
-            {
-                $this->connector->authenticatedWcRequest(
-                    'GetThings',
-                    $version,
-                    $info,
-                    array('record-id' => $recordId)
-                );
-            }
-            else
-            {
-                $this->connector->offlineRequest(
+            $this->connector->makeRequest(
                     'GetThings',
                     $version,
                     $info,
                     array('record-id' => $recordId),
                     $this->personId
-                );
-            }
+            );
+
 
             $things = array();
             $qp = $this->connector->getQueryPathResponse();
@@ -216,15 +195,14 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
             else
             {
                 $imgData = $qp->get('document')->textContent;
-                $img = substr($imgData, 73);
-
-                $imgData = base64_decode($img);
-
-                $f = finfo_open();
-
-                $mime_type = finfo_buffer($f, $imgData, FILEINFO_MIME_TYPE);
-
-                return "data:" . $mime_type . ";base64," . $img;
+                $imgData = explode('/', $imgData);
+                $img = '';
+                for ($i = 1; $i < sizeof($imgData); $i++)
+                {
+                    $img .= '/' . $imgData[$i];
+                }
+                //$test = $things[0]->$rootElementType;
+                return 'data:image/jpeg;base64,' . $img;
             }
 
 
@@ -239,36 +217,18 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
      * @param $things
      * @param $recordId
      * @throws HVClientNotConnectedException
-     * Modified to work with offline access
      */
-     
     public function putThings($thing, $recordId)
     {
         if ($this->connector)
         {
-
-            if($this->online)
-            {
-                $this->connector->authenticatedWcRequest(
-                    'PutThings',
-                    '1',
-                    $thing,
-                    array('record-id' => $recordId),
-                    $this->personId
-                );
-            }
-
-            else
-            {
-                $this->connector->offlineRequest(
-                    'PutThings',
-                    '1',
-                    $thing,
-                    array('record-id' => $recordId),
-                    $this->personId
-                );
-            }
-
+            $this->connector->makeRequest(
+                'PutThings',
+                '1',
+                $thing,
+                array('record-id' => $recordId),
+                $this->personId
+            );
         }
         else
         {
@@ -286,36 +246,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
      
     public function getOnlineMode()
     {
-        return $this->online;
-    }
-
-    /**
-     * Closes the current connection and reinitialize it in offline mode
-     */
-     
-    public function offlineMode()
-    {
-        if ($this->online)
-        {
-            $this->online = false;
-            //$this->disconnect();
-            $this->connecter = null;
-            $this->connect();
-        }
-    }
-
-    /**
-     * Closes the current connection and reinitialize it in online mode
-     */
-     
-    public function onlineMode()
-    {
-        if (!$this->online)
-        {
-            $this->online = true;
-            $this->connector = null;
-            $this->connect();
-        }
+        return isset( $this->config['wctoken'] );
     }
 
     /**
@@ -384,13 +315,13 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
      * @param $base64
      * @return SimpleXMLElement
      *
-     * This function gets an item from healthvault to use as a tempalte and creates a simpleXML Object from it.
+     * This function gets an item from HealthVault to use as a template and creates a simpleXML Object from it.
      */
 
     public function getItemTemplate($hvItem, $usrRecordId, $base64)
     {
         $itemObject = $this->getThings($hvItem, $usrRecordId, array(), $base64);
-            $sxml = new SimpleXMLElement($itemObject[0]->getItemXml());
+        $sxml = new SimpleXMLElement($itemObject[0]->getItemXml());
 
         return $sxml;
     }
@@ -481,13 +412,14 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
         //print_r($sxml->{'thing-id'}->attributes());
         $array = array();
         $thingId = $sxml->{'thing-id'};
-        $array[0] = $thingId[0][0];
+        $array[0] = $thingId[0];
         foreach($thingId->attributes() as $key => $value)
         {
-            $array[1] = $value[0];
+            $array[1] = $value;
         }
         return $array;
     }
+
 }
 
 class HVClientException extends \Exception
