@@ -16,7 +16,7 @@ interface HVClientInterface {
    * @param string $privateKey
    *   Private key as string or file path to load private key from
    */
-  public function connect($thumbPrint = NULL, $privateKey = NULL);
+  public function connect();
 
   public function disconnect();
 
