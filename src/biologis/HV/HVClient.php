@@ -148,7 +148,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
      * Normal GetThings Method, Used for anything that returns simple XML data that needs to be parsed
      * Works in both Online and Offline mode, and picks the appropriate request depending on which is active.
      */
-     
+
     public function getThings($thingNameOrTypeId, $recordId, $options = array(), $base64 = false)
     {
         if ($this->connector)
@@ -160,24 +160,29 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
                 'group max' => 30,
             );
 
+            //Establish filters if they exist
+            $filters = (array_key_exists('filters',$options) ? $options['filters'] : '');
+
             if (!$base64)
             {
-                $info = '<group max="' . $options['group max'] . '"><filter><type-id>' . $typeId . '</type-id></filter><format><section>core</section><xml/></format></group>';
+                $info = '<group max="' . $options['group max'] . '"><filter><type-id>' . $typeId . '</type-id>'
+                    . $filters . '</filter><format><section>core</section><xml/></format></group>';
                 $version = '3';
             }
             else
             {
-                $info = '<group max="' . $options['group max'] . '"><filter><type-id>' . $typeId . '</type-id></filter><format><section>otherdata</section><xml/></format></group>';
+                $info = '<group max="' . $options['group max'] . '"><filter><type-id>' . $typeId . '</type-id>'
+                    . $filters . '</filter><format><section>otherdata</section><xml/></format></group>';
                 $version = '2';
             }
 
 
             $this->connector->makeRequest(
-                    'GetThings',
-                    $version,
-                    $info,
-                    array('record-id' => $recordId),
-                    $this->personId
+                'GetThings',
+                $version,
+                $info,
+                array('record-id' => $recordId),
+                $this->personId
             );
 
 
@@ -244,7 +249,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
      * TRUE == Online
      * FALSE == Offline
      */
-     
+
     public function getOnlineMode()
     {
         return isset( $this->config['wctoken'] );
@@ -253,7 +258,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
     /**
      * @param $healthVaultAuthInstance
      */
-     
+
     public function setHealthVaultAuthInstance($healthVaultAuthInstance)
     {
         $this->healthVaultAuthInstance = $healthVaultAuthInstance;
@@ -262,7 +267,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
     /**
      * @return string
      */
-     
+
     public function getHealthVaultAuthInstance()
     {
         return $this->healthVaultAuthInstance;
@@ -271,7 +276,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
     /**
      * @param $healthVaultPlatform
      */
-     
+
     public function setHealthVaultPlatform($healthVaultPlatform)
     {
         $this->healthVaultPlatform = $healthVaultPlatform;
@@ -280,7 +285,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
     /**
      * @return string
      */
-     
+
     public function getHealthVaultPlatform()
     {
         return $this->healthVaultPlatform;
@@ -289,7 +294,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
     /**
      * @param HVRawConnectorInterface $connector
      */
-     
+
     public function setConnector(HVRawConnectorInterface $connector)
     {
         $this->connector = $connector;
@@ -304,13 +309,13 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
      * @param LoggerInterface $logger
      * @return null|void
      */
-     
+
     public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
     }
-    
-     /**
+
+    /**
      * @param $hvItem
      * @param $usrRecordId
      * @param $base64
@@ -345,7 +350,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
 
         $splitPath = array_map('trim', $splitPath);
         $path_count = count($splitPath);
-        switch($path_count) 
+        switch($path_count)
         {
             case 1:
                 $sxml->{'data-xml'}->{$splitPath[0]} = $updateVaule;
@@ -384,7 +389,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
      * more xml is wrapped around the 'thing' xml later in the request, but the function asXML() automatically
      * adds an XML header.
      */
-     
+
     public function stripXMLHeader($sxml)
     {
 
