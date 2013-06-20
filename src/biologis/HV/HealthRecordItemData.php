@@ -98,4 +98,28 @@ class HealthRecordItemData extends AbstractXmlEntity {
       $qpElement->branch()->find('y')->text()
     );
   }
+
+    /**
+     * Will remove the node if the value is empty. Otherwise, set the value.
+     *
+     * @param $hvXMLThing - XML Object to perform action on.
+     * @param $nodeName - Name of the node to search for, using QueryPath
+     * @param $value - Value to add in. If empty, the node will be removed.
+     */
+    public static function removeOrUpdateIfEmpty($hvXMLThing, $nodeName, $value)
+    {
+        // Find the node
+        $node = $hvXMLThing->getQp()->find($nodeName);
+        if ( !empty($node) )
+        {
+            if ( empty($value) )
+            {
+                $hvXMLThing->getQp()->remove($node);
+            }
+            else
+            {
+                $hvXMLThing->text($value);
+            }
+        }
+    }
 }
