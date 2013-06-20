@@ -17,7 +17,6 @@ class HVClientTest extends \PHPUnit_Framework_TestCase
     private $personId;
     private $thumbPrint;
     private $privateKey;
-    private $logger = null;
     private $elementPath;
     private $updateValue;
     private $sxml;
