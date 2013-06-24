@@ -4,10 +4,7 @@ namespace biologis\HV;
 
 use biologis\HV\HVClientBaseTest;
 
-<<<<<<< HEAD
-=======
 require_once("HVClientBaseTest.php");
->>>>>>> 3b888faee09a6984074db10c38364677acbe44dc
 
 class HVFilterTest extends HVClientBaseTest
 {
