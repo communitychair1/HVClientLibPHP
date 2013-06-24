@@ -142,7 +142,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
     }
 
     /**
-     * @param $thingNameOrTypeId
+     * @param $groupAndFilter : associative array of Type ID : and filter
      * @param $recordId
      * @param array $options
      * @param bool $base64
@@ -152,34 +152,43 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
      * Works in both Online and Offline mode, and picks the appropriate request depending on which is active.
      */
 
-    public function getThings($thingNameOrTypeId, $recordId, $options = array(), $base64 = false)
+    public function getThings($groupAndFilter = array(), $recordId, $options = array(), $base64 = false)
     {
         if ($this->connector)
         {
-            $typeId = HealthRecordItemFactory::getTypeId($thingNameOrTypeId);
+            //create a group of HV type - ID's associated with filters.
+            $requestGroupFilter = array();
+            foreach($groupAndFilter as $id => $filter){
+                $requestGroupFilter[HealthRecordItemFactory::getTypeId($id)] = $filter;
+            }
 
-
+            //set the group max
             $options += array(
                 'group max' => 30,
             );
 
-            //Establish filters if they exist
-            $filters = (array_key_exists('filters',$options) ? $options['filters'] : '');
-
+            //Create the XML info element, check first for Base64
+            $info = '';
             if (!$base64)
             {
-                $info = '<group max="' . $options['group max'] . '"><filter><type-id>' . $typeId . '</type-id>'
-                    . $filters . '</filter><format><section>core</section><xml/></format></group>';
+                foreach($requestGroupFilter as $id => $filter)
+                {
+                    $info .=
+                        '<group max="' . $options['group max'] . '">
+                        <filter><type-id>' . $id . '</type-id>'. $filter . '</filter>
+                        <format><section>core</section><xml/></format></group>';
+                }
                 $version = '3';
             }
             else
             {
-                $info = '<group max="' . $options['group max'] . '"><filter><type-id>' . $typeId . '</type-id>'
-                    . $filters . '</filter><format><section>otherdata</section><xml/></format></group>';
+                $info = '<group max="' . $options['group max'] . '">
+                        <filter><type-id>' . key($requestGroupFilter) . '</type-id>'
+                        . '</filter><format><section>otherdata</section><xml/></format></group>';
                 $version = '2';
             }
 
-
+            //make the request;
             $this->connector->makeRequest(
                 'GetThings',
                 $version,
@@ -188,10 +197,11 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
                 $this->personId
             );
 
-
+            //user query path to get the 'Things'
             $things = array();
             $qp = $this->connector->getQueryPathResponse();
             $qpThings = $qp->branch()->find('thing');
+
             if (!$base64)
             {
                 foreach ($qpThings as $qpThing)
@@ -223,7 +233,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
     }
 
     /**
-     * @param $things
+     * @param $thing
      * @param $recordId
      * @throws HVClientNotConnectedException
      */
@@ -329,7 +339,10 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
 
     public function getItemTemplate($hvItem, $usrRecordId, $base64)
     {
-        $itemObject = $this->getThings($hvItem, $usrRecordId, array(), $base64);
+        $typeId = array(
+            $hvItem => ''
+        );
+        $itemObject = $this->getThings($typeId, $usrRecordId, array(), $base64);
         $sxml = new SimpleXMLElement($itemObject[0]->getItemXml());
 
         return $sxml;
