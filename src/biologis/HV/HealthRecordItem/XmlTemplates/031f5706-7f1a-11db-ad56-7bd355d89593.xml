@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<thing>
+  <type-id name="Sleep Related Activity">031f5706-7f1a-11db-ad56-7bd355d89593</type-id>
+  <data-xml>
+      <sleep-pm>
+          <when></when>
+          <caffeine></caffeine>
+          <alcohol></alcohol>
+          <nap>
+              <when></when>
+              <minutes></minutes>
+          </nap>
+          <exercise>
+              <when></when>
+              <minutes></minutes>
+          </exercise>
+          <sleepiness></sleepiness>
+      </sleep-pm>
+  </data-xml>
+</thing>
