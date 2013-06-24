@@ -9,44 +9,21 @@ use biologis\HV\HVRawConnector;
 use biologis\HV\HVClient;
 use Symfony\Component\DependencyInjection\SimpleXMLElement;
 use DateTime;
+use biologis\HV\HVClientBaseTest;
 
-class HVClientTest extends \PHPUnit_Framework_TestCase
+class HVClientTest extends HVClientBaseTest
 {
-    private $appId;
-    private $session;
-    private $personId;
-    private $thumbPrint;
-    private $privateKey;
-    private $elementPath;
-    private $updateValue;
-    private $sxml;
-    protected function setUp()
-    {
-        $baseConfigPath = realpath("../app/Resources/HealthVault/dev");
-        $this->appId = file_get_contents($baseConfigPath . '/app.id');
-        $this->thumbPrint = file_get_contents($baseConfigPath . '/app.fp');
-        $this->privateKey = file_get_contents($baseConfigPath . '/app.pem');
-        $this->session = array();
-        $this->personId = '3933614a-92bc-4da5-95c0-6085f7aef4aa';
-        $this->recordId = '97cb6d50-8c8e-4aff-8818-483efdfed7d5';
-        $this->hv = new HVClient($this->appId, $this->personId, false);
-        $this->elementPath = 'test->test->test';
-        $this->updateValue= 'it works';
-        $this->sxml = new SimpleXMLElement('<music>\n<album>Beethoven</album>\n</music>');
-
-        //print_r($this->thumbPrint);
-    }
 
     public function testConnect()
     {
         //Offline Only
-        $this->hv->connect($this->thumbPrint, $this->privateKey);
+        $this->hv->connect();
         //$this->assertNotEmpty($this->session['healthVault']['authToken']);
     }
 
     public function testDisconnect()
     {
-        $this->hv->connect($this->thumbPrint, $this->privateKey);
+        $this->hv->connect();
         $this->hv->disconnect();
         $this->assertNull($this->hv->getConnector());
         //$this->assertNull($this->session['healthVault']);
@@ -54,14 +31,14 @@ class HVClientTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAuthenticationURL()
     {
-        $this->hv->connect($this->thumbPrint, $this->privateKey);
+        $this->hv->connect();
         $url = $this->hv->getAuthenticationURL("hvauthenticate");
         $this->assertNotEmpty($url);
     }
 
     public function getPersonInfo()
     {
-        $this->hv->connect($this->thumbPrint, $this->privateKey);
+        $this->hv->connect();
         $personInfo = $this->hv->getPersonInfo();
         $this->assertEquals($this->personId, $personInfo->person_id);
         $this->assertEquals($this->recordId, $personInfo->selected_record_id);
@@ -69,7 +46,7 @@ class HVClientTest extends \PHPUnit_Framework_TestCase
 
     public function testGetThings()
     {
-        $this->hv->connect($this->thumbPrint, $this->privateKey);
+        $this->hv->connect();
 
         $userData = $this->hv->getThings(
             "Personal Demographic Information",
@@ -95,7 +72,7 @@ class HVClientTest extends \PHPUnit_Framework_TestCase
 
     public function testPutThings()
     {
-        $this->hv->connect($this->thumbPrint, $this->privateKey);
+        $this->hv->connect();
 
         //Check text base PUTs
         //Example: Weight
@@ -168,7 +145,7 @@ class HVClientTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOnlineMode()
     {
-        $this->hv->connect($this->thumbPrint, $this->privateKey);
+        $this->hv->connect();
         $this->assertFalse($this->hv->getOnlineMode());
     }
 
@@ -192,7 +169,7 @@ class HVClientTest extends \PHPUnit_Framework_TestCase
 
     public function testGetThingId()
     {
-        $this->hv->connect($this->thumbPrint, $this->privateKey);
+        $this->hv->connect();
         $thingId = $this->hv->getThingId($this->recordId, "92ba621e-66b3-4a01-bd73-74844aed4f5b");
 
         $this->assertEquals('6de9dbe7-17f2-4016-b372-b6e9bd610554', $thingId[0]);

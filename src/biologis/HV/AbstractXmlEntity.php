@@ -38,8 +38,10 @@ abstract class AbstractXmlEntity {
     return null;
   }
 
-
-  public function getQp() {
+    /**
+     * @return \QueryPath
+     */
+    public function getQp() {
     return $this->qp->top();
   }
 

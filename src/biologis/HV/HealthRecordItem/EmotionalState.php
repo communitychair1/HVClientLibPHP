@@ -21,13 +21,16 @@ class EmotionalState extends HealthRecordItemData
 
     public static function createFromData($when, $mood = null, $stress = null, $wellbeing = null)
     {
+        /**
+         * @var $emotionalState EmotionalState
+         */
         $emotionalState = HealthRecordItemFactory::getThing('Emotional State');
         // Save the time
         $emotionalState->setTimestamp('when', $when);
         // Add item or remove node if value is empty
-        HealthRecordItemData::removeOrUpdateIfEmpty($emotionalState, "mood", $mood);
-        HealthRecordItemData::removeOrUpdateIfEmpty($emotionalState, "stress", $stress);
-        HealthRecordItemData::removeOrUpdateIfEmpty($emotionalState, "wellbeing", $wellbeing);
+        $emotionalState->removeOrUpdateIfEmpty( "mood", $mood);
+        $emotionalState->removeOrUpdateIfEmpty( "stress", $stress);
+        $emotionalState->removeOrUpdateIfEmpty( "wellbeing", $wellbeing);
         return $emotionalState;
     }
 

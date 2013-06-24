@@ -2,44 +2,19 @@
 
 namespace biologis\HV;
 
-use Doctrine\Bundle\DoctrineBundle\Tests\DependencyInjection\TestDatetimeFunction;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use biologis\HV\HVRawConnector;
-use biologis\HV\HVClient;
+use biologis\HV\HVClientBaseTest;
 
-class HVClientTest2 extends \PHPUnit_Framework_TestCase
+
+class HVFilterTest extends HVClientBaseTest
 {
-    /**
-     * @var HVRawConnector
-     */
-    private $connector;
-    /**
-     * @var HVClient
-     */
-    private $hv = null;
-    private $appId;
-    private $session;
-    private $personId;
-    private $thumbPrint;
-    private $privateKey;
-    private $recordId;
 
     /**
-     * Sets everything neccessary for health vault testing
+     * Sets everything necessary for health vault testing
      */
     protected function setUp()
     {
-        $baseConfigPath = realpath("/Applications/MAMP/htdocs/mentis/portal-web/trunk/app/Resources/HealthVault/dev");
-        $this->appId = file_get_contents($baseConfigPath . '/app.id');
-        $this->thumbPrint = file_get_contents($baseConfigPath . '/app.fp');
-        $this->privateKey = file_get_contents($baseConfigPath . '/app.pem');
-        $this->session = & $_SESSION;
-        $this->personId = 'ff4a3ed4-eb68-439a-ba96-3a2fdae2dd1c';
-        $this->recordId = '0f7430d2-0c24-4f00-a100-28dae9eb8ec8';
-        $config = array();
-        $this->hv = new HVClient($this->thumbPrint, $this->privateKey, $this->appId, $this->personId, $config );
+        parent::setUp();
         $this->hv->connect($this->thumbPrint, $this->privateKey);
-        $this->connector = $this->hv->getConnector();
     }
 
     /**
@@ -48,7 +23,6 @@ class HVClientTest2 extends \PHPUnit_Framework_TestCase
     public function testSetUp()
     {
         $this->assertNotNull($this->hv);
-        $this->assertNotNull($this->connector);
     }
 
 

@@ -75,6 +75,7 @@ class HealthRecordItemData extends AbstractXmlEntity {
     $qpElement->find('time')->replaceWith('<time>' . date('<\h>H</\h><\m>i</\m><\s>s</\s><\f>0</\f>', $timestamp). '</time>');
   }
 
+
   /**
    * Helper function to get a timestamp from a Health Record Item.
    *
@@ -102,23 +103,24 @@ class HealthRecordItemData extends AbstractXmlEntity {
     /**
      * Will remove the node if the value is empty. Otherwise, set the value.
      *
-     * @param $hvXMLThing - XML Object to perform action on.
      * @param $nodeName - Name of the node to search for, using QueryPath
      * @param $value - Value to add in. If empty, the node will be removed.
      */
-    public static function removeOrUpdateIfEmpty($hvXMLThing, $nodeName, $value)
+    public function removeOrUpdateIfEmpty($nodeName, $value)
     {
+        // echo "$nodeName , $value \n"
         // Find the node
-        $node = $hvXMLThing->getQp()->find($nodeName);
+        $node = $this->getQp()->find($nodeName);
         if ( !empty($node) )
         {
+            // No value, so remove the node
             if ( empty($value) )
             {
-                $hvXMLThing->getQp()->remove($node);
+                $node->remove();
             }
             else
             {
-                $hvXMLThing->text($value);
+                $node->text($value);
             }
         }
     }
