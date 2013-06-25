@@ -124,4 +124,15 @@ class HealthRecordItemData extends AbstractXmlEntity {
             }
         }
     }
+
+    /**
+     * Helper function to add the necessary XML for a time
+     * @param $parent
+     * @param int $nodeName
+     * @param $tstamp
+     */
+    public function setTime($node, $tstamp)
+    {
+        $node->append(date('<\h>H</\h><\m>i</\m><\s>s</\s><\f>0</\f>', $tstamp) );
+    }
 }

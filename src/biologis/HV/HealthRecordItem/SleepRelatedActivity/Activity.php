@@ -28,4 +28,5 @@ class Activity {
         $this->minutes = $minutes;
     }
 
+    // TODO: Give ability to have this generate the XML instead of the parent class performing the action.
 }
