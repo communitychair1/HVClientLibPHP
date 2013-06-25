@@ -29,9 +29,6 @@ class HVFilterTest extends HVClientBaseTest
 
     public function testFilters()
     {
-        //init local variables
-        $queryData = '';
-
         //Test filtered query one:
         //      Return all weight created after 2012
         $XpathQuery1 = "/thing/data-xml/weight/when/date[y &gt; 2012]";
@@ -41,15 +38,17 @@ class HVFilterTest extends HVClientBaseTest
         $XpathQuery2 = "/thing/data-xml/weight/value[kg &lt; 88]";
 
         //Init filters for query 1
-        $filters = array(
-            'filters' => '<thing-state>Active</thing-state><xpath>'. $XpathQuery1 .'</xpath>'
+        $groupReq = array(
+            "Weight Measurement" => '<thing-state>Active</thing-state><xpath>'. $XpathQuery1 .'</xpath>'
         );
+
+        $options = array();
 
         //Make request to retrieve person info;
         $queryData = $this->hv->getThings(
-            "Weight Measurement",
+            $groupReq,
             $this->recordId,
-            $filters,
+            $options,
             false
         );
 
@@ -65,17 +64,13 @@ class HVFilterTest extends HVClientBaseTest
             $this->assertNotNull($weight->{'weight'}->{'value'});
         }
 
-
-        //Init filters for query2
-        $filters = array(
-            'filters' => '<thing-state>Active</thing-state><xpath>'. $XpathQuery2 .'</xpath>'
-        );
+        $groupReq["Weight Measurement"] = '<thing-state>Active</thing-state><xpath>'. $XpathQuery2 .'</xpath>';
 
         //Run query 2
         $queryData = $this->hv->getThings(
-            "Weight Measurement",
+            $groupReq,
             $this->recordId,
-            $filters,
+            $options,
             false
         );
 

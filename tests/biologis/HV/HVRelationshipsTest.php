@@ -2,11 +2,15 @@
 
 namespace biologis\HV;
 
-use biologis\HV\HVClientBaseTest;
+use Doctrine\Bundle\DoctrineBundle\Tests\DependencyInjection\TestDatetimeFunction;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use biologis\HV\HVRawConnector;
+use biologis\HV\HVClient;
+
+require_once("HVClientBaseTest.php");
 
 class HVRelationshipsTest extends HVClientBaseTest
 {
-
 
     /**
      * Sets everything neccessary for health vault testing
@@ -17,6 +21,13 @@ class HVRelationshipsTest extends HVClientBaseTest
         $this->hv->connect($this->thumbPrint, $this->privateKey);
     }
 
+    /**
+     * Tests the set up configuration
+     */
+    public function testSetUp()
+    {
+        $this->assertNotNull($this->hv);
+    }
 
     /**
      * Test:  Gather Authorized Records
@@ -24,10 +35,10 @@ class HVRelationshipsTest extends HVClientBaseTest
      */
     public function testGatherAuthorizedRecords()
     {
-        //Make request to retreive person info;
+        //Make request to retrieve person info;
         $this->personInfo = $this->hv->getPersonInfo();
 
-        //Assert it's existance
+        //Assert it's existence
         $this->assertNotEmpty($this->personInfo->record);
 
         //Create array for all records tied to account

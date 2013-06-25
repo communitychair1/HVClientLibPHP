@@ -158,8 +158,6 @@ class HVGroupTest extends HVClientBaseTest
             false
         );
 
-        //foreach($userData as $data)
-        print_r($userData[1]->contact->contact->email->address);
         $this->assertNotEmpty($userData[0]->personal, "Personal data in the right place");
         $this->assertNotEmpty($userData[1]->contact, "Contact data returned");
 

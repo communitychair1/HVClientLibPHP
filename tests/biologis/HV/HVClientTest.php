@@ -11,8 +11,27 @@ use Symfony\Component\DependencyInjection\SimpleXMLElement;
 use DateTime;
 use biologis\HV\HVClientBaseTest;
 
+require_once("HVClientBaseTest.php");
+
 class HVClientTest extends HVClientBaseTest
 {
+
+    /**
+     * Sets everything neccessary for health vault testing
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->hv->connect($this->thumbPrint, $this->privateKey);
+    }
+
+    /**
+     * Tests the set up configuration
+     */
+    public function testSetUp()
+    {
+        $this->assertNotNull($this->hv);
+    }
 
     public function testConnect()
     {
@@ -49,13 +68,14 @@ class HVClientTest extends HVClientBaseTest
         $this->hv->connect();
 
         $userData = $this->hv->getThings(
-            "Personal Demographic Information",
+            array("Personal Demographic Information" => ''),
             $this->recordId,
-            array()
+            array(),
+            false
         );
 
         $imgData = $this->hv->getThings(
-            "Personal Image",
+            array("Personal Image" => ''),
             $this->recordId,
             array(),
             True
@@ -77,9 +97,10 @@ class HVClientTest extends HVClientBaseTest
         //Check text base PUTs
         //Example: Weight
         $weight = $this->hv->getThings(
-            '3d34d87e-7fc1-4153-800f-f56592cb0d17',
+            array('3d34d87e-7fc1-4153-800f-f56592cb0d17'=>''),
             $this->recordId,
-            array()
+            array(),
+            false
         );
 
         $weight = intval($weight[0]->{'weight'}->{'value'}->{'kg'}->__toString());
@@ -94,9 +115,10 @@ class HVClientTest extends HVClientBaseTest
         $this->hv->putThings($this->hv->stripXMLHeader($sxml), $this->recordId);
 
         $checkWeight = $this->hv->getThings(
-            '3d34d87e-7fc1-4153-800f-f56592cb0d17',
+            array('3d34d87e-7fc1-4153-800f-f56592cb0d17'=>''),
             $this->recordId,
-            array()
+            array(),
+            false
         );
 
 
@@ -107,7 +129,7 @@ class HVClientTest extends HVClientBaseTest
         //Check Base64 Based Puts
         //Using Personal Image
         $imgData = $this->hv->getThings(
-            "a5294488-f865-4ce3-92fa-187cd3b58930",
+            array("a5294488-f865-4ce3-92fa-187cd3b58930"=>''),
             $this->recordId,
             array(),
             True
@@ -124,7 +146,7 @@ class HVClientTest extends HVClientBaseTest
          $this->hv->putThings($this->hv->stripXMLHeader($sxml), $this->recordId);
 
          $imgData3 = $this->hv->getThings(
-             "a5294488-f865-4ce3-92fa-187cd3b58930",
+             array("a5294488-f865-4ce3-92fa-187cd3b58930"=>''),
              $this->recordId,
              array(),
              True
@@ -149,17 +171,6 @@ class HVClientTest extends HVClientBaseTest
         $this->assertFalse($this->hv->getOnlineMode());
     }
 
-    /*public function testOfflineMode()
-    {
-        $this->hv->offlineMode();
-        $this->assertFalse($this->hv->getOnlineMode());
-    }*/
-
-//    public function testOnlineMode()
-//    {
-//        $this->hv->onlineMode();
-//        $this->assertTrue($this->hv->getOnlineMode());
-//    }
 
     public function testSetHealthVaultAuthInstance()
     {
@@ -167,14 +178,14 @@ class HVClientTest extends HVClientBaseTest
         $this->assertEquals('testing',$this->hv->getHealthVaultAuthInstance(),'Setting the HVAuthInstance does not work');
     }
 
-    public function testGetThingId()
-    {
-        $this->hv->connect();
-        $thingId = $this->hv->getThingId($this->recordId, "92ba621e-66b3-4a01-bd73-74844aed4f5b");
-
-        $this->assertEquals('6de9dbe7-17f2-4016-b372-b6e9bd610554', $thingId[0]);
-        $this->assertEquals('f0bfe4ee-0fbe-4c10-8846-220b5b95cb4a', $thingId[1]);
-    }
+//    public function testGetThingId()
+//    {
+//        $this->hv->connect();
+//        $thingId = $this->hv->getThingId($this->recordId, "92ba621e-66b3-4a01-bd73-74844aed4f5b");
+//
+//        $this->assertEquals('6de9dbe7-17f2-4016-b372-b6e9bd610554', $thingId[0]);
+//        $this->assertEquals('f0bfe4ee-0fbe-4c10-8846-220b5b95cb4a', $thingId[1]);
+//    }
 
     public function testSetHealthVaultPlatform()
     {
@@ -182,16 +193,16 @@ class HVClientTest extends HVClientBaseTest
         $this->assertEquals('testing',$this->hv->getHealthVaultPlatform(),'Setting the HVPlatform does not work');
     }
 
-    public function testUpsertElementInTemplate()
-    {
-        $xml = $this->sxml;
-        $elementPath = $this->elementPath;
-        $updateValue = $this->updateValue;
-        $this->hv->upsertElementInTemplate($xml, $elementPath, $updateValue);
-
-        $this->assertEquals('it works',$xml->{'data-xml'}->{'test'}->{'test'}->{'test'},'XML Template Update did not work');
-
-    }
+//    public function testUpsertElementInTemplate()
+//    {
+//        $xml = $this->sxml;
+//        $elementPath = $this->elementPath;
+//        $updateValue = $this->updateValue;
+//        $this->hv->upsertElementInTemplate($xml, $elementPath, $updateValue);
+//
+//        $this->assertEquals('it works',$xml->{'data-xml'}->{'test'}->{'test'}->{'test'},'XML Template Update did not work');
+//
+//    }
 
     public function testStripXMLHeader()
     {
