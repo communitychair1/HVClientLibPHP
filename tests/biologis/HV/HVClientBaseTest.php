@@ -29,13 +29,13 @@ class HVClientBaseTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $baseConfigPath = realpath("/Applications/MAMP/htdocs/mentis/portal-web/trunk/app/Resources/HealthVault/dev");
+        $baseConfigPath = realpath("../app/Resources/HealthVault/dev");
         $this->appId = file_get_contents($baseConfigPath . '/app.id');
         $this->thumbPrint = file_get_contents($baseConfigPath . '/app.fp');
         $this->privateKey = file_get_contents($baseConfigPath . '/app.pem');
         $this->session = array();
-        $this->personId = 'ff4a3ed4-eb68-439a-ba96-3a2fdae2dd1c';
-        $this->recordId = '0f7430d2-0c24-4f00-a100-28dae9eb8ec8';
+        $this->personId = 'fe7e6e83-e8a1-433c-b72d-c52837eb1abd';
+        $this->recordId = '3630afcd-169b-4e79-8b85-c4d0cfee9cd9';
         $this->hv = new HVClient($this->thumbPrint, $this->privateKey, $this->appId, $this->personId, false);
         // echo("AppID: $this->appId Thumb: $this->thumbPrint Private Key: $this->privateKey.");
     }

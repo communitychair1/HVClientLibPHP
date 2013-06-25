@@ -18,14 +18,25 @@ class HealthJournalEntry extends HealthRecordItemData
      * @return mixed
      *
      */
-    public static function createFromData($when, $content = null, $category = null)
+    public static function createFromData($when = null, $descriptiveWhen = null, $content = null, $category = null)
     {
         /**
          * @var $journalEntry HealthJournalEntry
          */
         $journalEntry = HealthRecordItemFactory::getThing('Health Journal Entry');
-        // Save the time
-        $journalEntry->setTimestamp('when', $when);
+        // Either $when or $descriptiveWhen needs to be set. We'll remove the node that we don't use.
+        if ( !empty($when) )
+        {
+            $journalEntry->setTimestamp('when', $when);
+            // Remove the descriptive node.
+            $journalEntry->getQp()->find("descriptive")->remove();
+        }
+        else
+        {
+            $journalEntry->getQp()->find("descriptive")->text($descriptiveWhen);
+            // Remove the when node.
+            $journalEntry->getQp()->find("when structured")->remove();
+        }
 
         // Save the content as well.
         // TODO: Do we need to escape the XML elements?

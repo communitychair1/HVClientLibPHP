@@ -39,7 +39,7 @@ class HVHealthJournalEntryTest extends HVClientBaseTest
 
 
         // Create an emotional state
-        $journalEntry = HealthJournalEntry::createFromData( time(), "Lorem ipsum journal entry text...", "madeupcategory");
+        $journalEntry = HealthJournalEntry::createFromData( time(), null, "Lorem ipsum journal entry text...", "madeupcategory");
 
         $this->assertNotEmpty($journalEntry, "Journal entry object empty.");
         // Grab the XML
@@ -67,14 +67,14 @@ class HVHealthJournalEntryTest extends HVClientBaseTest
 
 
         // Create an emotional state
-        $journalEntry = HealthJournalEntry::createFromData( time(), "Random chars < > ! &gte; break", "category");
+        $journalEntry = HealthJournalEntry::createFromData( time(), null, "Random chars < > ! &gte; break", "category");
 
         $this->assertNotEmpty($journalEntry, "Journal entry object empty.");
         // Grab the XML
         $xml = $journalEntry->getItemXml();
         $this->assertNotEmpty($xml, "itemXml empty");
 
-        echo "XML:: \n $xml \n";
+        // echo "XML:: \n $xml \n";
 
         $this->hv->putThings($xml, $this->recordId );
         $this->assertNotEmpty($this->hv->getConnector()->getRawResponse(),"No response received from HV");
@@ -83,5 +83,31 @@ class HVHealthJournalEntryTest extends HVClientBaseTest
 
     }
 
+    /**
+     * Try setting the descriptive date instead of an actual date.
+     */
+    public function testCreateEmotionalState3()
+    {
+        /**
+         * @var $journalEntry HealthJournalEntry
+         */
+
+
+        // Create an emotional state
+        $journalEntry = HealthJournalEntry::createFromData( null, "yesterday", "Journal entry from 'yesterday'. ", "category");
+
+        $this->assertNotEmpty($journalEntry, "Journal entry object empty.");
+        // Grab the XML
+        $xml = $journalEntry->getItemXml();
+        $this->assertNotEmpty($xml, "itemXml empty");
+
+        // echo "XML:: \n $xml \n";
+
+        $this->hv->putThings($xml, $this->recordId );
+        $this->assertNotEmpty($this->hv->getConnector()->getRawResponse(),"No response received from HV");
+        $this->assertContains("version", $this->hv->getConnector()->getRawResponse(), "Missing version identifier from response");
+        // echo $this->hv->getConnector()->getRawResponse();
+
+    }
 
 }
