@@ -151,14 +151,17 @@ class HVGroupTest extends HVClientBaseTest
 
         $options = array();
         $userData = $this->hv->getThings(
-            array("Personal Demographic Information" => ''),
+            array("Personal Demographic Information" => '',
+                "162dd12d-9859-4a66-b75f-96760d67072b" => ''),
             $this->recordId,
             $options,
             false
         );
 
         //foreach($userData as $data)
-        print_r($userData[0]->personal);
+        print_r($userData[1]->contact->contact->email->address);
+        $this->assertNotEmpty($userData[0]->personal, "Personal data in the right place");
+        $this->assertNotEmpty($userData[1]->contact, "Contact data returned");
 
     }
 }

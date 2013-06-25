@@ -24,8 +24,6 @@ class HVRelationshipsTest extends HVClientBaseTest
      */
     public function testGatherAuthorizedRecords()
     {
-        echo "-----Sanity Check: Gather Authorized Records-----\n";
-
         //Make request to retreive person info;
         $this->personInfo = $this->hv->getPersonInfo();
 
