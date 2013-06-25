@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<thing>
+  <type-id name="Health Journal Entry">21d75546-8717-4deb-8b17-a57f48917790</type-id>
+  <data-xml>
+      <health-journal-entry>
+          <when>
+              <structured>
+                <date></date>
+                <time></time>
+              </structured>
+              <descriptive></descriptive>
+          </when>
+          <content></content>
+          <category><text></text></category>
+      </health-journal-entry>
+  </data-xml>
+</thing>
