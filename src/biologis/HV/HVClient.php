@@ -366,7 +366,6 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
 
         $splitPath = array_map('trim', $splitPath);
         $path_count = count($splitPath);
-        print_r($xml);
         switch($path_count)
         {
             case 1:
