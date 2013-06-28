@@ -42,10 +42,6 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
                                 $config = array() )
     {
 
-
-        //$country = NULL,
-        //$language = NULL,
-
         $this->thumbPrint = $thumbPrint;
         $this->privateKey = $privateKey;
         $this->appId = $appId;
@@ -443,6 +439,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
     }
 
 }
+
 
 class HVClientException extends \Exception
 {

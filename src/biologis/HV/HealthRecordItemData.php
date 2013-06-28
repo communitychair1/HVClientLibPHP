@@ -17,10 +17,12 @@ use QueryPath\Query;
 class HealthRecordItemData extends AbstractXmlEntity {
 
   protected $typeId;
+  protected $version;
 
   public function __construct(Query $qp) {
     $this->qp = $qp;
     $this->typeId = $this->qp->top()->find('type-id')->text();
+    $this->version = $this->qp->top()->find('thing-id')->attr("version-stamp");
     $this->payloadElement = 'data-xml';
   }
 
@@ -135,4 +137,17 @@ class HealthRecordItemData extends AbstractXmlEntity {
     {
         $node->append(date('<\h>H</\h><\m>i</\m><\s>s</\s><\f>0</\f>', $tstamp) );
     }
+
+    /**
+     * Helper function to load up the base json array. Child classes can add the additional record data as needed.
+     */
+    public function getItemJSONArray()
+    {
+        $data = array(
+            "type-id" => $this->typeId,
+            "version" => $this->version
+        );
+        return $data;
+    }
+
 }
