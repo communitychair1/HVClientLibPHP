@@ -424,6 +424,12 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
         return $xmlString;
     }
 
+    /**
+     * @param $recordId
+     * @param $typeId
+     * @param bool $base64
+     * @return array
+     */
     public function getThingId($recordId, $typeId, $base64 = FALSE)
     {
         $sxml = $this->getItemTemplate($typeId, $recordId, $base64);
@@ -436,6 +442,18 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
             $array[1] = $value;
         }
         return $array;
+    }
+
+    public function translateTypeId($typeId)
+    {
+
+        foreach(HVRawConnector::$things as $item => $key)
+        {
+            if($key == $typeId)
+            {
+                return $item;
+            }
+        }
     }
 
 }
