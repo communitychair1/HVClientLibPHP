@@ -4,6 +4,7 @@ namespace biologis\HV\HealthRecordItem;
 
 use biologis\HV\HealthRecordItemData;
 use biologis\HV\HealthRecordItemFactory;
+use QueryPath\Query;
 
 /**
  * Contact Thing
@@ -11,6 +12,28 @@ use biologis\HV\HealthRecordItemFactory;
  */
 class EmotionalState extends HealthRecordItemData
 {
+    protected $when = null;
+    protected $mood = null;
+    protected $stress = null;
+    protected $wellbeing = null;
+
+
+    public function __construct(Query $qp) {
+        parent::__construct($qp);
+        $qpRecord = $qp->top()->find("data-xml");
+
+        if ($qpRecord) {
+            $text = $qp->top()->find("when")->xml();
+            if (!empty($text))
+            {
+                $this->when = $this->getTimestamp("when");
+            }
+
+            $this->mood = $qp->top()->find("mood")->text();
+            $this->stress = $qp->top()->find("stress")->text();
+            $this->wellbeing= $qp->top()->find("wellbeing")->text();
+        }
+    }
 
     /**
      *
@@ -18,7 +41,6 @@ class EmotionalState extends HealthRecordItemData
      * @return mixed
      *
      */
-
     public static function createFromData($when, $mood = null, $stress = null, $wellbeing = null)
     {
         /**
@@ -32,6 +54,19 @@ class EmotionalState extends HealthRecordItemData
         $emotionalState->removeOrUpdateIfEmpty( "stress", $stress);
         $emotionalState->removeOrUpdateIfEmpty( "wellbeing", $wellbeing);
         return $emotionalState;
+    }
+
+    public function getItemJSONArray()
+    {
+        $parentData = parent::getItemJSONArray();
+
+        $myData = array(
+            "when" => $this->when,
+            "mood" => $this->mood,
+            "stress" => $this->stress,
+            "wellbeing" => $this->wellbeing
+        );
+        return array_merge($myData, $parentData);
     }
 
 }

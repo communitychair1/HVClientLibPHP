@@ -62,27 +62,25 @@ class HVHealthJournalParserTest extends HVClientBaseTest
         //Populate the Request group
         // Key = TypeName of Thing to request
         // Value = filter on that thing request
-        $requestGroup["Health Journal Entry"] = "";
-        $requestGroup["Emotional State"] = "";
-        //$requestGroup["Emotional State"] = $timeFilterMin.$timeFilterMax;
+        $requestGroup["Health Journal Entry"] = $timeFilterMin.$timeFilterMax;
 
         //Make the request to health vault.
-        $response = $this->hv->getThings(
+        $hvThingArr = $this->hv->getThings(
             $requestGroup,
             $this->recordId,
             $option,
             false
         );
 
-        /* @var $dataItem HealthRecordItemData */
-        foreach ($response as $dataItem)
+        /* @var $hvThing HealthRecordItemData */
+        foreach ($hvThingArr as $hvThing)
         {
-            print_r($dataItem->getItemJSONArray());
-            // echo json_encode($dataItem->getItemJSONArray());
+            $dataArr = $hvThing->getItemJSONArray();
+            $this->assertArrayHasKey("content", $dataArr);
+            $this->assertArrayHasKey("when", $dataArr);
+            $this->assertArrayHasKey("category text", $dataArr);
+            // echo json_encode($dataArr) . "\n\n\n";
         }
-
-        //print_r($response);
-
 
     }
 

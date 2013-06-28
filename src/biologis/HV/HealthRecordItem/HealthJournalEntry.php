@@ -24,8 +24,12 @@ class HealthJournalEntry extends HealthRecordItemData
         $qpRecord = $qp->top()->find("data-xml");
 
         if ($qpRecord) {
-           // $text = $qp->top()->find("data-xml when")->text();
-           // $this->when = $this->getTimestamp("data-xml when");
+           $text = $qp->top()->find("data-xml when structured")->xml();
+           if (!empty($text))
+           {
+               $this->when = $this->getTimestamp("data-xml when structured");
+           }
+
            $this->descriptiveWhen = $qp->top()->find("data-xml descriptive")->text();
            $this->content = $qp->top()->find("data-xml content")->text();
            $this->category= $qp->top()->find("data-xml category text")->text();
@@ -71,7 +75,7 @@ class HealthJournalEntry extends HealthRecordItemData
 
         $myData = array(
             "when" => $this->when,
-            "descriptive" => $this->descriptiveWhen,
+            "descriptive when" => $this->descriptiveWhen,
             "content" => $this->content,
             "category text" => $this->categoryText
         );
