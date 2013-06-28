@@ -74,12 +74,9 @@ class HVHealthJournalEntryTest extends HVClientBaseTest
         $xml = $journalEntry->getItemXml();
         $this->assertNotEmpty($xml, "itemXml empty");
 
-        // echo "XML:: \n $xml \n";
-
         $this->hv->putThings($xml, $this->recordId );
         $this->assertNotEmpty($this->hv->getConnector()->getRawResponse(),"No response received from HV");
         $this->assertContains("version", $this->hv->getConnector()->getRawResponse(), "Missing version identifier from response");
-        // echo $this->hv->getConnector()->getRawResponse();
 
     }
 

@@ -160,7 +160,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
 
             //set the group max
             $options += array(
-                'group max' => 30,
+                'group max' => 100,
             );
 
             //Create the XML info element, check first for Base64

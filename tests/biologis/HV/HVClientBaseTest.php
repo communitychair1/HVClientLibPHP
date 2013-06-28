@@ -29,7 +29,7 @@ class HVClientBaseTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $baseConfigPath = realpath("../app/Resources/HealthVault/dev");
+        $baseConfigPath = realpath("/Applications/MAMP/htdocs/mentis/portal-web/trunk/app/Resources/HealthVault/dev");
         $this->appId = file_get_contents($baseConfigPath . '/app.id');
         $this->thumbPrint = file_get_contents($baseConfigPath . '/app.fp');
         $this->privateKey = file_get_contents($baseConfigPath . '/app.pem');

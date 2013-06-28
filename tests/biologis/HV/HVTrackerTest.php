@@ -186,6 +186,7 @@ class HVTrackerTest extends HVClientBaseTest
         // Value = filter on that thing request
         $requestGroup["Sleep Related Activity"] = $timeFilterMin.$timeFilterMax;
         $requestGroup["Emotional State"] = $timeFilterMin.$timeFilterMax;
+        $requestGroup["Health Journal Entry"] = '';
 
         //Make the request to health vault.
         $response = $this->hv->getThings(
