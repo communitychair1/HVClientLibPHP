@@ -9,7 +9,7 @@ use biologis\HV\HVClient;
 
 require_once("HVClientBaseTest.php");
 
-class HVHealthJournalParserTest extends HVClientBaseTest
+class HVParseSleepRelatedActivityTest extends HVClientBaseTest
 {
 
     /**
@@ -62,8 +62,7 @@ class HVHealthJournalParserTest extends HVClientBaseTest
         //Populate the Request group
         // Key = TypeName of Thing to request
         // Value = filter on that thing request
-        $requestGroup["Health Journal Entry"] = '';
-        //$requestGroup["Sleep Related Activity"] = '';
+        $requestGroup["Sleep Related Activity"] = '';
 
         //Make the request to health vault.
         $hvThingArr = $this->hv->getThings(
@@ -77,9 +76,11 @@ class HVHealthJournalParserTest extends HVClientBaseTest
         foreach ($hvThingArr as $hvThing)
         {
             $dataArr = $hvThing->getItemJSONArray();
-            $this->assertArrayHasKey("data-xml", $dataArr);
             $this->assertArrayHasKey("when", $dataArr);
-            $this->assertArrayHasKey("category text", $dataArr);
+            $this->assertArrayHasKey("alcohol", $dataArr);
+            $this->assertArrayHasKey("sleepiness", $dataArr);
+            $this->assertArrayHasKey("nap", $dataArr);
+            $this->assertArrayHasKey("exercise", $dataArr);
         }
     }
 

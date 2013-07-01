@@ -102,6 +102,27 @@ class HealthRecordItemData extends AbstractXmlEntity {
     );
   }
 
+
+    /**
+     * @param $elementBranch : Query path branch
+     * @param $baseDate : QP of the timestamp of the entire item.
+     * @return int
+     */
+    public function populateTimeData($elementBranch, $baseDate)
+    {
+
+        $timeStamp = mktime(
+            (int)$elementBranch->find('h')->text() ? (int)$elementBranch->find('h')->text() : 0,
+            (int)$elementBranch->find('m')->text() ? (int)$elementBranch->find('m')->text() : 0,
+            (int)$elementBranch->find('s')->text() ? (int)$elementBranch->find('s')->text() : 0,
+            (int)$baseDate->top()->find('date m')->text(),
+            (int)$baseDate->top()->find('d')->text(),
+            (int)$baseDate->top()->find('y')->text()
+        );
+
+        return $timeStamp;
+    }
+
     /**
      * Will remove the node if the value is empty. Otherwise, set the value.
      *
