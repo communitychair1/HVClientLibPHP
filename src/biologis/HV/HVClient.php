@@ -433,7 +433,6 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
     public function getThingId($recordId, $typeId, $base64 = FALSE)
     {
         $sxml = $this->getItemTemplate($typeId, $recordId, $base64);
-        //print_r($sxml->{'thing-id'}->attributes());
         $array = array();
         $thingId = $sxml->{'thing-id'};
         $array[0] = $thingId[0];
@@ -444,6 +443,12 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
         return $array;
     }
 
+    /**
+     * @param $typeId
+     * @return int|string
+     *
+     * This method will translate a typeId into a type name.
+     */
     public function translateTypeId($typeId)
     {
 
