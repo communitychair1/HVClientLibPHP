@@ -93,34 +93,50 @@ class SleepRelatedActivity extends HealthRecordItemData
         $sleepRelatedActivity = HealthRecordItemFactory::getThing('Sleep Related Activity');
 
         $sleepRelatedActivity->setTimestamp('when', $when);
-        $sleepRelatedActivity->getQp()->find('sleepiness')->text($sleepiness);
+
+        if(!(is_null($sleepiness)))
+        {
+            $sleepRelatedActivity->getQp()->find('sleepiness')->text($sleepiness);
+        }
 
         // Save ref to parent node so we can append new nodes
         $parentNode = $sleepRelatedActivity->qp->top()->find("when");
 
         // Loop through arrays adding items.
-        foreach ($exercises as $item)
+        if(!(is_null($exercises)))
         {
-            // Should be a time, so just add it.
-            $sleepRelatedActivity->addActivity($parentNode, "exercise", $item);
+            foreach ($exercises as $item)
+            {
+                // Should be a time, so just add it.
+                $sleepRelatedActivity->addActivity($parentNode, "exercise", $item);
+            }
         }
 
+        if(!(is_null($naps)))
+        {
         foreach ($naps as $item)
-        {
-            // Should be a time, so just add it.
-            $sleepRelatedActivity->addActivity($parentNode, "nap", $item);
+            {
+                // Should be a time, so just add it.
+                $sleepRelatedActivity->addActivity($parentNode, "nap", $item);
+            }
         }
 
-        foreach ($alcohol as $tstamp)
+        if(!(is_null($alcohol)))
         {
-            // Should be a time, so just add it.
-            $sleepRelatedActivity->addTime($parentNode, "alcohol", $tstamp);
+            foreach ($alcohol as $tstamp)
+            {
+                // Should be a time, so just add it.
+                $sleepRelatedActivity->addTime($parentNode, "alcohol", $tstamp);
+            }
         }
 
-        foreach ($caffeine as $tstamp)
+        if(!(is_null($caffeine)))
         {
-            // Should be a time, so just add it.
-            $sleepRelatedActivity->addTime($parentNode, "caffeine", $tstamp);
+            foreach ($caffeine as $tstamp)
+            {
+                // Should be a time, so just add it.
+                $sleepRelatedActivity->addTime($parentNode, "caffeine", $tstamp);
+            }
         }
 
         return $sleepRelatedActivity;
