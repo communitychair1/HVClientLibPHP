@@ -74,7 +74,7 @@ class SleepSession extends HealthRecordItemData
         $sleepSession->setTimestamp('when', $when);
 
         $sleepSession->setTime($sleepSession->getQp()->top()->find('bed-time'), $bedTime);
-        $sleepSession->setTime($sleepSession->getQp()->top()->find('wake-time'), $bedTime);
+        $sleepSession->setTime($sleepSession->getQp()->top()->find('wake-time'), $wakeTime);
         $sleepSession->getQp()->top()->find('sleep-minutes')->text($sleepMinutes);
         $sleepSession->getQp()->top()->find('settling-minutes')->text($settlingMinutes);
         $sleepSession->getQp()->top()->find('wake-state')->text($wakeState);
@@ -121,6 +121,7 @@ class SleepSession extends HealthRecordItemData
     }
 
 
+<<<<<<< HEAD
     public function getItemJSONArray()
     {
         $parentData = parent::getItemJSONArray();
@@ -150,3 +151,6 @@ class SleepSession extends HealthRecordItemData
     }
 
 }
+=======
+}
+>>>>>>> 484d3bf67bf4ca0ea59f283a785072449988021e

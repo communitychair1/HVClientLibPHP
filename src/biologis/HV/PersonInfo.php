@@ -21,6 +21,7 @@ class PersonInfo extends AbstractXmlEntity {
     foreach ($this->qp->top()->find('record') as $record) {
       $records[$record->attr('id')] = $record->text();
     }
+    return $records;
   }
 
   public function getRecordById($id) {

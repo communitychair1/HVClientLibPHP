@@ -27,7 +27,6 @@ class HVTestSleepSessionObjectCreation extends \PHPUnit_Framework_TestCase
      */
     public function testCreateCodableValue()
     {
-
         $codableValue = HVTestSleepSessionObjectCreation::createCodableValue();
 
         $this->assertNotNull($codableValue);
@@ -65,15 +64,15 @@ class HVTestSleepSessionObjectCreation extends \PHPUnit_Framework_TestCase
 
     public static function createSleepSession1()
     {
-        $item = SleepSession::createFromData(time(),time(),time(),300, 25, 1);
+        $item = SleepSession::createFromData(time(), time(), time(), 300, 25, 1);
         return $item;
     }
 
     public static function createSleepSession2()
     {
-        $awakenings = array( HVTestSleepSessionObjectCreation::createAwakening());
-        $medications = array( HVTestSleepSessionObjectCreation::createCodableValue());
-        $item = SleepSession::createFromData(time(),time(),time(),300, 25, 1, $awakenings, $medications );
+        $awakenings = array(HVTestSleepSessionObjectCreation::createAwakening());
+        $medications = array(HVTestSleepSessionObjectCreation::createCodableValue());
+        $item = SleepSession::createFromData(time(), time(), time(), 300, 25, 1, $awakenings, $medications);
         return $item;
     }
 
@@ -107,7 +106,6 @@ class HVTestSleepSessionObjectCreation extends \PHPUnit_Framework_TestCase
     {
         return Awakening::createFromData(time(), 13);
     }
-
 
 
 }

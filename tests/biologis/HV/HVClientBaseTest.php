@@ -27,6 +27,9 @@ class HVClientBaseTest extends \PHPUnit_Framework_TestCase
     protected $updateValue;
     protected $sxml;
 
+    /**
+     * Base setup constructor for HV php Unit tests.
+     */
     protected function setUp()
     {
         $baseConfigPath = realpath("../app/Resources/HealthVault/dev");

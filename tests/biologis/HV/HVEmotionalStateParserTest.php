@@ -9,7 +9,7 @@ use biologis\HV\HVClient;
 
 require_once("HVClientBaseTest.php");
 
-class HVParseSleepRelatedActivityTest extends HVClientBaseTest
+class HVEmotionalStateParserTest extends HVClientBaseTest
 {
 
     /**
@@ -35,7 +35,25 @@ class HVParseSleepRelatedActivityTest extends HVClientBaseTest
      *
      *  Tests retrieving tracker data within a range of dates
      */
-    public function testHealthJournalParser(){
+    public function testTrackerRequestMaxMinDate(){
+
+        //Create a timestamp 14 days in the past
+        $dateFilterStrMax = '-2 days';
+        $dateFilterStrMin = '-5 days';
+
+        $timeMax = date(DATE_ATOM, mktime(0,0,0,
+            date('m', strtotime($dateFilterStrMax)),
+            date('d', strtotime($dateFilterStrMax)),
+            date('Y', strtotime($dateFilterStrMax))));
+
+        $timeMin = date(DATE_ATOM, mktime(0,0,0,
+            date('m', strtotime($dateFilterStrMin)),
+            date('d', strtotime($dateFilterStrMin)),
+            date('Y', strtotime($dateFilterStrMin))));
+
+        //Create an XML filter using timestamp
+        $timeFilterMax = '<eff-date-max>'.$timeMax.'</eff-date-max>';
+        $timeFilterMin = '<eff-date-min>'.$timeMin.'</eff-date-min>';
 
         //Init array's for request
         $option = array();
@@ -44,7 +62,7 @@ class HVParseSleepRelatedActivityTest extends HVClientBaseTest
         //Populate the Request group
         // Key = TypeName of Thing to request
         // Value = filter on that thing request
-        $requestGroup["Sleep Related Activity"] = '';
+        $requestGroup["Emotional State"] = $timeFilterMin.$timeFilterMax;
 
         //Make the request to health vault.
         $hvThingArr = $this->hv->getThings(
@@ -58,12 +76,13 @@ class HVParseSleepRelatedActivityTest extends HVClientBaseTest
         foreach ($hvThingArr as $hvThing)
         {
             $dataArr = $hvThing->getItemJSONArray();
+            $this->assertArrayHasKey("mood", $dataArr);
             $this->assertArrayHasKey("when", $dataArr);
-            $this->assertArrayHasKey("alcohol", $dataArr);
-            $this->assertArrayHasKey("sleepiness", $dataArr);
-            $this->assertArrayHasKey("nap", $dataArr);
-            $this->assertArrayHasKey("exercise", $dataArr);
+            $this->assertArrayHasKey("stress", $dataArr);
+            $this->assertArrayHasKey("wellbeing", $dataArr);
+            // echo json_encode($dataArr) . "\n\n\n";
         }
+
     }
 
 

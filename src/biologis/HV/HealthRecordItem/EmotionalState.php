@@ -23,7 +23,7 @@ class EmotionalState extends HealthRecordItemData
         $qpRecord = $qp->top()->find("data-xml");
 
         if ($qpRecord) {
-            $text = $qp->top()->find("when")->xml();
+            $text = $qp->top()->find("when date y")->text();
             if (!empty($text))
             {
                 $this->when = $this->getTimestamp("when");
@@ -68,5 +68,4 @@ class EmotionalState extends HealthRecordItemData
         );
         return array_merge($myData, $parentData);
     }
-
 }

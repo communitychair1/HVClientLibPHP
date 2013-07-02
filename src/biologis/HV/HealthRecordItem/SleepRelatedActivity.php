@@ -36,7 +36,7 @@ class SleepRelatedActivity extends HealthRecordItemData
         foreach($exerciseBranch as $exerciseEntry)
         {
             $this->exercise[$index]['when'] =
-                date('c', $this->populateTimeData($exerciseEntry->branch('when'), $this->qp->find('data-xml when')));
+                $this->populateTimeData($exerciseEntry->branch('when'), $this->qp->find('data-xml when'));
             $this->exercise[$index]['minutes'] =
                 $exerciseEntry->Branch('minutes')->text();
             $index++;
@@ -46,13 +46,13 @@ class SleepRelatedActivity extends HealthRecordItemData
         //Populate Caffeine Data from HV
         $caffeineBranch = $recordQp->branch('caffeine');
         $this->caffeine =
-            date('c', $this->populateTimeData($caffeineBranch, $this->qp->find('data-xml when')));
+            $this->populateTimeData($caffeineBranch, $this->qp->find('data-xml when'));
         $caffeineBranch = null;
 
         //Populate Alcohol Data from HV
         $alcoholBranch = $recordQp->branch('alcohol');
         $this->alcohol =
-            date('c', $this->populateTimeData($alcoholBranch, $this->qp->find('data-xml when')));
+            $this->populateTimeData($alcoholBranch, $this->qp->find('data-xml when'));
         $alcoholBranch = null;
 
         //Populate Nap Data from HV
@@ -60,9 +60,9 @@ class SleepRelatedActivity extends HealthRecordItemData
         $index = 0;
         foreach($napBranch as $napEntry)
         {
-            $this->exercise[$index]['when'] =
-                date('c', $this->populateTimeData($napEntry->branch('when'), $this->qp->find('data-xml when')));
-            $this->exercise[$index]['minutes'] =
+            $this->nap[$index]['when'] =
+                $this->populateTimeData($napEntry->branch('when'), $this->qp->find('data-xml when'));
+            $this->nap[$index]['minutes'] =
                 $napEntry->Branch('minutes')->text();
             $index++;
         }
@@ -72,7 +72,7 @@ class SleepRelatedActivity extends HealthRecordItemData
         $this->when = $this->getTimestamp("when");
 
         //Populate the Sleepiness Data from HV
-        $this->sleepiness = $recordQp->find("Sleepiness")->text();
+        $this->sleepiness = $recordQp->find("sleepiness")->text();
     }
 
     /**
@@ -93,34 +93,50 @@ class SleepRelatedActivity extends HealthRecordItemData
         $sleepRelatedActivity = HealthRecordItemFactory::getThing('Sleep Related Activity');
 
         $sleepRelatedActivity->setTimestamp('when', $when);
-        $sleepRelatedActivity->getQp()->find('sleepiness')->text($sleepiness);
+
+        if(!(is_null($sleepiness)))
+        {
+            $sleepRelatedActivity->getQp()->find('sleepiness')->text($sleepiness);
+        }
 
         // Save ref to parent node so we can append new nodes
         $parentNode = $sleepRelatedActivity->qp->top()->find("when");
 
         // Loop through arrays adding items.
-        foreach ($exercises as $item)
+        if(!(is_null($exercises)))
         {
-            // Should be a time, so just add it.
-            $sleepRelatedActivity->addActivity($parentNode, "exercise", $item);
+            foreach ($exercises as $item)
+            {
+                // Should be a time, so just add it.
+                $sleepRelatedActivity->addActivity($parentNode, "exercise", $item);
+            }
         }
 
+        if(!(is_null($naps)))
+        {
         foreach ($naps as $item)
-        {
-            // Should be a time, so just add it.
-            $sleepRelatedActivity->addActivity($parentNode, "nap", $item);
+            {
+                // Should be a time, so just add it.
+                $sleepRelatedActivity->addActivity($parentNode, "nap", $item);
+            }
         }
 
-        foreach ($alcohol as $tstamp)
+        if(!(is_null($alcohol)))
         {
-            // Should be a time, so just add it.
-            $sleepRelatedActivity->addTime($parentNode, "alcohol", $tstamp);
+            foreach ($alcohol as $tstamp)
+            {
+                // Should be a time, so just add it.
+                $sleepRelatedActivity->addTime($parentNode, "alcohol", $tstamp);
+            }
         }
 
-        foreach ($caffeine as $tstamp)
+        if(!(is_null($caffeine)))
         {
-            // Should be a time, so just add it.
-            $sleepRelatedActivity->addTime($parentNode, "caffeine", $tstamp);
+            foreach ($caffeine as $tstamp)
+            {
+                // Should be a time, so just add it.
+                $sleepRelatedActivity->addTime($parentNode, "caffeine", $tstamp);
+            }
         }
 
         return $sleepRelatedActivity;
@@ -155,7 +171,11 @@ class SleepRelatedActivity extends HealthRecordItemData
     }
 
 
-
+    /**
+     * @return array
+     *      Returns JSON formatted array of
+     *      Sleep related activities.
+     */
     public function getItemJSONArray()
     {
         $parentData = parent::getItemJSONArray();
