@@ -120,8 +120,6 @@ class SleepSession extends HealthRecordItemData
         $parent->after($xml);
     }
 
-
-<<<<<<< HEAD
     public function getItemJSONArray()
     {
         $parentData = parent::getItemJSONArray();
@@ -149,8 +147,4 @@ class SleepSession extends HealthRecordItemData
 
         return array_merge($myData, $parentData);
     }
-
 }
-=======
-}
->>>>>>> 484d3bf67bf4ca0ea59f283a785072449988021e
