@@ -34,7 +34,7 @@ class SleepSession extends HealthRecordItemData
         $sleepSession->setTimestamp('when', $when);
 
         $sleepSession->setTime($sleepSession->getQp()->top()->find('bed-time'), $bedTime);
-        $sleepSession->setTime($sleepSession->getQp()->top()->find('wake-time'), $bedTime);
+        $sleepSession->setTime($sleepSession->getQp()->top()->find('wake-time'), $wakeTime);
         $sleepSession->getQp()->top()->find('sleep-minutes')->text($sleepMinutes);
         $sleepSession->getQp()->top()->find('settling-minutes')->text($settlingMinutes);
         $sleepSession->getQp()->top()->find('wake-state')->text($wakeState);
