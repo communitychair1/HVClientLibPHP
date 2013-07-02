@@ -24,7 +24,7 @@ class HealthJournalEntry extends HealthRecordItemData
         $qpRecord = $qp->top()->find("data-xml");
 
         if ($qpRecord) {
-           $text = $qp->top()->find("data-xml when structured")->xml();
+            $text = $qp->top()->find("data-xml when date y")->xml();
            if (!empty($text))
            {
                $this->when = $this->getTimestamp("data-xml when structured");
