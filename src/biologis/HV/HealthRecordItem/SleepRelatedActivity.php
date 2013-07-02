@@ -36,7 +36,7 @@ class SleepRelatedActivity extends HealthRecordItemData
         foreach($exerciseBranch as $exerciseEntry)
         {
             $this->exercise[$index]['when'] =
-                date('c', $this->populateTimeData($exerciseEntry->branch('when'), $this->qp->find('data-xml when')));
+                $this->populateTimeData($exerciseEntry->branch('when'), $this->qp->find('data-xml when'));
             $this->exercise[$index]['minutes'] =
                 $exerciseEntry->Branch('minutes')->text();
             $index++;
@@ -46,13 +46,13 @@ class SleepRelatedActivity extends HealthRecordItemData
         //Populate Caffeine Data from HV
         $caffeineBranch = $recordQp->branch('caffeine');
         $this->caffeine =
-            date('c', $this->populateTimeData($caffeineBranch, $this->qp->find('data-xml when')));
+            $this->populateTimeData($caffeineBranch, $this->qp->find('data-xml when'));
         $caffeineBranch = null;
 
         //Populate Alcohol Data from HV
         $alcoholBranch = $recordQp->branch('alcohol');
         $this->alcohol =
-            date('c', $this->populateTimeData($alcoholBranch, $this->qp->find('data-xml when')));
+            $this->populateTimeData($alcoholBranch, $this->qp->find('data-xml when'));
         $alcoholBranch = null;
 
         //Populate Nap Data from HV
@@ -61,7 +61,7 @@ class SleepRelatedActivity extends HealthRecordItemData
         foreach($napBranch as $napEntry)
         {
             $this->nap[$index]['when'] =
-                date('c', $this->populateTimeData($napEntry->branch('when'), $this->qp->find('data-xml when')));
+                $this->populateTimeData($napEntry->branch('when'), $this->qp->find('data-xml when'));
             $this->nap[$index]['minutes'] =
                 $napEntry->Branch('minutes')->text();
             $index++;
@@ -72,7 +72,7 @@ class SleepRelatedActivity extends HealthRecordItemData
         $this->when = $this->getTimestamp("when");
 
         //Populate the Sleepiness Data from HV
-        $this->sleepiness = $recordQp->find("Sleepiness")->text();
+        $this->sleepiness = $recordQp->find("sleepiness")->text();
     }
 
     /**
