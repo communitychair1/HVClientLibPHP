@@ -58,7 +58,6 @@ class HVParseSleepRelatedActivityTest extends HVClientBaseTest
         foreach ($hvThingArr as $hvThing)
         {
             $dataArr = $hvThing->getItemJSONArray();
-            print_r($dataArr);
             $this->assertArrayHasKey("when", $dataArr);
             $this->assertArrayHasKey("alcohol", $dataArr);
             $this->assertArrayHasKey("sleepiness", $dataArr);
