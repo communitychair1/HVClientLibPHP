@@ -60,9 +60,9 @@ class SleepRelatedActivity extends HealthRecordItemData
         $index = 0;
         foreach($napBranch as $napEntry)
         {
-            $this->exercise[$index]['when'] =
+            $this->nap[$index]['when'] =
                 date('c', $this->populateTimeData($napEntry->branch('when'), $this->qp->find('data-xml when')));
-            $this->exercise[$index]['minutes'] =
+            $this->nap[$index]['minutes'] =
                 $napEntry->Branch('minutes')->text();
             $index++;
         }
