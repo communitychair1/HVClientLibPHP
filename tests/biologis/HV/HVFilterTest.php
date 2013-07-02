@@ -26,8 +26,10 @@ class HVFilterTest extends HVClientBaseTest
         $this->assertNotNull($this->hv);
     }
 
-
-    public function testFilters()
+    /**
+     * Test using Xpath to filter data returned from HV
+     */
+    public function testXPathFilters()
     {
         //Test filtered query one:
         //      Return all weight created after 2012
@@ -64,6 +66,7 @@ class HVFilterTest extends HVClientBaseTest
             $this->assertNotNull($weight->{'weight'}->{'value'});
         }
 
+        //Make the second request and filter
         $groupReq["Weight Measurement"] = '<thing-state>Active</thing-state><xpath>'. $XpathQuery2 .'</xpath>';
 
         //Run query 2

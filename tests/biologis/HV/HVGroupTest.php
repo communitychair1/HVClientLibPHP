@@ -147,6 +147,9 @@ class HVGroupTest extends HVClientBaseTest
         }
     }
 
+    /**
+     * TODO: move to it's own test
+     */
     public function testProfileRequests(){
 
         $options = array();

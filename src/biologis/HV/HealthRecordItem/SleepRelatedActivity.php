@@ -155,7 +155,11 @@ class SleepRelatedActivity extends HealthRecordItemData
     }
 
 
-
+    /**
+     * @return array
+     *      Returns JSON formatted array of
+     *      Sleep related activities.
+     */
     public function getItemJSONArray()
     {
         $parentData = parent::getItemJSONArray();

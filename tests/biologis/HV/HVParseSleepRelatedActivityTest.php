@@ -37,24 +37,6 @@ class HVParseSleepRelatedActivityTest extends HVClientBaseTest
      */
     public function testHealthJournalParser(){
 
-        //Create a timestamp 14 days in the past
-        $dateFilterStrMax = '-2 days';
-        $dateFilterStrMin = '-5 days';
-
-        $timeMax = date(DATE_ATOM, mktime(0,0,0,
-            date('m', strtotime($dateFilterStrMax)),
-            date('d', strtotime($dateFilterStrMax)),
-            date('Y', strtotime($dateFilterStrMax))));
-
-        $timeMin = date(DATE_ATOM, mktime(0,0,0,
-            date('m', strtotime($dateFilterStrMin)),
-            date('d', strtotime($dateFilterStrMin)),
-            date('Y', strtotime($dateFilterStrMin))));
-
-        //Create an XML filter using timestamp
-        $timeFilterMax = '<eff-date-max>'.$timeMax.'</eff-date-max>';
-        $timeFilterMin = '<eff-date-min>'.$timeMin.'</eff-date-min>';
-
         //Init array's for request
         $option = array();
         $requestGroup = array();
@@ -76,6 +58,7 @@ class HVParseSleepRelatedActivityTest extends HVClientBaseTest
         foreach ($hvThingArr as $hvThing)
         {
             $dataArr = $hvThing->getItemJSONArray();
+            print_r($dataArr);
             $this->assertArrayHasKey("when", $dataArr);
             $this->assertArrayHasKey("alcohol", $dataArr);
             $this->assertArrayHasKey("sleepiness", $dataArr);

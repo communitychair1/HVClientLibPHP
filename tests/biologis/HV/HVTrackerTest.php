@@ -126,7 +126,6 @@ class HVTrackerTest extends HVClientBaseTest
             false
         );
 
-
         //For all the "things" returned
         //Make sure the dates are the correct length apart.
         foreach($response as $thing)
@@ -196,7 +195,6 @@ class HVTrackerTest extends HVClientBaseTest
             false
         );
 
-
         foreach($response as $thing)
         {
             if($thing->{'emotion'})
@@ -218,9 +216,6 @@ class HVTrackerTest extends HVClientBaseTest
                         $thing->{'sleep-pm'}->{'when'}->{'date'}->{'d'});
             }
         }
-
-
-
 
     }
 

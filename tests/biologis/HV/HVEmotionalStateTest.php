@@ -27,7 +27,6 @@ class HVEmotionalStateTest extends HVClientBaseTest
         $this->assertNotNull($this->hv);
     }
 
-
     /**
      * Function will add a sample emotional state to the user record
      */
@@ -37,46 +36,52 @@ class HVEmotionalStateTest extends HVClientBaseTest
          * @var $emotState EmotionalState
          */
 
-
         // Create an emotional state
-        $emotState = EmotionalState::createFromData( time(), 1, 2, 3);
+        $emotState = EmotionalState::createFromData(time(), 1, 2, 3);
 
         $this->assertNotEmpty($emotState, "Emotional State object empty.");
         // Grab the XML
         $xml = $emotState->getItemXml();
         $this->assertNotEmpty($xml, "Emotional State itemXml empty");
 
-        $this->hv->putThings($xml, $this->recordId );
-        $this->assertNotEmpty($this->hv->getConnector()->getRawResponse(),"No response received from HV");
+        $this->hv->putThings($xml, $this->recordId);
+        $this->assertNotEmpty($this->hv->getConnector()->getRawResponse(), "No response received from HV");
         $this->assertContains("version", $this->hv->getConnector()->getRawResponse(), "Missing version identifier from response");
 
     }
 
+    /**
+     * Create and emotion data test
+     */
     public function testCreateEmotionalWithJustMood()
     {
         /**
          * @var $emotState EmotionalState
          */
         // Create an emotional state
-        $emotState = EmotionalState::createFromData( time(), 1, null, null);
+        $emotState = EmotionalState::createFromData(time(), 1, null, null);
 
         $this->assertNotEmpty($emotState, "Emotional State object empty.");
         // Grab the XML
         $xml = $emotState->getItemXml();
         $this->assertNotEmpty($xml, "Emotional State itemXml empty");
 
-        $this->hv->putThings($xml, $this->recordId );
-        $this->assertNotEmpty($this->hv->getConnector()->getRawResponse(),"No response received from HV");
+        $this->hv->putThings($xml, $this->recordId);
+        $this->assertNotEmpty($this->hv->getConnector()->getRawResponse(), "No response received from HV");
         $this->assertContains("version", $this->hv->getConnector()->getRawResponse(), "Missing version identifier from response");
     }
 
+    /**
+     * Tests creating emotion data with no values
+     * and places them in HV
+     */
     public function testCreateEmotionalWithNoStateValues()
     {
         /**
          * @var $emotState EmotionalState
          */
         // Create an emotional state
-        $emotState = EmotionalState::createFromData( time(), null, null, null);
+        $emotState = EmotionalState::createFromData(time(), null, null, null);
 
         $this->assertNotEmpty($emotState, "Emotional State object empty.");
         // Grab the XML
@@ -84,13 +89,13 @@ class HVEmotionalStateTest extends HVClientBaseTest
         $this->assertNotEmpty($xml, "Emotional State itemXml empty");
 
         try {
-            $this->hv->putThings($xml, $this->recordId );
+            $this->hv->putThings($xml, $this->recordId);
         } catch (HVRawConnectorWcRequestException $ex) {
             // Ignore
             echo "Got the exception";
         }
 
-        $this->assertNotEmpty($this->hv->getConnector()->getRawResponse(),"No response received from HV");
+        $this->assertNotEmpty($this->hv->getConnector()->getRawResponse(), "No response received from HV");
         $this->assertContains("version", $this->hv->getConnector()->getRawResponse(), "Missing version identifier from response");
     }
 

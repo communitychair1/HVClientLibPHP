@@ -37,24 +37,6 @@ class HVHealthJournalParserTest extends HVClientBaseTest
      */
     public function testHealthJournalParser(){
 
-        //Create a timestamp 14 days in the past
-        $dateFilterStrMax = '-2 days';
-        $dateFilterStrMin = '-5 days';
-
-        $timeMax = date(DATE_ATOM, mktime(0,0,0,
-            date('m', strtotime($dateFilterStrMax)),
-            date('d', strtotime($dateFilterStrMax)),
-            date('Y', strtotime($dateFilterStrMax))));
-
-        $timeMin = date(DATE_ATOM, mktime(0,0,0,
-            date('m', strtotime($dateFilterStrMin)),
-            date('d', strtotime($dateFilterStrMin)),
-            date('Y', strtotime($dateFilterStrMin))));
-
-        //Create an XML filter using timestamp
-        $timeFilterMax = '<eff-date-max>'.$timeMax.'</eff-date-max>';
-        $timeFilterMin = '<eff-date-min>'.$timeMin.'</eff-date-min>';
-
         //Init array's for request
         $option = array();
         $requestGroup = array();
@@ -63,7 +45,6 @@ class HVHealthJournalParserTest extends HVClientBaseTest
         // Key = TypeName of Thing to request
         // Value = filter on that thing request
         $requestGroup["Health Journal Entry"] = '';
-        //$requestGroup["Sleep Related Activity"] = '';
 
         //Make the request to health vault.
         $hvThingArr = $this->hv->getThings(
@@ -77,9 +58,12 @@ class HVHealthJournalParserTest extends HVClientBaseTest
         foreach ($hvThingArr as $hvThing)
         {
             $dataArr = $hvThing->getItemJSONArray();
-            $this->assertArrayHasKey("data-xml", $dataArr);
+            $this->assertArrayHasKey("content", $dataArr);
             $this->assertArrayHasKey("when", $dataArr);
+            $this->assertArrayHasKey("descriptive when", $dataArr);
             $this->assertArrayHasKey("category text", $dataArr);
+            $this->assertArrayHasKey("type-id", $dataArr);
+            $this->assertArrayHasKey("version", $dataArr);
         }
     }
 

@@ -29,7 +29,6 @@ class HVSleepSessionTest extends HVClientBaseTest
         $this->assertNotNull($this->hv);
     }
 
-
     /**
      * Try setting the descriptive date instead of an actual date.
      */
@@ -39,10 +38,8 @@ class HVSleepSessionTest extends HVClientBaseTest
          * @var $item SleepSession
          */
 
-
         // Create an emotional state
         $item = HVTestSleepSessionObjectCreation::createSleepSession1();
-
 
 
         $this->assertNotEmpty($item);
@@ -52,8 +49,8 @@ class HVSleepSessionTest extends HVClientBaseTest
 
         // echo "XML:: \n $xml \n";
 
-        $this->hv->putThings($xml, $this->recordId );
-        $this->assertNotEmpty($this->hv->getConnector()->getRawResponse(),"No response received from HV");
+        $this->hv->putThings($xml, $this->recordId);
+        $this->assertNotEmpty($this->hv->getConnector()->getRawResponse(), "No response received from HV");
         $this->assertContains("version", $this->hv->getConnector()->getRawResponse(), "Missing version identifier from response");
         // echo $this->hv->getConnector()->getRawResponse();
     }
@@ -67,11 +64,8 @@ class HVSleepSessionTest extends HVClientBaseTest
          * @var $item SleepSession
          */
 
-
         // Create an emotional state
         $item = HVTestSleepSessionObjectCreation::createSleepSession2();
-
-
 
         $this->assertNotEmpty($item);
         // Grab the XML
@@ -80,8 +74,8 @@ class HVSleepSessionTest extends HVClientBaseTest
 
         // echo "XML:: \n $xml \n";
 
-        $this->hv->putThings($xml, $this->recordId );
-        $this->assertNotEmpty($this->hv->getConnector()->getRawResponse(),"No response received from HV");
+        $this->hv->putThings($xml, $this->recordId);
+        $this->assertNotEmpty($this->hv->getConnector()->getRawResponse(), "No response received from HV");
         $this->assertContains("version", $this->hv->getConnector()->getRawResponse(), "Missing version identifier from response");
         // echo $this->hv->getConnector()->getRawResponse();
     }
