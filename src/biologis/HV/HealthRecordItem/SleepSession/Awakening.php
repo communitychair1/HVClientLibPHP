@@ -19,6 +19,27 @@ class Awakening extends HealthRecordItemData
     public $minutes = null;
 
 
+    public static function createFromXML(Query $qp, $baseDate = null )
+    {
+        // echo "CodableValue XML:: " . $qp->xml() . "\n\n";
+
+        $item = new Awakening($qp);
+
+        if ( !empty($baseDate) )
+        {
+            // TODO Change this to a timestamp - should expect one in the constructor
+            $item->when = $qp->find("when")->text();
+        }
+        else
+        {
+            $item->when = $qp->find("when")->text();
+        }
+
+        $item->minutes = $qp->find("minutes")->text();
+        return $item;
+    }
+
+
     public static function createFromData($when, $minutes)
     {
         $item = new Awakening(QueryPath::withXML());
@@ -38,5 +59,16 @@ class Awakening extends HealthRecordItemData
     public function getItemXml()
     {
         return $this->getQp()->top()->innerXML();
+    }
+
+    public function getItemJSONArray()
+    {
+
+        $myData = array(
+            "when" => $this->when,
+            "minutes" => $this->minutes
+        );
+
+        return $myData;
     }
 }

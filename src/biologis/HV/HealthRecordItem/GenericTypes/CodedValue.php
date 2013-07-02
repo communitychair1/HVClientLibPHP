@@ -15,9 +15,19 @@ use QueryPath;
 class CodedValue extends HealthRecordItemData
 {
     public $value = null;
-    public $family = null;
     public $type = null;
+    public $family = null;
     public $version = null;
+
+    public static function createFromXML(Query $qp)
+    {
+        $cv = new CodedValue($qp);
+        $cv->value = $qp->find("value")->text();
+        $cv->type = $qp->find("type")->text();
+        $cv->family = $qp->find("family")->text();
+        $cv->version = $qp->find("version")->text();
+        return $cv;
+    }
 
     public static function createFromData($value, $type, $family = null, $version = null)
     {
@@ -62,6 +72,18 @@ class CodedValue extends HealthRecordItemData
     public function getItemXml()
     {
         return $this->qp->top()->innerXML();
+    }
+
+    public function getItemJSONArray()
+    {
+        $myData = array(
+            "value" => $this->value,
+            "type" => $this->type,
+            "famiily" => $this->family,
+            "version" => $this->version
+        );
+
+        return $myData;
     }
 
 

@@ -77,6 +77,14 @@ class HVTestSleepSessionObjectCreation extends \PHPUnit_Framework_TestCase
         return $item;
     }
 
+    public static function createSleepSession3()
+    {
+        $awakenings = array( HVTestSleepSessionObjectCreation::createAwakening(), HVTestSleepSessionObjectCreation::createAwakening());
+        $medications = array( HVTestSleepSessionObjectCreation::createCodableValue(), HVTestSleepSessionObjectCreation::createCodableValue() );
+        $item = SleepSession::createFromData(time(),time(),time(),300, 25, 1, $awakenings, $medications );
+        return $item;
+    }
+
     public static function createCodedValue1()
     {
         return CodedValue::createFromData("1st val", "oral pill", "diabetes", 1);

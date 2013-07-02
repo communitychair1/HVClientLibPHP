@@ -22,6 +22,22 @@ class CodableValue extends HealthRecordItemData
      */
     public $codes = null;
 
+
+    public static function createFromXML(Query $qp)
+    {
+        $cv = new CodableValue($qp);
+        $cv->text = $qp->find("text")->text();
+
+        $codeQPArray = $qp->find('code');
+
+        foreach($codeQPArray as $codeQP)
+        {
+            $cv->codes[] = CodedValue::createFromXML($codeQP);
+        }
+
+        return $cv;
+    }
+
     public static function createFromData($text,  $codes)
     {
         $item = new CodableValue(QueryPath::withXML());
@@ -48,6 +64,24 @@ class CodableValue extends HealthRecordItemData
     public function getItemXml()
     {
         return $this->getQp()->top()->innerXML();
+    }
+
+    public function getItemJSONArray()
+    {
+
+        $myData = array(
+            "text" => $this->text
+        );
+
+        if ( !empty($this->codes))
+        {
+            foreach ($this->codes as $key=>$code)
+            {
+                $myData["codes"][] = $code->getItemJSONArray();
+            }
+        }
+
+        return $myData;
     }
 
 }

@@ -2,8 +2,12 @@
 
 namespace biologis\HV\HealthRecordItem;
 
+use biologis\HV\HealthRecordItem\GenericTypes\CodableValue;
 use biologis\HV\HealthRecordItemData;
+use biologis\HV\HealthRecordItem\SleepSession\Awakening;
 use biologis\HV\HealthRecordItemFactory;
+use QueryPath\Query;
+use QueryPath;
 
 /**
  * Sleep Session
@@ -11,6 +15,42 @@ use biologis\HV\HealthRecordItemFactory;
  */
 class SleepSession extends HealthRecordItemData
 {
+
+    protected $when = null;
+    protected $bedTime = null;
+    protected $sleepMinutes = null;
+    protected $settlingMinutes = null;
+    protected $wakeState = null;
+    protected $awakenings = null;
+    protected $medications = null;
+
+    /**
+     * @param Query Path of the object
+     */
+    public function __construct(Query $qp) {
+        parent::__construct($qp);
+        $recordQp = $qp->find('data-xml');
+        $txt = $recordQp->find("data-xml when h")->text();
+        if ( !empty($txt) )
+        {
+            $this->when = $this->getTimestamp('data-xml when');
+        }
+
+        $this->bedTime = $recordQp->find('bed-time')->text();
+        $this->sleepMinutes = $recordQp->find('wake-time')->text();
+        $this->sleepMinutes = $recordQp->find('sleep-minutes')->text();
+        $this->settlingMinutes = $recordQp->find('settling-minutes')->text();
+        $this->wakeState = $recordQp->find('wake-state')->text();
+
+        $this->medications = CodableValue::createFromXML($recordQp->top()->find('data-xml medications'));
+
+        $items= $recordQp->top()->find('data-xml awakening');
+        foreach ($items as $index=>$qpItem)
+        {
+            $this->awakenings[] = Awakening::createFromXML($qpItem);
+        }
+    }
+
 
     /**
      * @param $when Required time(). The date and time that the journal entry refers to.
@@ -21,7 +61,7 @@ class SleepSession extends HealthRecordItemData
      * @param $wakeState An evaluation of how the person felt when they got up in the morning. 1 = Wide awake,2 = Awake but a little tired,3 = Sleepy
      * @param array of Awakening $awakening
      * @param array of CodableValue $medications
-     * @return SleepRelatedActivity
+     * @return SleepSession
      */
     public static function createFromData($when, $bedTime, $wakeTime, $sleepMinutes, $settlingMinutes, $wakeState,
                                           $awakening = null, $medications = null)
@@ -80,5 +120,33 @@ class SleepSession extends HealthRecordItemData
         $parent->after($xml);
     }
 
+
+    public function getItemJSONArray()
+    {
+        $parentData = parent::getItemJSONArray();
+
+        $myData = array(
+            "when" => $this->when,
+            "bedTime" => $this->bedTime,
+            "sleepMinutes" => $this->sleepMinutes,
+            "settlingMinutes" => $this->settlingMinutes,
+            "wakeState" => $this->wakeState
+        );
+
+        // Loop over arrays and get their JSON data.
+        if (!empty($this->awakenings))
+        {
+            foreach($this->awakenings as $index=>$awakening)
+            {
+                $myData["awakenings"][] = $awakening->getItemJSONArray();
+            }
+        }
+        if ( !empty($this->medications))
+        {
+            $myData["medications"] = $this->medications->getItemJSONArray();
+        }
+
+        return array_merge($myData, $parentData);
+    }
 
 }
