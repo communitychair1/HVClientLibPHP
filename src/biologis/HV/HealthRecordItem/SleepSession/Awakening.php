@@ -56,7 +56,7 @@ class Awakening extends HealthRecordItemData
         return $item;
     }
 
-    public function getItemXml()
+    public function getObjectXml()
     {
         return $this->getQp()->top()->innerXML();
     }
