@@ -73,7 +73,7 @@ class HVClientTest extends HVClientBaseTest
         $this->assertEquals($this->personId, $personInfo->person_id);
         $this->assertEquals($this->recordId, $personInfo->selected_record_id);
         $arr = $personInfo->getRecordList();
-        foreach($arr as $record){
+        foreach ($arr as $record) {
             $this->assertArrayHasKey('id', $record);
         }
     }
@@ -118,7 +118,7 @@ class HVClientTest extends HVClientBaseTest
         $this->hv->connect();
 
         $weight = $this->hv->getThings(
-            array('3d34d87e-7fc1-4153-800f-f56592cb0d17'=>''),
+            array('3d34d87e-7fc1-4153-800f-f56592cb0d17' => ''),
             $this->recordId,
             array(),
             false
@@ -136,7 +136,7 @@ class HVClientTest extends HVClientBaseTest
         $this->hv->putThings($this->hv->stripXMLHeader($sxml), $this->recordId);
 
         $checkWeight = $this->hv->getThings(
-            array('3d34d87e-7fc1-4153-800f-f56592cb0d17'=>''),
+            array('3d34d87e-7fc1-4153-800f-f56592cb0d17' => ''),
             $this->recordId,
             array(),
             false
@@ -162,7 +162,7 @@ class HVClientTest extends HVClientBaseTest
     public function testSetHealthVaultAuthInstance()
     {
         $this->hv->setHealthVaultAuthInstance('testing');
-        $this->assertEquals('testing',$this->hv->getHealthVaultAuthInstance(),'Setting the HVAuthInstance does not work');
+        $this->assertEquals('testing', $this->hv->getHealthVaultAuthInstance(), 'Setting the HVAuthInstance does not work');
     }
 
     /**
@@ -183,7 +183,7 @@ class HVClientTest extends HVClientBaseTest
     public function testSetHealthVaultPlatform()
     {
         $this->hv->setHealthVaultPlatform('testing');
-        $this->assertEquals('testing',$this->hv->getHealthVaultPlatform(),'Setting the HVPlatform does not work');
+        $this->assertEquals('testing', $this->hv->getHealthVaultPlatform(), 'Setting the HVPlatform does not work');
     }
 
 
@@ -194,6 +194,6 @@ class HVClientTest extends HVClientBaseTest
     {
         $xml = simplexml_load_string('<music>\n<album>Beethoven</album>\n</music>');
         $xml = simplexml_load_string($this->hv->stripXMLHeader($xml));
-        $this->assertObjectNotHasAttribute('music',$xml);
+        $this->assertObjectNotHasAttribute('music', $xml);
     }
 }

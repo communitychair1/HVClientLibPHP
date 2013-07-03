@@ -38,7 +38,6 @@ class HVSleepSessionParserTest extends HVClientBaseTest
         $item = HVTestSleepSessionObjectCreation::createSleepSession3();
 
 
-
         $this->assertNotEmpty($item);
         // Grab the XML
         $xml = $item->getItemXml();
@@ -50,7 +49,7 @@ class HVSleepSessionParserTest extends HVClientBaseTest
         $parsedItem = new SleepSession(QueryPath::withXML($xml));
         // print_r( $parsedItem->getItemJSONArray() );
         $jsonData = $parsedItem->getItemJSONArray();
-            
+
         // Ensure we got the items parsed correctly.
         $this->assertArrayHasKey("when", $jsonData);
         $this->assertArrayHasKey("bedTime", $jsonData);

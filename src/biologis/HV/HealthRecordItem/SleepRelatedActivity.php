@@ -24,7 +24,8 @@ class SleepRelatedActivity extends HealthRecordItemData
     /**
      * @param Query Path of the object
      */
-    public function __construct(Query $qp) {
+    public function __construct(Query $qp)
+    {
         parent::__construct($qp);
         $recordQp = $qp->find('data-xml');
         $this->when = $this->getTimestamp('data-xml when');
@@ -33,8 +34,7 @@ class SleepRelatedActivity extends HealthRecordItemData
         //Populate Exercise Data from HV
         $exerciseBranch = $recordQp->branch('exercise');
         $index = 0;
-        foreach($exerciseBranch as $exerciseEntry)
-        {
+        foreach ($exerciseBranch as $exerciseEntry) {
             $this->exercise[$index]['when'] =
                 $this->populateTimeData($exerciseEntry->branch('when'), $this->qp->find('data-xml when'));
             $this->exercise[$index]['minutes'] =
@@ -58,8 +58,7 @@ class SleepRelatedActivity extends HealthRecordItemData
         //Populate Nap Data from HV
         $napBranch = $recordQp->branch('nap');
         $index = 0;
-        foreach($napBranch as $napEntry)
-        {
+        foreach ($napBranch as $napEntry) {
             $this->nap[$index]['when'] =
                 $this->populateTimeData($napEntry->branch('when'), $this->qp->find('data-xml when'));
             $this->nap[$index]['minutes'] =
@@ -85,7 +84,7 @@ class SleepRelatedActivity extends HealthRecordItemData
      * @return mixed
      */
 
-    public static function createFromData($when, $sleepiness, $caffeine = array(), $alcohol = array(), $naps = array(), $exercises = array() )
+    public static function createFromData($when, $sleepiness, $caffeine = array(), $alcohol = array(), $naps = array(), $exercises = array())
     {
         /**
          * @var $sleepRelatedActivity SleepRelatedActivity
@@ -94,8 +93,7 @@ class SleepRelatedActivity extends HealthRecordItemData
 
         $sleepRelatedActivity->setTimestamp('when', $when);
 
-        if(!(is_null($sleepiness)))
-        {
+        if (!(is_null($sleepiness))) {
             $sleepRelatedActivity->getQp()->find('sleepiness')->text($sleepiness);
         }
 
@@ -103,37 +101,29 @@ class SleepRelatedActivity extends HealthRecordItemData
         $parentNode = $sleepRelatedActivity->qp->top()->find("when");
 
         // Loop through arrays adding items.
-        if(!(is_null($exercises)))
-        {
-            foreach ($exercises as $item)
-            {
+        if (!(is_null($exercises))) {
+            foreach ($exercises as $item) {
                 // Should be a time, so just add it.
                 $sleepRelatedActivity->addActivity($parentNode, "exercise", $item);
             }
         }
 
-        if(!(is_null($naps)))
-        {
-        foreach ($naps as $item)
-            {
+        if (!(is_null($naps))) {
+            foreach ($naps as $item) {
                 // Should be a time, so just add it.
                 $sleepRelatedActivity->addActivity($parentNode, "nap", $item);
             }
         }
 
-        if(!(is_null($alcohol)))
-        {
-            foreach ($alcohol as $tstamp)
-            {
+        if (!(is_null($alcohol))) {
+            foreach ($alcohol as $tstamp) {
                 // Should be a time, so just add it.
                 $sleepRelatedActivity->addTime($parentNode, "alcohol", $tstamp);
             }
         }
 
-        if(!(is_null($caffeine)))
-        {
-            foreach ($caffeine as $tstamp)
-            {
+        if (!(is_null($caffeine))) {
+            foreach ($caffeine as $tstamp) {
                 // Should be a time, so just add it.
                 $sleepRelatedActivity->addTime($parentNode, "caffeine", $tstamp);
             }
@@ -141,7 +131,6 @@ class SleepRelatedActivity extends HealthRecordItemData
 
         return $sleepRelatedActivity;
     }
-
 
     /**
      * Helper function to add the necessary XML for Activity
@@ -163,13 +152,12 @@ class SleepRelatedActivity extends HealthRecordItemData
     public function addActivity($parent, $nodeName, Activity $activity)
     {
         $xml = "<$nodeName><when>"
-                . date('<\h>H</\h><\m>i</\m><\s>s</\s><\f>0</\f>', $activity->when)
-                . "</when><minutes>"
-                . $activity->minutes
-                . "</minutes></$nodeName>";
+            . date('<\h>H</\h><\m>i</\m><\s>s</\s><\f>0</\f>', $activity->when)
+            . "</when><minutes>"
+            . $activity->minutes
+            . "</minutes></$nodeName>";
         $parent->after($xml);
     }
-
 
     /**
      * @return array

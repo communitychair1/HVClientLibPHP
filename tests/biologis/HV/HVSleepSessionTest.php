@@ -37,17 +37,13 @@ class HVSleepSessionTest extends HVClientBaseTest
         /**
          * @var $item SleepSession
          */
-
         // Create an emotional state
         $item = HVTestSleepSessionObjectCreation::createSleepSession1();
-
 
         $this->assertNotEmpty($item);
         // Grab the XML
         $xml = $item->getItemXml();
         $this->assertNotEmpty($xml, "itemXml empty");
-
-        // echo "XML:: \n $xml \n";
 
         $this->hv->putThings($xml, $this->recordId);
         $this->assertNotEmpty($this->hv->getConnector()->getRawResponse(), "No response received from HV");
@@ -71,8 +67,6 @@ class HVSleepSessionTest extends HVClientBaseTest
         // Grab the XML
         $xml = $item->getItemXml();
         $this->assertNotEmpty($xml, "itemXml empty");
-
-        // echo "XML:: \n $xml \n";
 
         $this->hv->putThings($xml, $this->recordId);
         $this->assertNotEmpty($this->hv->getConnector()->getRawResponse(), "No response received from HV");

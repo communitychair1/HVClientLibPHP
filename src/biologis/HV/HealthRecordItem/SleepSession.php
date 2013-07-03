@@ -86,7 +86,6 @@ class SleepSession extends HealthRecordItemData
         $sleepSession->getQp()->top()->find('settling-minutes')->text($settlingMinutes);
         $sleepSession->getQp()->top()->find('wake-state')->text($wakeState);
 
-
         // Loop through arrays adding items.
         $settlingNode = $sleepSession->getQp()->top()->find("settling-minutes");
         if ( !empty($medications) )

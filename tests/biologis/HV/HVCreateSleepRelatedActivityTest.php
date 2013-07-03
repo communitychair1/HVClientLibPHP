@@ -37,7 +37,7 @@ class HVSleepRelatedActivityTest extends HVClientBaseTest
         /**
          * @var $sleepRelatedActivity SleepRelatedActivity
          */
-        $sleepRelatedActivity = SleepRelatedActivity::createFromData( time(), 1);
+        $sleepRelatedActivity = SleepRelatedActivity::createFromData(time(), 1);
 
         $this->assertNotEmpty($sleepRelatedActivity, "Sleep Related State object empty.");
         // Grab the XML
@@ -45,8 +45,8 @@ class HVSleepRelatedActivityTest extends HVClientBaseTest
         // echo "XML: $xml \n";
         $this->assertNotEmpty($xml, "itemXml empty");
 
-        $this->hv->putThings($xml, $this->recordId );
-        $this->assertNotEmpty($this->hv->getConnector()->getRawResponse(),"No response received from HV");
+        $this->hv->putThings($xml, $this->recordId);
+        $this->assertNotEmpty($this->hv->getConnector()->getRawResponse(), "No response received from HV");
         $this->assertContains("version", $this->hv->getConnector()->getRawResponse(), "Missing version identifier from response");
 
     }
@@ -62,8 +62,8 @@ class HVSleepRelatedActivityTest extends HVClientBaseTest
          * @var $sleepRelatedActivity SleepRelatedActivity
          */
         // Create an emotional state
-        $sleepRelatedActivity = SleepRelatedActivity::createFromData( time(), 1,
-                                    array(time()), array(time()), array($activity), array($activity) );
+        $sleepRelatedActivity = SleepRelatedActivity::createFromData(time(), 1,
+            array(time()), array(time()), array($activity), array($activity));
 
         $this->assertNotEmpty($sleepRelatedActivity, "Sleep Related State object empty.");
         // Grab the XML
@@ -71,8 +71,8 @@ class HVSleepRelatedActivityTest extends HVClientBaseTest
         // echo "XML: $xml \n";
         $this->assertNotEmpty($xml, "itemXml empty");
 
-        $this->hv->putThings($xml, $this->recordId );
-        $this->assertNotEmpty($this->hv->getConnector()->getRawResponse(),"No response received from HV");
+        $this->hv->putThings($xml, $this->recordId);
+        $this->assertNotEmpty($this->hv->getConnector()->getRawResponse(), "No response received from HV");
         $this->assertContains("version", $this->hv->getConnector()->getRawResponse(), "Missing version identifier from response");
 
     }

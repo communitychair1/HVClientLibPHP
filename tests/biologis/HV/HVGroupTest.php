@@ -34,7 +34,8 @@ class HVGroupTest extends HVClientBaseTest
      *  This testes the case in which only a single type Id
      *  is passed in.
      */
-    public function testSingleGroupNoFilters(){
+    public function testSingleGroupNoFilters()
+    {
 
 
         //---------TEST ONE: SINGLE GROUP NO FILTERS---------
@@ -52,8 +53,7 @@ class HVGroupTest extends HVClientBaseTest
             false
         );
 
-        foreach($xmlResponse as $weights)
-        {
+        foreach ($xmlResponse as $weights) {
             $this->assertNotNull($weights->{'weight'}, "Weights Have Been Returned");
         }
 
@@ -65,7 +65,8 @@ class HVGroupTest extends HVClientBaseTest
      *  is passed in along with a filter.
      */
 
-    public function testSingleGroupSingleFilter(){
+    public function testSingleGroupSingleFilter()
+    {
         $groupAndFilter = array(
             'Weight Measurement' => '<xpath>/thing/data-xml/height/when/date[y &gt; 2012]</xpath>',
         );
@@ -78,8 +79,7 @@ class HVGroupTest extends HVClientBaseTest
             false
         );
 
-        foreach($xmlResponse as $weights)
-        {
+        foreach ($xmlResponse as $weights) {
             $this->assertNotNull($weights->{'weight'}, "Weights Have Been Returned");
             $this->assertGreaterThan(2012, $weights->{'weight'}->{'when'}->{'date'}->{'y'});
         }
@@ -90,7 +90,8 @@ class HVGroupTest extends HVClientBaseTest
      *  This testes the case in which multiple type Id's
      *  // are passed in along with no filter.
      */
-    public function testMultipleGroupsNoFilters(){
+    public function testMultipleGroupsNoFilters()
+    {
         $groupAndFilter["Height Measurement"] = '';
         $groupAndFilter["Weight Measurement"] = '';
         $options = array();
@@ -101,14 +102,10 @@ class HVGroupTest extends HVClientBaseTest
             false
         );
 
-        foreach ($xmlResponse as $thing)
-        {
-            if($thing->{'weight'})
-            {
+        foreach ($xmlResponse as $thing) {
+            if ($thing->{'weight'}) {
                 $this->assertNotEmpty($thing->{'weight'}, "Weights Have Been Returned");
-            }
-            elseif($thing->{'height'})
-            {
+            } elseif ($thing->{'height'}) {
                 $this->assertNotEmpty($thing->{'height'}, "Heights Have Been Returned");
             }
         }
@@ -132,15 +129,11 @@ class HVGroupTest extends HVClientBaseTest
             false
         );
 
-        foreach ($xmlResponse as $thing)
-        {
-            if($thing->{'weight'})
-            {
+        foreach ($xmlResponse as $thing) {
+            if ($thing->{'weight'}) {
                 $this->assertNotEmpty($thing->{'weight'}, "Weights Have Been Returned");
-                $this->assertLessThan(88,$thing->{'weight'}->{'value'}->{'kg'});
-            }
-            elseif($thing->{'height'})
-            {
+                $this->assertLessThan(88, $thing->{'weight'}->{'value'}->{'kg'});
+            } elseif ($thing->{'height'}) {
                 $this->assertNotEmpty($thing->{'height'}, "Heights Have Been Returned");
                 $this->assertGreaterThan(2012, $thing->{'height'}->{'when'}->{'date'}->{'y'});
             }
@@ -150,7 +143,8 @@ class HVGroupTest extends HVClientBaseTest
     /**
      * TODO: move to it's own test
      */
-    public function testProfileRequests(){
+    public function testProfileRequests()
+    {
 
         $options = array();
         $userData = $this->hv->getThings(

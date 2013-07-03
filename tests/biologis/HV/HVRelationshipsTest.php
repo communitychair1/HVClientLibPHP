@@ -45,19 +45,17 @@ class HVRelationshipsTest extends HVClientBaseTest
         $allRecords = array();
 
         //loop through all records and add them to the array
-        for($i = 0; $i < count($this->personInfo->record); $i++)
+        for ($i = 0; $i < count($this->personInfo->record); $i++)
             $allRecords[$i] = $this->personInfo->record[$i];
 
         //loop through all records and make assertions
-        foreach($allRecords as $record)
-        {
+        foreach ($allRecords as $record) {
             //assert that the id of each array exist
             $this->assertNotEmpty($record['id'], 'Id exists in this record');
 
             //assert rel-type and rel-name exist for building relationships
             // It is important we make sure all relevant relationships are correct
-            switch($record['rel-type'])
-            {
+            switch ($record['rel-type']) {
                 case 1:
                     $this->assertEquals($record['rel-name'], 'Self');
                     $this->assertEquals($record['id'], $this->recordId);

@@ -35,17 +35,18 @@ class HVTrackerTest extends HVClientBaseTest
      *  Tests the return of all data related to sleep and emotional state
      *  Filtered by a 14 day time stamp
      */
-    public function testTrackerRequestByDate14(){
+    public function testTrackerRequestByDate14()
+    {
 
         //Create a timestamp 14 days in the past
         $dateFilterStr = '-14 days';
-        $time14 = date(DATE_ATOM, mktime(0,0,0,
+        $time14 = date(DATE_ATOM, mktime(0, 0, 0,
             date('m', strtotime($dateFilterStr)),
             date('d', strtotime($dateFilterStr)),
             date('Y', strtotime($dateFilterStr))));
 
         //Create an XML filter using timestamp
-        $timeFilter = '<eff-date-min>'.$time14.'</eff-date-min>';
+        $timeFilter = '<eff-date-min>' . $time14 . '</eff-date-min>';
 
         //Init array's for request
         $option = array();
@@ -68,20 +69,16 @@ class HVTrackerTest extends HVClientBaseTest
 
         //For all the "things" returned
         //Make sure the dates are the correct length apart.
-        foreach($response as $thing)
-        {
-            if($thing->{'emotion'})
-            {
-                if($thing->{'emotion'}->{'when'}->{'date'}->{'m'} == date('m', strtotime($dateFilterStr)))
+        foreach ($response as $thing) {
+            if ($thing->{'emotion'}) {
+                if ($thing->{'emotion'}->{'when'}->{'date'}->{'m'} == date('m', strtotime($dateFilterStr)))
                     $this->assertGreaterThanOrEqual(date('d', strtotime($dateFilterStr)),
                         $thing->{'emotion'}->{'when'}->{'date'}->{'d'});
                 else
                     $this->assertGreaterThanOrEqual(date('d', strtotime($dateFilterStr)),
                         $thing->{'emotion'}->{'when'}->{'date'}->{'d'} + date('d', strtotime($dateFilterStr)));
-            }
-            elseif($thing->{'sleep-pm'})
-            {
-                if($thing->{'sleep-pm'}->{'when'}->{'date'}->{'m'} == date('m', strtotime($dateFilterStr)))
+            } elseif ($thing->{'sleep-pm'}) {
+                if ($thing->{'sleep-pm'}->{'when'}->{'date'}->{'m'} == date('m', strtotime($dateFilterStr)))
                     $this->assertGreaterThanOrEqual(date('d', strtotime($dateFilterStr)),
                         $thing->{'sleep-pm'}->{'when'}->{'date'}->{'d'});
                 else
@@ -90,23 +87,25 @@ class HVTrackerTest extends HVClientBaseTest
             }
         }
     }
+
     /**
      * Test Tracker Request By Date 30
      *
      *  Tests the return of all data related to sleep and emotional state
      *  Filtered by a 30 day time stamp
      */
-    public function testTrackerRequestByDate30(){
+    public function testTrackerRequestByDate30()
+    {
 
         //Create a timestamp 14 days in the past
         $dateFilterStr = '-30 days';
-        $time14 = date(DATE_ATOM, mktime(0,0,0,
+        $time14 = date(DATE_ATOM, mktime(0, 0, 0,
             date('m', strtotime($dateFilterStr)),
             date('d', strtotime($dateFilterStr)),
             date('Y', strtotime($dateFilterStr))));
 
         //Create an XML filter using timestamp
-        $timeFilter = '<eff-date-min>'.$time14.'</eff-date-min>';
+        $timeFilter = '<eff-date-min>' . $time14 . '</eff-date-min>';
 
         //Init array's for request
         $option = array();
@@ -128,20 +127,16 @@ class HVTrackerTest extends HVClientBaseTest
 
         //For all the "things" returned
         //Make sure the dates are the correct length apart.
-        foreach($response as $thing)
-        {
-            if($thing->{'emotion'})
-            {
-                if($thing->{'emotion'}->{'when'}->{'date'}->{'m'} == date('m', strtotime($dateFilterStr)))
+        foreach ($response as $thing) {
+            if ($thing->{'emotion'}) {
+                if ($thing->{'emotion'}->{'when'}->{'date'}->{'m'} == date('m', strtotime($dateFilterStr)))
                     $this->assertGreaterThanOrEqual(date('d', strtotime($dateFilterStr)),
                         $thing->{'emotion'}->{'when'}->{'date'}->{'d'});
                 else
                     $this->assertGreaterThan(date('m', strtotime($dateFilterStr)),
                         $thing->{'emotion'}->{'when'}->{'date'}->{'m'});
-            }
-            elseif($thing->{'sleep-pm'})
-            {
-                if($thing->{'sleep-pm'}->{'when'}->{'date'}->{'m'} == date('m', strtotime($dateFilterStr)))
+            } elseif ($thing->{'sleep-pm'}) {
+                if ($thing->{'sleep-pm'}->{'when'}->{'date'}->{'m'} == date('m', strtotime($dateFilterStr)))
                     $this->assertGreaterThanOrEqual(date('d', strtotime($dateFilterStr)),
                         $thing->{'sleep-pm'}->{'when'}->{'date'}->{'d'});
                 else
@@ -156,25 +151,26 @@ class HVTrackerTest extends HVClientBaseTest
      *
      *  Tests retrieving tracker data within a range of dates
      */
-    public function testTrackerRequestMaxMinDate(){
+    public function testTrackerRequestMaxMinDate()
+    {
 
         //Create a timestamp 14 days in the past
         $dateFilterStrMax = '-2 days';
         $dateFilterStrMin = '-5 days';
 
-        $timeMax = date(DATE_ATOM, mktime(0,0,0,
+        $timeMax = date(DATE_ATOM, mktime(0, 0, 0,
             date('m', strtotime($dateFilterStrMax)),
             date('d', strtotime($dateFilterStrMax)),
             date('Y', strtotime($dateFilterStrMax))));
 
-        $timeMin = date(DATE_ATOM, mktime(0,0,0,
+        $timeMin = date(DATE_ATOM, mktime(0, 0, 0,
             date('m', strtotime($dateFilterStrMin)),
             date('d', strtotime($dateFilterStrMin)),
             date('Y', strtotime($dateFilterStrMin))));
 
         //Create an XML filter using timestamp
-        $timeFilterMax = '<eff-date-max>'.$timeMax.'</eff-date-max>';
-        $timeFilterMin = '<eff-date-min>'.$timeMin.'</eff-date-min>';
+        $timeFilterMax = '<eff-date-max>' . $timeMax . '</eff-date-max>';
+        $timeFilterMin = '<eff-date-min>' . $timeMin . '</eff-date-min>';
 
         //Init array's for request
         $option = array();
@@ -183,8 +179,8 @@ class HVTrackerTest extends HVClientBaseTest
         //Populate the Request group
         // Key = TypeName of Thing to request
         // Value = filter on that thing request
-        $requestGroup["Sleep Related Activity"] = $timeFilterMin.$timeFilterMax;
-        $requestGroup["Emotional State"] = $timeFilterMin.$timeFilterMax;
+        $requestGroup["Sleep Related Activity"] = $timeFilterMin . $timeFilterMax;
+        $requestGroup["Emotional State"] = $timeFilterMin . $timeFilterMax;
         $requestGroup["Health Journal Entry"] = '';
 
         //Make the request to health vault.
@@ -195,23 +191,19 @@ class HVTrackerTest extends HVClientBaseTest
             false
         );
 
-        foreach($response as $thing)
-        {
-            if($thing->{'emotion'})
-            {
-                if($thing->{'emotion'}->{'when'}->{'date'}->{'m'} == date('m', strtotime($dateFilterStrMax)))
+        foreach ($response as $thing) {
+            if ($thing->{'emotion'}) {
+                if ($thing->{'emotion'}->{'when'}->{'date'}->{'m'} == date('m', strtotime($dateFilterStrMax)))
                     $this->assertLessThanOrEqual(date('d', strtotime($dateFilterStrMax)),
                         $thing->{'emotion'}->{'when'}->{'date'}->{'d'});
-                if($thing->{'emotion'}->{'when'}->{'date'}->{'m'} == date('m', strtotime($dateFilterStrMin)))
+                if ($thing->{'emotion'}->{'when'}->{'date'}->{'m'} == date('m', strtotime($dateFilterStrMin)))
                     $this->assertGreaterThanOrEqual(date('d', strtotime($dateFilterStrMin)),
                         $thing->{'emotion'}->{'when'}->{'date'}->{'d'});
-            }
-            elseif($thing->{'sleep-pm'})
-            {
-                if($thing->{'sleep-pm'}->{'when'}->{'date'}->{'m'} == date('m', strtotime($dateFilterStrMax)))
+            } elseif ($thing->{'sleep-pm'}) {
+                if ($thing->{'sleep-pm'}->{'when'}->{'date'}->{'m'} == date('m', strtotime($dateFilterStrMax)))
                     $this->assertLessThanOrEqual(date('d', strtotime($dateFilterStrMax)),
                         $thing->{'sleep-pm'}->{'when'}->{'date'}->{'d'});
-                if($thing->{'emotion'}->{'when'}->{'date'}->{'m'} == date('m', strtotime($dateFilterStrMin)))
+                if ($thing->{'emotion'}->{'when'}->{'date'}->{'m'} == date('m', strtotime($dateFilterStrMin)))
                     $this->assertGreaterThanOrEqual(date('d', strtotime($dateFilterStrMin)),
                         $thing->{'sleep-pm'}->{'when'}->{'date'}->{'d'});
             }

@@ -35,25 +35,26 @@ class HVEmotionalStateParserTest extends HVClientBaseTest
      *
      *  Tests retrieving tracker data within a range of dates
      */
-    public function testTrackerRequestMaxMinDate(){
+    public function testTrackerRequestMaxMinDate()
+    {
 
         //Create a timestamp 14 days in the past
         $dateFilterStrMax = '-2 days';
         $dateFilterStrMin = '-5 days';
 
-        $timeMax = date(DATE_ATOM, mktime(0,0,0,
+        $timeMax = date(DATE_ATOM, mktime(0, 0, 0,
             date('m', strtotime($dateFilterStrMax)),
             date('d', strtotime($dateFilterStrMax)),
             date('Y', strtotime($dateFilterStrMax))));
 
-        $timeMin = date(DATE_ATOM, mktime(0,0,0,
+        $timeMin = date(DATE_ATOM, mktime(0, 0, 0,
             date('m', strtotime($dateFilterStrMin)),
             date('d', strtotime($dateFilterStrMin)),
             date('Y', strtotime($dateFilterStrMin))));
 
         //Create an XML filter using timestamp
-        $timeFilterMax = '<eff-date-max>'.$timeMax.'</eff-date-max>';
-        $timeFilterMin = '<eff-date-min>'.$timeMin.'</eff-date-min>';
+        $timeFilterMax = '<eff-date-max>' . $timeMax . '</eff-date-max>';
+        $timeFilterMin = '<eff-date-min>' . $timeMin . '</eff-date-min>';
 
         //Init array's for request
         $option = array();
@@ -62,7 +63,7 @@ class HVEmotionalStateParserTest extends HVClientBaseTest
         //Populate the Request group
         // Key = TypeName of Thing to request
         // Value = filter on that thing request
-        $requestGroup["Emotional State"] = $timeFilterMin.$timeFilterMax;
+        $requestGroup["Emotional State"] = $timeFilterMin . $timeFilterMax;
 
         //Make the request to health vault.
         $hvThingArr = $this->hv->getThings(
@@ -73,8 +74,7 @@ class HVEmotionalStateParserTest extends HVClientBaseTest
         );
 
         /* @var $hvThing HealthRecordItemData */
-        foreach ($hvThingArr as $hvThing)
-        {
+        foreach ($hvThingArr as $hvThing) {
             $dataArr = $hvThing->getItemJSONArray();
             $this->assertArrayHasKey("mood", $dataArr);
             $this->assertArrayHasKey("when", $dataArr);

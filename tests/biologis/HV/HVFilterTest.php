@@ -41,7 +41,7 @@ class HVFilterTest extends HVClientBaseTest
 
         //Init filters for query 1
         $groupReq = array(
-            "Weight Measurement" => '<thing-state>Active</thing-state><xpath>'. $XpathQuery1 .'</xpath>'
+            "Weight Measurement" => '<thing-state>Active</thing-state><xpath>' . $XpathQuery1 . '</xpath>'
         );
 
         $options = array();
@@ -55,19 +55,18 @@ class HVFilterTest extends HVClientBaseTest
         );
 
         // Loop through the first query and assert conditions
-        foreach($queryData as $weight)
-        {
+        foreach ($queryData as $weight) {
             $year = $weight->{'weight'}->{'when'}->{'date'}->{'y'};
 
             //Assert the year of each thing returned is greater than 2012
-            $this->assertGreaterThan(2012,$year);
+            $this->assertGreaterThan(2012, $year);
 
             //Assert the value of the weight element exists.
             $this->assertNotNull($weight->{'weight'}->{'value'});
         }
 
         //Make the second request and filter
-        $groupReq["Weight Measurement"] = '<thing-state>Active</thing-state><xpath>'. $XpathQuery2 .'</xpath>';
+        $groupReq["Weight Measurement"] = '<thing-state>Active</thing-state><xpath>' . $XpathQuery2 . '</xpath>';
 
         //Run query 2
         $queryData = $this->hv->getThings(
@@ -78,12 +77,11 @@ class HVFilterTest extends HVClientBaseTest
         );
 
         // Loop through the first query and assert conditions
-        foreach($queryData as $weight)
-        {
+        foreach ($queryData as $weight) {
             $kg = $weight->{'weight'}->{'value'}->{'kg'};
 
             //Assert the year of each thing returned is greater than 2012
-            $this->assertLessThan(88,$kg);
+            $this->assertLessThan(88, $kg);
 
             //Assert the date of measurement exists
             $this->assertNotNull($weight->{'weight'}->{'when'}->{'date'});

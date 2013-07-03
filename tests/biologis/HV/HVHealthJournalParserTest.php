@@ -35,7 +35,8 @@ class HVHealthJournalParserTest extends HVClientBaseTest
      *
      *  Tests retrieving tracker data within a range of dates
      */
-    public function testHealthJournalParser(){
+    public function testHealthJournalParser()
+    {
 
         //Init array's for request
         $option = array();
@@ -55,8 +56,7 @@ class HVHealthJournalParserTest extends HVClientBaseTest
         );
 
         /* @var $hvThing HealthRecordItemData */
-        foreach ($hvThingArr as $hvThing)
-        {
+        foreach ($hvThingArr as $hvThing) {
             $dataArr = $hvThing->getItemJSONArray();
             $this->assertArrayHasKey("content", $dataArr);
             $this->assertArrayHasKey("when", $dataArr);
