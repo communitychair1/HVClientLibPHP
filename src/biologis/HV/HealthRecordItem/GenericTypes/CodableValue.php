@@ -61,7 +61,7 @@ class CodableValue extends HealthRecordItemData
     }
 
 
-    public function getItemXml()
+    public function getObjectXml()
     {
         return $this->getQp()->top()->innerXML();
     }
