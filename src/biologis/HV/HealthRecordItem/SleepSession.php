@@ -18,6 +18,7 @@ class SleepSession extends HealthRecordItemData
 
     protected $when = null;
     protected $bedTime = null;
+    protected $wakeTime = null;
     protected $sleepMinutes = null;
     protected $settlingMinutes = null;
     protected $wakeState = null;
@@ -36,13 +37,19 @@ class SleepSession extends HealthRecordItemData
             $this->when = $this->getTimestamp('data-xml when');
         }
 
-        $this->bedTime = $recordQp->find('bed-time')->text();
+        $this->bedTime = $this->getTimestamp('data-xml bed-time');
+        $this->wakeTime = $this->getTimestamp('data-xml wake-time');
         $this->sleepMinutes = $recordQp->find('wake-time')->text();
         $this->sleepMinutes = $recordQp->find('sleep-minutes')->text();
         $this->settlingMinutes = $recordQp->find('settling-minutes')->text();
         $this->wakeState = $recordQp->find('wake-state')->text();
 
-        $this->medications = CodableValue::createFromXML($recordQp->top()->find('data-xml medications'));
+        $txt = $recordQp->find("data-xml medications")->text();
+
+        if (!empty($txt))
+        {
+            $this->medications = CodableValue::createFromXML($recordQp->top()->find('data-xml medications'));
+        }
 
         $items= $recordQp->top()->find('data-xml awakening');
         foreach ($items as $index=>$qpItem)
@@ -127,6 +134,7 @@ class SleepSession extends HealthRecordItemData
         $myData = array(
             "when" => $this->when,
             "bedTime" => $this->bedTime,
+            "wakeTime" => $this->wakeTime,
             "sleepMinutes" => $this->sleepMinutes,
             "settlingMinutes" => $this->settlingMinutes,
             "wakeState" => $this->wakeState
