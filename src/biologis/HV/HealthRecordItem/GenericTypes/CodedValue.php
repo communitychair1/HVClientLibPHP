@@ -69,7 +69,7 @@ class CodedValue extends HealthRecordItemData
         return $item;
     }
 
-    public function getItemXml()
+    public function getObjectXml()
     {
         return $this->qp->top()->innerXML();
     }
