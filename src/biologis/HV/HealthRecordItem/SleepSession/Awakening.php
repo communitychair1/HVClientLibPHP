@@ -21,8 +21,6 @@ class Awakening extends HealthRecordItemData
 
     public static function createFromXML(Query $qp, $baseDate = null )
     {
-        // echo "CodableValue XML:: " . $qp->xml() . "\n\n";
-
         $item = new Awakening($qp);
 
         if ( !empty($baseDate) )
@@ -63,7 +61,6 @@ class Awakening extends HealthRecordItemData
 
     public function getItemJSONArray()
     {
-
         $myData = array(
             "when" => $this->when,
             "minutes" => $this->minutes

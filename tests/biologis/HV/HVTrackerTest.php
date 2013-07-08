@@ -203,7 +203,7 @@ class HVTrackerTest extends HVClientBaseTest
                 if ($thing->{'sleep-pm'}->{'when'}->{'date'}->{'m'} == date('m', strtotime($dateFilterStrMax)))
                     $this->assertLessThanOrEqual(date('d', strtotime($dateFilterStrMax)),
                         $thing->{'sleep-pm'}->{'when'}->{'date'}->{'d'});
-                if ($thing->{'emotion'}->{'when'}->{'date'}->{'m'} == date('m', strtotime($dateFilterStrMin)))
+                if ($thing->{'sleep-pm'}->{'when'}->{'date'}->{'m'} == date('m', strtotime($dateFilterStrMin)))
                     $this->assertGreaterThanOrEqual(date('d', strtotime($dateFilterStrMin)),
                         $thing->{'sleep-pm'}->{'when'}->{'date'}->{'d'});
             }
