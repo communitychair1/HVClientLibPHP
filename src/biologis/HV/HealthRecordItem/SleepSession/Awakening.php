@@ -42,8 +42,14 @@ class Awakening extends HealthRecordItemData
 
     public static function createFromData($when, $minutes)
     {
+
         $item = new Awakening(QueryPath::withXML());
-        $item->getQp()->top()->append("<container/>");
+
+        // Save value as class members
+        $item->when  =$when;
+        $item->minutes = $minutes;
+
+        $item->getQp()->top()->append("<awakening/>");
 
         $item->getQp()->top()->append("<when/>");
 

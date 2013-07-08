@@ -30,6 +30,7 @@ class SleepSession extends HealthRecordItemData
      */
     public function __construct(Query $qp) {
         parent::__construct($qp);
+
         $recordQp = $qp->find('data-xml');
         $txt = $recordQp->find("data-xml when h")->text();
         if ( !empty($txt) )
@@ -74,12 +75,22 @@ class SleepSession extends HealthRecordItemData
                                           $awakening = null, $medications = null)
     {
         /**
-         * @var $sleepRelatedActivity SleepRelatedActivity
+         * @var $sleepSession SleepSession
          */
         $sleepSession = HealthRecordItemFactory::getThing('Sleep Session');
 
-        $sleepSession->setTimestamp('when', $when);
 
+        // Save member access
+        $sleepSession->when  =$when;
+        $sleepSession->bedTime = $bedTime;
+        $sleepSession->wakeTime = $wakeTime;
+        $sleepSession->sleepMinutes = $sleepMinutes;
+        $sleepSession->settlingMinutes = $settlingMinutes;
+        $sleepSession->wakeState= $wakeState;
+        $sleepSession->awakenings = $awakening;
+        $sleepSession->medications = $medications;
+
+        $sleepSession->setTimestamp('when', $when);
         $sleepSession->setTime($sleepSession->getQp()->top()->find('bed-time'), $bedTime);
         $sleepSession->setTime($sleepSession->getQp()->top()->find('wake-time'), $wakeTime);
         $sleepSession->getQp()->top()->find('sleep-minutes')->text($sleepMinutes);
@@ -93,7 +104,8 @@ class SleepSession extends HealthRecordItemData
             foreach ($medications as $item)
             {
                 // Insert the XML
-                $settlingNode->after("<medications>". $item->getItemXML() . "</medications>");
+                $xml = $item->getQp()->innerXml();
+                $settlingNode->after( "<medications>" . $xml . "</medications>" );
             }
         }
 
@@ -103,27 +115,11 @@ class SleepSession extends HealthRecordItemData
             foreach ($awakening as $item)
             {
                 // Insert the XML
-                $settlingNode->after("<awakening>". $item->getItemXML() . "</awakening>");
+                $settlingNode->after($item->getItemXML("awakening"));
             }
         }
 
         return $sleepSession;
-    }
-
-    /**
-     * Helper function to create the necessary XML for the Activity
-     * @param $parent
-     * @param $nodeName
-     * @param Activity $activity
-     */
-    public function addActivity($parent, $nodeName, Activity $activity)
-    {
-        $xml = "<$nodeName><when>"
-                . date('<\h>H</\h><\m>i</\m><\s>s</\s><\f>0</\f>', $activity->when)
-                . "</when><minutes>"
-                . $activity->minutes
-                . "</minutes></$nodeName>";
-        $parent->after($xml);
     }
 
     public function getItemJSONArray()

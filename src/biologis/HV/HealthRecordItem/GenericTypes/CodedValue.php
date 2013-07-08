@@ -35,6 +35,12 @@ class CodedValue extends HealthRecordItemData
          * @var $parent QueryPath
          */
         $item = new CodedValue(QueryPath::withXML());
+
+        $item->value = $value;
+        $item->type = $type;
+        $item->family = $family;
+        $item->version = $version;
+
         $item->getQp()->top()->append("<code/>");
         $parent = $item->getQp()->top();
 

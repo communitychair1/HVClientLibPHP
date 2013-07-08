@@ -41,6 +41,10 @@ class CodableValue extends HealthRecordItemData
     public static function createFromData($text,  $codes)
     {
         $item = new CodableValue(QueryPath::withXML());
+
+        $item->text = $text;
+        $item->codes = $codes;
+
         $item->getQp()->top()->append("<container/>");
         $item->getQp()->top()->append("<text/>")
             ->top()->find("text")
@@ -53,8 +57,8 @@ class CodableValue extends HealthRecordItemData
                 /**
                  * @var $codedVal CodedValue
                  */
-                // Append the XML from that item.
-                $item->getQp()->top()->append("<code>".$codedVal->getItemXml() ."</code>");
+
+                $item->getQp()->top()->append( $codedVal->getQp()->top()->xml(true) );
             }
         }
         return $item;

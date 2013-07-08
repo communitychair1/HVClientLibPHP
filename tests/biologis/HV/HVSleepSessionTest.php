@@ -67,7 +67,7 @@ class HVSleepSessionTest extends HVClientBaseTest
         // Grab the XML
         $xml = $item->getItemXml();
         $this->assertNotEmpty($xml, "itemXml empty");
-
+        // print_r($xml);
         $this->hv->putThings($xml, $this->recordId);
         $this->assertNotEmpty($this->hv->getConnector()->getRawResponse(), "No response received from HV");
         $this->assertContains("version", $this->hv->getConnector()->getRawResponse(), "Missing version identifier from response");
