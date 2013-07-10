@@ -77,7 +77,7 @@ class HealthJournalEntry extends HealthRecordItemData
             "when" => $this->when,
             "descriptive when" => $this->descriptiveWhen,
             "content" => $this->content,
-            "category text" => $this->categoryText
+            "category text" => $this->category
         );
         return array_merge($myData, $parentData);
     }
