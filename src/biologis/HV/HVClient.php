@@ -249,6 +249,10 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
         {
             throw new HVClientNotConnectedException();
         }
+
+        $qp = $this->connector->getQueryPathResponse();
+        $ar = $qp->toArray();
+        return substr($ar[0]->nodeValue, 1);
     }
 
     /**
@@ -457,6 +461,24 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
             if($key == $typeId)
             {
                 return $item;
+            }
+        }
+    }
+
+    /**
+     * @param $typeName - Health Vault Thing Type Name (Sleep Session, Peronsal Demographic Information, etc.)
+     * @return string - Health Vault Thing ID (8375de98-7465-ae345-8ace-736af3b8e92c, etc.)
+     *
+     * This method will take a Health Vault Thing Type Name and conver it to the thing type id.
+     * It is the inverse of translateTypeId
+     */
+    public function translateTypeName($typeName)
+    {
+        foreach(HVRawConnector::$things as $item => $key)
+        {
+            if($typeName == $item)
+            {
+                return $key;
             }
         }
     }
