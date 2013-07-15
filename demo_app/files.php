@@ -53,7 +53,7 @@ try {
   }
 
   $things = $hv->getThings('File', $recordId);
-  foreach ($things as $thing) {
+  foreach ($things as $thing)
     print $thing->file->name . '<br>';
   }
   print "<hr>";

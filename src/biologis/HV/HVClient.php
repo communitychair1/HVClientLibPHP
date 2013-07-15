@@ -482,6 +482,15 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
             }
         }
     }
+    /*
+     * @param $pid
+     *
+     * Sets the person ID.  Used by devices connecting to the portal
+     */
+    public function setPersonId($pid)
+    {
+        $this->personId = $pid;
+    }
 
 }
 
