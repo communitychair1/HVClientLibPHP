@@ -63,7 +63,7 @@ class WeightMeasurement extends HealthRecordItemData {
         $parentData = parent::getItemJSONArray();
 
         $myData = array(
-            "timestamp" => $this->when,
+            "when" => $this->when,
             "weight" => $this->weight,
             "displayUnits" => $this->displayUnits
         );
