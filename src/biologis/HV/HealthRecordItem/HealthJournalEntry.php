@@ -82,4 +82,9 @@ class HealthJournalEntry extends HealthRecordItemData
         return array_merge($myData, $parentData);
     }
 
+    public function getContent()
+    {
+        return $this->content;
+    }
+
 }

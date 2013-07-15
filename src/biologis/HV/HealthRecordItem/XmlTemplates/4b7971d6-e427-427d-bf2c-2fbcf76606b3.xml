@@ -1,24 +1,31 @@
 <?xml version="1.0"?>
 <thing>
-  <type-id name="Emotional State">4b7971d6-e427-427d-bf2c-2fbcf76606b3</type-id>
-  <data-xml>
-    <emotion>
-      <when>
-        <date>
-          <y />
-          <m />
-          <d />
-        </date>
-        <time>
-          <h />
-          <m />
-          <s />
-          <f />
-        </time>
-      </when>
-        <mood/>
-        <stress/>
-        <wellbeing/>
-    </emotion>
-  </data-xml>
+    <type-id name="Emotional State">4b7971d6-e427-427d-bf2c-2fbcf76606b3</type-id>
+    <data-xml>
+        <emotion>
+            <when>
+                <date>
+                    <y />
+                    <m />
+                    <d />
+                </date>
+                <time>
+                    <h />
+                    <m />
+                    <s />
+                    <f />
+                </time>
+            </when>
+            <mood/>
+            <stress/>
+            <wellbeing/>
+        </emotion>
+        <common>
+            <related-thing>
+                <thing-id></thing-id>
+                <version-stamp></version-stamp>
+                <relationship-type></relationship-type>
+            </related-thing>
+        </common>
+    </data-xml>
 </thing>

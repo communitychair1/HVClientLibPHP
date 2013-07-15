@@ -19,6 +19,7 @@ class HealthRecordItemData extends AbstractXmlEntity
 
     protected $typeId;
     protected $version;
+    protected $thingId;
 
     /** Constructor
      * @param Query $qp
@@ -27,6 +28,7 @@ class HealthRecordItemData extends AbstractXmlEntity
     {
         $this->qp = $qp;
         $this->typeId = $this->qp->top()->find('type-id')->text();
+        $this->thingId = $this->qp->top()->find('thing-id')->first()->text();
         $this->version = $this->qp->top()->find('thing-id')->attr("version-stamp");
         $this->payloadElement = 'data-xml';
     }
@@ -144,11 +146,23 @@ class HealthRecordItemData extends AbstractXmlEntity
         if (!empty($node)) {
             // No value, so remove the node
             if (empty($value)) {
-                $node->remove();
+                $this->removeNode($nodeName);
             } else {
                 $node->text($value);
             }
         }
+    }
+
+    /**
+     *  This metod will remove a node from the xml.
+     *
+     * @param $nodeName
+     */
+
+    public function removeNode($nodeName)
+    {
+        $node = $this->getQp()->find($nodeName);
+        $node->remove();
     }
 
     /**
@@ -168,7 +182,8 @@ class HealthRecordItemData extends AbstractXmlEntity
     {
         $data = array(
             "type-id" => $this->typeId,
-            "version" => $this->version
+            "version" => $this->version,
+            "thing-id" => $this->thingId
         );
         return $data;
     }

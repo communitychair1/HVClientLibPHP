@@ -30,6 +30,7 @@ class File extends HealthRecordItemData {
 
         $file = HealthRecordItemFactory::getThing('File');
         $qp = $file->getQp();
+          mime_content_type($path);
         $qp->find('name')->text(basename($path))->top()
           ->find('size')->text(filesize($path))->top()
           ->find('content-type text')->text(mime_content_type($path))->top()
