@@ -38,16 +38,10 @@ class HVClientTest extends HVClientBaseTest
     //This should be deleted
     public function testFileSetup()
     {
-        echo "SANITY CHECK";
 
-        $file1 = File::createFromFilePath("/Applications/MAMP/htdocs/mentis/portal-web/trunk/vendor/communitychair1/hv-client-lib/src/biologis/HV/HealthRecordItem/testfile.txt");
-
-        $xml = $file1->getItemXml();
-
-        //uncomment to place a file in HV
+        $file = File::createFromFilePath("/Applications/MAMP/htdocs/mentis/portal-web/trunk/vendor/communitychair1/hv-client-lib/src/biologis/HV/HealthRecordItem/test.eda.zip");
+        $xml = $file->getItemXml();
         //$this->hv->putThings($xml, $this->recordId);
-
-        echo "SANITY CHECK";
 
     }
 
