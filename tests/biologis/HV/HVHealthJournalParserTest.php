@@ -55,7 +55,7 @@ class HVHealthJournalParserTest extends HVClientBaseTest
             false
         );
 
-        /* @var $hvThing HealthRecordItemData */
+        //Assert all data is consistent
         foreach ($hvThingArr as $hvThing) {
             $dataArr = $hvThing->getItemJSONArray();
             $this->assertArrayHasKey("content", $dataArr);

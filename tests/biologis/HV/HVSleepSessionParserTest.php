@@ -33,21 +33,22 @@ class HVSleepSessionParserTest extends HVClientBaseTest
          * @var $item SleepSession
          */
 
-
         // Create an emotional state
         $item = HVTestSleepSessionObjectCreation::createSleepSession3();
 
-
+        //Check that the object has been initialized
         $this->assertNotEmpty($item);
+
         // Grab the XML
         $xml = $item->getItemXml();
-        $this->assertNotEmpty($xml, "itemXml empty");
 
-        // echo "XML:: \n $xml \n";
+        //assert xml object is created
+        $this->assertNotEmpty($xml, "itemXml empty");
 
         // Now try creating from XML...
         $parsedItem = new SleepSession(QueryPath::withXML($xml));
-        // print_r( $parsedItem->getItemJSONArray() );
+
+        //get the json form of the object
         $jsonData = $parsedItem->getItemJSONArray();
 
         // Ensure we got the items parsed correctly.
