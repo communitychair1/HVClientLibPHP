@@ -35,18 +35,20 @@ class HVEmotionalStateParserTest extends HVClientBaseTest
      *
      *  Tests retrieving tracker data within a range of dates
      */
-    public function testTrackerRequestMaxMinDate()
+    public function testEmotionalStateParser()
     {
 
         //Create a timestamp 14 days in the past
         $dateFilterStrMax = '-2 days';
         $dateFilterStrMin = '-5 days';
 
+        //Create max date filter
         $timeMax = date(DATE_ATOM, mktime(0, 0, 0,
             date('m', strtotime($dateFilterStrMax)),
             date('d', strtotime($dateFilterStrMax)),
             date('Y', strtotime($dateFilterStrMax))));
 
+        //Create Min date filter
         $timeMin = date(DATE_ATOM, mktime(0, 0, 0,
             date('m', strtotime($dateFilterStrMin)),
             date('d', strtotime($dateFilterStrMin)),
@@ -80,7 +82,6 @@ class HVEmotionalStateParserTest extends HVClientBaseTest
             $this->assertArrayHasKey("when", $dataArr);
             $this->assertArrayHasKey("stress", $dataArr);
             $this->assertArrayHasKey("wellbeing", $dataArr);
-            // echo json_encode($dataArr) . "\n\n\n";
         }
 
     }
