@@ -10,6 +10,9 @@ namespace biologis\HV\HealthRecordItem;
 
 use biologis\HV\HealthRecordItemData;
 use biologis\HV\HealthRecordItemFactory;
+use QueryPath\Query;
+use QueryPath;
+
 
 /**
  * Class WeightMeasurement.
@@ -17,7 +20,32 @@ use biologis\HV\HealthRecordItemFactory;
  */
 class WeightMeasurement extends HealthRecordItemData {
 
-  /**
+    protected $when = null;
+    protected $displayUnits = null;
+    protected $weight = null;
+
+    public function __construct(Query $qp)
+    {
+        parent::__construct($qp);
+
+        $recordQp = $qp->find('data-xml');
+        $this->when = $this->getTimestamp('data-xml weight when');
+
+        $txt = $recordQp->find("weight value display")->text();
+        if(!empty($txt)){
+            $this->weight = $txt;
+            $this->displayUnits = $recordQp->find('weight value display')->attr("units");
+
+        }
+        else
+        {
+            $this->displayUnits = "kgs.";
+            $this->weight = $recordQp->find('value kg')->text();
+        }
+
+    }
+
+    /**
    * @see http://msdn.microsoft.com/en-us/library/dd724265.aspx
    *
    * @param $timestamp
@@ -25,9 +53,21 @@ class WeightMeasurement extends HealthRecordItemData {
    * @return object File
    */
   public static function createFromData($timestamp, $weight) {
-    $weightMeasurement = HealthRecordItemFactory::getThing('Weight Measurement');
-    $weightMeasurement->setTimestamp('when', $timestamp);
-    $weightMeasurement->getQp()->find('kg')->text($weight);
+        $weightMeasurement = HealthRecordItemFactory::getThing('Weight Measurement');
+        $weightMeasurement->setTimestamp('when', $timestamp);
+        $weightMeasurement->getQp()->find('kg')->text($weight);
     return $weightMeasurement;
   }
+
+    public function getItemJSONArray(){
+        $parentData = parent::getItemJSONArray();
+
+        $myData = array(
+            "timestamp" => $this->when,
+            "weight" => $this->weight,
+            "displayUnits" => $this->displayUnits
+        );
+
+        return array_merge($myData, $parentData);
+    }
 }
