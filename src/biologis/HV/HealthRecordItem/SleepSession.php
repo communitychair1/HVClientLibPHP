@@ -36,10 +36,10 @@ class SleepSession extends HealthRecordItemData
 
         $commonQp = $qp->find('common');
         $recordQp = $qp->find('data-xml');
-        $txt = $recordQp->find("data-xml when h")->text();
+        $txt = $recordQp->find("data-xml>sleep-am>when")->text();
         if ( !empty($txt) )
         {
-            $this->when = $this->getTimestamp('data-xml when');
+            $this->when = $this->getTimestamp('data-xml>sleep-am>when');
         }
 
         $this->bedTime = $this->getTimestamp('data-xml bed-time');
@@ -119,7 +119,7 @@ class SleepSession extends HealthRecordItemData
         $sleepSession->awakenings = $awakening;
         $sleepSession->medications = $medications;
 
-        $sleepSession->setTimestamp('when', $when);
+        $sleepSession->setTimestamp('sleep-am>when', $when);
         $sleepSession->setTime($sleepSession->getQp()->top()->find('bed-time'), $bedTime);
         $sleepSession->setTime($sleepSession->getQp()->top()->find('wake-time'), $wakeTime);
         $sleepSession->getQp()->top()->find('sleep-minutes')->text($sleepMinutes);

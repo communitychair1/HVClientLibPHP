@@ -32,7 +32,7 @@ class SleepRelatedActivity extends HealthRecordItemData
         parent::__construct($qp);
         $commonQp = $qp->find('common');
         $recordQp = $qp->find('data-xml');
-        $this->when = $this->getTimestamp('data-xml when');
+        $this->when = $this->getTimestamp('sleep-pm>when');
 
 
         //Populate Exercise Data from HV
@@ -40,7 +40,7 @@ class SleepRelatedActivity extends HealthRecordItemData
         $index = 0;
         foreach ($exerciseBranch as $exerciseEntry) {
             $this->exercise[$index]['when'] =
-                $this->populateTimeData($exerciseEntry->branch('when'), $this->qp->find('data-xml when'));
+                $this->populateTimeData($exerciseEntry->branch('when'), $this->qp->find('sleep-pm>when'));
             $this->exercise[$index]['minutes'] =
                 $exerciseEntry->Branch('minutes')->text();
             $index++;
@@ -50,13 +50,13 @@ class SleepRelatedActivity extends HealthRecordItemData
         //Populate Caffeine Data from HV
         $caffeineBranch = $recordQp->branch('caffeine');
         $this->caffeine =
-            $this->populateTimeData($caffeineBranch, $this->qp->find('data-xml when'));
+            $this->populateTimeData($caffeineBranch, $this->qp->find('sleep-pm>when'));
         $caffeineBranch = null;
 
         //Populate Alcohol Data from HV
         $alcoholBranch = $recordQp->branch('alcohol');
         $this->alcohol =
-            $this->populateTimeData($alcoholBranch, $this->qp->find('data-xml when'));
+            $this->populateTimeData($alcoholBranch, $this->qp->find('sleep-pm>when'));
         $alcoholBranch = null;
 
         //Populate Nap Data from HV
@@ -64,7 +64,7 @@ class SleepRelatedActivity extends HealthRecordItemData
         $index = 0;
         foreach ($napBranch as $napEntry) {
             $this->nap[$index]['when'] =
-                $this->populateTimeData($napEntry->branch('when'), $this->qp->find('data-xml when'));
+                $this->populateTimeData($napEntry->branch('when'), $this->qp->find('sleep-pm>when'));
             $this->nap[$index]['minutes'] =
                 $napEntry->Branch('minutes')->text();
             $index++;
@@ -72,7 +72,7 @@ class SleepRelatedActivity extends HealthRecordItemData
         $napEntry = null;
 
         //Populate TimeStamp Data from HV
-        $this->when = $this->getTimestamp("when");
+        $this->when = $this->getTimestamp("sleep-pm>when");
 
         //Populate the Sleepiness Data from HV
         $this->sleepiness = $recordQp->find("sleepiness")->text();
@@ -119,14 +119,14 @@ class SleepRelatedActivity extends HealthRecordItemData
          */
         $sleepRelatedActivity = HealthRecordItemFactory::getThing('Sleep Related Activity');
 
-        $sleepRelatedActivity->setTimestamp('when', $when);
+        $sleepRelatedActivity->setTimestamp('sleep-pm>when', $when);
 
         if (!(is_null($sleepiness))) {
             $sleepRelatedActivity->getQp()->find('sleepiness')->text($sleepiness);
         }
 
         // Save ref to parent node so we can append new nodes
-        $parentNode = $sleepRelatedActivity->qp->top()->find("when");
+        $parentNode = $sleepRelatedActivity->qp->top()->find("sleep-pm>when");
 
         // Loop through arrays adding items.
         if (!(is_null($exercises))) {
