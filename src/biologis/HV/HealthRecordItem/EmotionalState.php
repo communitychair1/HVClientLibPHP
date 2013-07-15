@@ -16,72 +16,94 @@ class EmotionalState extends HealthRecordItemData
     protected $mood = null;
     protected $stress = null;
     protected $wellbeing = null;
+    protected $relatedThingId = null;
+    protected $relatedThingVersion = null;
+    protected $relatedThingRealationship = null;
 
 
     public function __construct(Query $qp) {
-        //call the parents constructor
         parent::__construct($qp);
+        $recordQp = $qp->top()->find("data-xml");
+        $commonQp = $qp->find('common');
 
-        //Point query-path at data-xml
-        $qpRecord = $qp->top()->find("data-xml");
-
-        //If the data exists search for the date
-        if ($qpRecord) {
+        if ($recordQp) {
             $text = $qp->top()->find("when date y")->text();
-
-            //If a date exists, create a timestamp
             if (!empty($text))
+            {
                 $this->when = $this->getTimestamp("when");
+            }
 
-            //insert data from xml to array
             $this->mood = $qp->top()->find("mood")->text();
             $this->stress = $qp->top()->find("stress")->text();
             $this->wellbeing= $qp->top()->find("wellbeing")->text();
         }
+
+        //Populate the relationship stats from the HV XML
+        if($recordQp->find("common related-thing thing-id")->text())
+        {
+            $this->relatedThingId = $commonQp->find("related-thing thing-id")->text();
+        }
+        if($recordQp->find("common related-thing version-stamp")->text())
+        {
+            $this->relatedThingVersion = $commonQp->find("related-thing version-stamp")->text();
+        }
+        if($recordQp->find("common related-thing relationship-type")->text())
+        {
+            $this->relatedThingRealationship = $commonQp->find("related-thing relationship-type")->text();
+        }
     }
 
     /**
+     *
      * Creates a Health Vault Emotional State XML Item.
-     * @param $when
-     * @param null $mood
-     * @param null $stress
-     * @param null $wellbeing
      * @return mixed
+     *
      */
-    public static function createFromData($when, $mood = null, $stress = null, $wellbeing = null)
+    public static function createFromData(
+        $when,
+        $mood = null,
+        $stress = null,
+        $wellbeing = null,
+        $relatedThingId = null,
+        $relatedThingVersion = null,
+        $relatedThingRelationship = null
+    )
     {
-        //Create the emotional state from factory
+        /**
+         * @var $emotionalState EmotionalState
+         */
         $emotionalState = HealthRecordItemFactory::getThing('Emotional State');
-
         // Save the time
         $emotionalState->setTimestamp('when', $when);
-
         // Add item or remove node if value is empty
         $emotionalState->removeOrUpdateIfEmpty( "mood", $mood);
         $emotionalState->removeOrUpdateIfEmpty( "stress", $stress);
         $emotionalState->removeOrUpdateIfEmpty( "wellbeing", $wellbeing);
 
-        //return the object
+        $emotionalState->removeOrUpdateIfEmpty( "common related-thing thing-id", $relatedThingId);
+        $emotionalState->removeOrUpdateIfEmpty( "common related-thing version-stamp", $relatedThingVersion);
+        $emotionalState->removeOrUpdateIfEmpty( "common related-thing relationship-type", $relatedThingRelationship);
+        if(is_null($relatedThingId))
+        {
+            $emotionalState->removeNode("common");
+        }
+
         return $emotionalState;
     }
 
-    /** Return's a json array of emotional states
-     * @return array
-     */
     public function getItemJSONArray()
     {
-        //Get data consistent between all HV objects
         $parentData = parent::getItemJSONArray();
 
-        //Get data is that only relevant to emotional state
         $myData = array(
             "when" => $this->when,
             "mood" => $this->mood,
             "stress" => $this->stress,
-            "wellbeing" => $this->wellbeing
+            "wellbeing" => $this->wellbeing,
+            "relatedThingId" => $this->relatedThingId,
+            "relatedThingVersion" => $this->relatedThingVersion,
+            "relatedThingRelationship" => $this->relatedThingRealationship
         );
-
-        //return the merged array.
         return array_merge($myData, $parentData);
     }
 }
