@@ -55,10 +55,18 @@ class WeightMeasurement extends HealthRecordItemData {
    * @param $weight
    * @return object File
    */
-  public static function createFromData($timestamp, $weight) {
+    public static function createFromData($timestamp, $weight, $units = null, $displayWeight = null)
+    {
         $weightMeasurement = HealthRecordItemFactory::getThing('Weight Measurement');
         $weightMeasurement->setTimestamp('when', $timestamp);
         $weightMeasurement->getQp()->find('kg')->text($weight);
+
+
+        $weightMeasurement->removeOrUpdateIfEmpty('value display', $displayWeight);
+        if(!(is_null($units)))
+        {
+            $weightMeasurement->getQp()->find('value display')->attr("units", $units);
+        }
     return $weightMeasurement;
   }
 
