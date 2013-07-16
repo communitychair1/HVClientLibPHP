@@ -31,13 +31,13 @@ class Exercise extends HealthRecordItemData
         $this->title = $recordQp->find("title")->text();
 
         //Populate Distance field
-        $this->distance = $recordQp->find("distance")->text();
+        $this->distance = $recordQp->find("distance>display")->text();
 
         //Populate Duration field
         $this->duration = $recordQp->find("duration")->text();
 
         //Populate the activity field
-        $this->activity = $recordQp->find("activity")->text();
+        $this->activity = $recordQp->find("activity>text")->text();
 
     }
 

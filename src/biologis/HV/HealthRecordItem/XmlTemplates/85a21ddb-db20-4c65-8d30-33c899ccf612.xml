@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<thing>
+    <type-id name="Exercise">85a21ddb-db20-4c65-8d30-33c899ccf612</type-id>
+    <data-xml>
+        <exercise>
+            <when>
+                <structured>
+                    <date>
+                        <y></y>
+                        <m></m>
+                        <d></d>
+                    </date>
+                    <time>
+                        <h></h>
+                        <m></m>
+                        <s></s>
+                        <f></f>
+                    </time>
+                </structured>
+            </when>
+            <activity>
+                <text></text>
+                <code>
+                    <value></value>
+                    <family></family>
+                    <type></type>
+                    <version></version>
+                </code>
+            </activity>
+            <title></title>
+            <distance>
+                <m></m>
+                <display units="meters"></display>
+            </distance>
+            <duration></duration>
+            <segment>
+                <activity>
+                    <text></text>
+                    <code>
+                        <value></value>
+                        <family></family>
+                        <type></type>
+                        <version></version>
+                    </code>
+                </activity>
+                <title></title>
+                <distance>
+                    <m></m>
+                    <display units="meters"></display>
+                </distance>
+                <duration></duration>
+                <offset></offset>
+            </segment>
+        </exercise>
+    </data-xml>
+</thing>

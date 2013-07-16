@@ -13,7 +13,6 @@ use QueryPath\Query;
 class HealthRecordItemFactory {
 
   private static $classNames = array();
-  private static $xmlTemplateCache = array();
 
   public static function getThing($type_or_qp, $version = 0) {
     $thingNames = array_flip(HVRawConnector::$things);

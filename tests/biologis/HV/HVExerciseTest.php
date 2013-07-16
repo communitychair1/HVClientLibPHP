@@ -29,7 +29,6 @@ class HVExerciseTest extends HVClientBaseTest
         $this->assertNotNull($this->hv);
     }
 
-
     /**
      * Test Tracker Request Max Min Date
      *
@@ -58,7 +57,6 @@ class HVExerciseTest extends HVClientBaseTest
         /* @var $hvThing HealthRecordItemData */
         foreach ($hvThingArr as $hvThing) {
             $dataArr = $hvThing->getItemJSONArray();
-            print_r($dataArr);
             $this->assertArrayHasKey("when", $dataArr);
             $this->assertArrayHasKey("title", $dataArr);
             $this->assertArrayHasKey("distance", $dataArr);
