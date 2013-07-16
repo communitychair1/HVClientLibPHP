@@ -4,7 +4,6 @@ namespace biologis\HV\HealthRecordItem;
 
 use biologis\HV\HealthRecordItemData;
 use biologis\HV\HealthRecordItemFactory;
-use biologis\HV\HealthRecordItem\SleepRelatedActivity\Activity;
 use QueryPath\Query;
 
 
@@ -13,6 +12,7 @@ class Exercise extends HealthRecordItemData
     protected $when = null;
     protected $title = "";
     protected $distance = null;
+    protected $distanceDisplay = null;
     protected $duration = null;
     protected $activity = null;
 
@@ -31,7 +31,10 @@ class Exercise extends HealthRecordItemData
         $this->title = $recordQp->find("title")->text();
 
         //Populate Distance field
-        $this->distance = $recordQp->find("distance>display")->text();
+        $this->distance = $recordQp->find("distance>m")->text();
+
+        //Populate Distance display field
+        $this->distanceDisplay = $recordQp->find("distance>display")->text();
 
         //Populate Duration field
         $this->duration = $recordQp->find("duration")->text();
@@ -45,6 +48,7 @@ class Exercise extends HealthRecordItemData
         $when = null,
         $title = "",
         $distance = null,
+        $distanceDisplay = null,
         $duration = null,
         $activity = null
     )
@@ -56,7 +60,8 @@ class Exercise extends HealthRecordItemData
         $exercise = HealthRecordItemFactory::getThing('Exercise');
         $exercise->removeOrUpdateIfEmpty('when', $when);
         $exercise->removeOrUpdateIfEmpty('title', $title);
-        $exercise->removeOrUpdateIfEmpty('distance', $distance);
+        $exercise->removeOrUpdateIfEmpty('distance m', $distance);
+        $exercise->removeOrUpdateIfEmpty('distance display', $distanceDisplay);
         $exercise->removeOrUpdateIfEmpty('duration', $duration);
         $exercise->removeOrUpdateIfEmpty('activity', $activity);
     }
@@ -71,6 +76,7 @@ class Exercise extends HealthRecordItemData
             "when" => $this->when,
             "title" => $this->title,
             "distance" => $this->distance,
+            "distanceDisplay" => $this->distanceDisplay,
             "duration" => $this->duration,
             "activity" => $this->activity
         );

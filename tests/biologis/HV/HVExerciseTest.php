@@ -6,6 +6,7 @@ use Doctrine\Bundle\DoctrineBundle\Tests\DependencyInjection\TestDatetimeFunctio
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use biologis\HV\HVRawConnector;
 use biologis\HV\HVClient;
+use biologis\HV\HealthRecordItem\Exercise;
 
 require_once("HVClientBaseTest.php");
 
@@ -57,12 +58,14 @@ class HVExerciseTest extends HVClientBaseTest
         /* @var $hvThing HealthRecordItemData */
         foreach ($hvThingArr as $hvThing) {
             $dataArr = $hvThing->getItemJSONArray();
+            print_r($dataArr);
             $this->assertArrayHasKey("when", $dataArr);
             $this->assertArrayHasKey("title", $dataArr);
             $this->assertArrayHasKey("distance", $dataArr);
             $this->assertArrayHasKey("duration", $dataArr);
             $this->assertArrayHasKey("activity", $dataArr);
         }
+
     }
 
 
