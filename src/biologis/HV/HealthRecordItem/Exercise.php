@@ -14,7 +14,7 @@ class Exercise extends HealthRecordItemData
     protected $title = "";
     protected $distance = null;
     protected $duration = null;
-    protected $detail = null;
+    protected $activity = null;
 
     public function __construct(Query $qp)
     {
@@ -31,13 +31,13 @@ class Exercise extends HealthRecordItemData
         $this->title = $recordQp->find("title")->text();
 
         //Populate Distance field
-        $this->distance = $recordQp->find("distance");
+        $this->distance = $recordQp->find("distance")->text();
 
         //Populate Duration field
-        $this->duration = $recordQp->find("duration");
+        $this->duration = $recordQp->find("duration")->text();
 
-        //Populate the detail field
-        $this->detail = $recordQp->find("detail");
+        //Populate the activity field
+        $this->activity = $recordQp->find("activity")->text();
 
     }
 
@@ -46,7 +46,7 @@ class Exercise extends HealthRecordItemData
         $title = "",
         $distance = null,
         $duration = null,
-        $detail = null
+        $activity = null
     )
     {
         /**
@@ -58,7 +58,7 @@ class Exercise extends HealthRecordItemData
         $exercise->removeOrUpdateIfEmpty('title', $title);
         $exercise->removeOrUpdateIfEmpty('distance', $distance);
         $exercise->removeOrUpdateIfEmpty('duration', $duration);
-        $exercise->removeOrUpdateIfEmpty('detail', $detail);
+        $exercise->removeOrUpdateIfEmpty('activity', $activity);
     }
 
 
@@ -72,7 +72,7 @@ class Exercise extends HealthRecordItemData
             "title" => $this->title,
             "distance" => $this->distance,
             "duration" => $this->duration,
-            "detail" => $this->detail
+            "activity" => $this->activity
         );
 
         //merge the array's and return them

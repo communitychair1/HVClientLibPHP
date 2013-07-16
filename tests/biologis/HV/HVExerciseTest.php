@@ -58,11 +58,12 @@ class HVExerciseTest extends HVClientBaseTest
         /* @var $hvThing HealthRecordItemData */
         foreach ($hvThingArr as $hvThing) {
             $dataArr = $hvThing->getItemJSONArray();
+            print_r($dataArr);
             $this->assertArrayHasKey("when", $dataArr);
             $this->assertArrayHasKey("title", $dataArr);
             $this->assertArrayHasKey("distance", $dataArr);
             $this->assertArrayHasKey("duration", $dataArr);
-            $this->assertArrayHasKey("detail", $dataArr);
+            $this->assertArrayHasKey("activity", $dataArr);
         }
     }
 
