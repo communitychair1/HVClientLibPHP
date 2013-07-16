@@ -23,6 +23,7 @@ class WeightMeasurement extends HealthRecordItemData {
     protected $when = null;
     protected $displayUnits = null;
     protected $weight = null;
+    protected $displayWeight = null;
 
     public function __construct(Query $qp)
     {
@@ -31,16 +32,18 @@ class WeightMeasurement extends HealthRecordItemData {
         $recordQp = $qp->find('data-xml');
         $this->when = $this->getTimestamp('data-xml weight when');
 
+        $this->weight = $recordQp->find('value kg')->text();
+
         $txt = $recordQp->find("weight value display")->text();
         if(!empty($txt)){
-            $this->weight = $txt;
+            $this->displayWeight = $txt;
             $this->displayUnits = $recordQp->find('weight value display')->attr("units");
 
         }
         else
         {
             $this->displayUnits = "kgs.";
-            $this->weight = $recordQp->find('value kg')->text();
+            $this->displayWeight = $recordQp->find('value kg')->text();
         }
 
     }
@@ -63,9 +66,10 @@ class WeightMeasurement extends HealthRecordItemData {
         $parentData = parent::getItemJSONArray();
 
         $myData = array(
-            "timestamp" => $this->when,
-            "weight" => $this->weight,
-            "displayUnits" => $this->displayUnits
+            "when" => $this->when,
+            "displayWeight" => $this->displayWeight,
+            "displayUnits" => $this->displayUnits,
+            "weight" => $this->weight
         );
 
         return array_merge($myData, $parentData);
