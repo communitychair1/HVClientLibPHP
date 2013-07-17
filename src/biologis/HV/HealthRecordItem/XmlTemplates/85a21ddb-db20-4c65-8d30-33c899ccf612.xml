@@ -6,50 +6,50 @@
             <when>
                 <structured>
                     <date>
-                        <y></y>
-                        <m></m>
-                        <d></d>
+                        <y />
+                        <m />
+                        <d />
                     </date>
                     <time>
-                        <h></h>
-                        <m></m>
-                        <s></s>
-                        <f></f>
+                        <h />
+                        <m />
+                        <s />
+                        <f />
                     </time>
                 </structured>
             </when>
             <activity>
-                <text></text>
+                <text />
                 <code>
-                    <value></value>
-                    <family></family>
-                    <type></type>
-                    <version></version>
+                    <value />
+                    <family />
+                    <type />
+                    <version />
                 </code>
             </activity>
-            <title></title>
+            <title />
             <distance>
-                <m></m>
-                <display units="meters"></display>
+                <m />
+                <display />
             </distance>
-            <duration></duration>
+            <duration />
             <segment>
                 <activity>
-                    <text></text>
+                    <text />
                     <code>
-                        <value></value>
-                        <family></family>
-                        <type></type>
-                        <version></version>
+                        <value />
+                        <family />
+                        <type />
+                        <version />
                     </code>
                 </activity>
-                <title></title>
+                <title />
                 <distance>
-                    <m></m>
-                    <display units="meters"></display>
+                    <m />
+                    <display />
                 </distance>
-                <duration></duration>
-                <offset></offset>
+                <duration />
+                <offset />
             </segment>
         </exercise>
     </data-xml>
