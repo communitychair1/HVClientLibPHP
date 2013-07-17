@@ -1,4 +1,4 @@
-HVClientLibPHP[![Build Status](https://travis-ci.org/communitychair1/HVClientLibPHP.png?branch=master)](https://travis-ci.org/communitychair1/HVClientLibPHP)
+HVClientLibPHP [![Build Status](https://travis-ci.org/communitychair1/HVClientLibPHP.png?branch=master)](https://travis-ci.org/communitychair1/HVClientLibPHP)
 ==============
 
 An easy to use PHP library to connect to
