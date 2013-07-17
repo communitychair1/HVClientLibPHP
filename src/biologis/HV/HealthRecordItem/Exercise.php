@@ -13,8 +13,9 @@ class Exercise extends HealthRecordItemData
     protected $title = "";
     protected $distance = null;
     protected $distanceDisplay = null;
+    protected $distDisplayUnits = '';
     protected $duration = null;
-    protected $activity = null;
+    protected $activity = '';
 
     public function __construct(Query $qp)
     {
@@ -36,6 +37,9 @@ class Exercise extends HealthRecordItemData
         //Populate Distance display field
         $this->distanceDisplay = $recordQp->find("distance>display")->text();
 
+        //Populate Distance Units
+        $this->distDisplayUnits = $recordQp->find("distance value display")->attr("units");
+
         //Populate Duration field
         $this->duration = $recordQp->find("duration")->text();
 
@@ -50,7 +54,8 @@ class Exercise extends HealthRecordItemData
         $distance = null,
         $distanceDisplay = null,
         $duration = null,
-        $activity = null
+        $activity = '',
+        $distDisplayUnits = 'meters'
     )
     {
         /**
@@ -58,12 +63,15 @@ class Exercise extends HealthRecordItemData
          */
         //Create the object from data
         $exercise = HealthRecordItemFactory::getThing('Exercise');
-        $exercise->removeOrUpdateIfEmpty('when', $when);
+        $exercise->setTimestamp('when', $when);
         $exercise->removeOrUpdateIfEmpty('title', $title);
         $exercise->removeOrUpdateIfEmpty('distance m', $distance);
         $exercise->removeOrUpdateIfEmpty('distance display', $distanceDisplay);
+        $exercise->getQp()->find('distance display')->attr('units', $distDisplayUnits);
         $exercise->removeOrUpdateIfEmpty('duration', $duration);
-        $exercise->removeOrUpdateIfEmpty('activity', $activity);
+        $exercise->removeOrUpdateIfEmpty('activity text', $activity);
+
+        return $exercise;
     }
 
 

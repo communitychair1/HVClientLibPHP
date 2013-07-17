@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use biologis\HV\HVRawConnector;
 use biologis\HV\HVClient;
 use biologis\HV\HealthRecordItem\Exercise;
+use QueryPath\Query;
 
 require_once("HVClientBaseTest.php");
 
@@ -58,13 +59,16 @@ class HVExerciseTest extends HVClientBaseTest
         /* @var $hvThing HealthRecordItemData */
         foreach ($hvThingArr as $hvThing) {
             $dataArr = $hvThing->getItemJSONArray();
-            print_r($dataArr);
             $this->assertArrayHasKey("when", $dataArr);
             $this->assertArrayHasKey("title", $dataArr);
             $this->assertArrayHasKey("distance", $dataArr);
             $this->assertArrayHasKey("duration", $dataArr);
             $this->assertArrayHasKey("activity", $dataArr);
         }
+
+        $exercise = Exercise::CreateFromData(time(), 'DodgeBall', 100, 200.0, 60, 'DodgeBall with Blazer and Lazer');
+        $xml = $exercise->getItemXml();
+        $this->hv->putThings($xml, $this->recordId);
 
     }
 
