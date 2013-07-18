@@ -38,7 +38,15 @@ class Exercise extends HealthRecordItemData
         $this->distanceDisplay = $recordQp->find("distance>display")->text();
 
         //Populate Distance Units
-        $this->distDisplayUnits = $recordQp->find("distance value display")->attr("units");
+        $txt = $recordQp->find("distance value display")->attr("units");
+        if(!empty($txt))
+        {
+            $this->distDisplayUnits = $recordQp->find("distance value display")->attr("units");
+        }
+        else
+        {
+            $this->distDisplayUnits = 'm';
+        }
 
         //Populate Duration field
         $this->duration = $recordQp->find("duration")->text();
@@ -85,6 +93,7 @@ class Exercise extends HealthRecordItemData
             "title" => $this->title,
             "distance" => $this->distance,
             "distanceDisplay" => $this->distanceDisplay,
+            "distanceDisplayUnits" => $this->distDisplayUnits,
             "duration" => $this->duration,
             "activity" => $this->activity
         );
