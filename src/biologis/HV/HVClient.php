@@ -159,9 +159,9 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
             }
 
             //set the group max
-            $options += array(
-                'group max' => 100,
-            );
+            if(!array_key_exists('group max', $options)){
+                $options += array('group max' => 100);
+            }
 
             //Create the XML info element, check first for Base64
             $info = '';
@@ -249,6 +249,10 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
         {
             throw new HVClientNotConnectedException();
         }
+
+        $qp = $this->connector->getQueryPathResponse();
+        $ar = $qp->toArray();
+        return substr($ar[0]->nodeValue, 1);
     }
 
     /**
@@ -462,6 +466,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
     }
 
     /**
+<<<<<<< HEAD
      * @param mixed $appId
      */
     public function setAppId($appId)
@@ -543,6 +548,34 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
 
     
 
+=======
+     * @param $typeName - Health Vault Thing Type Name (Sleep Session, Peronsal Demographic Information, etc.)
+     * @return string - Health Vault Thing ID (8375de98-7465-ae345-8ace-736af3b8e92c, etc.)
+     *
+     * This method will take a Health Vault Thing Type Name and conver it to the thing type id.
+     * It is the inverse of translateTypeId
+     */
+    public function translateTypeName($typeName)
+    {
+        foreach(HVRawConnector::$things as $item => $key)
+        {
+            if($typeName == $item)
+            {
+                return $key;
+            }
+        }
+    }
+    /*
+     * @param $pid
+     *
+     * Sets the person ID.  Used by devices connecting to the portal
+     */
+    public function setPersonId($pid)
+    {
+        $this->personId = $pid;
+    }
+
+>>>>>>> a63c7c9903fdd1eaef6fccd646cccbf0ab80dabd
 }
 
 

@@ -1,19 +1,21 @@
-HVClientLibPHP
+HVClientLibPHP [![Build Status](https://travis-ci.org/communitychair1/HVClientLibPHP.png?branch=master)](https://travis-ci.org/communitychair1/HVClientLibPHP)
 ==============
 
 An easy to use PHP library to connect to
 [Microsoft® HealthVault™](https://www.healthvault.com/)
 on top of
-[HVRawConnectorPHP](https://github.com/mkalkbrenner/HVRawConnectorPHP/).
+[HVRawConnectorPHP](https://github.com/communitychair1/HVRawConnectorPHP).
 It adds a nicer object oriented programming interface and hides (most) of the
 complicated XML parts in the HealthVault protocol.
+
+This library was forked from [HVClientPHP](https://github.com/mkalkbrenner/HVClientLibPHP) and many new features have been created and added to the library. A list of changes is at the bottom of this document.
 
 
 Installation
 ------------
 
 HVClientLibPHP depends on
-[HVRawConnectorPHP](https://github.com/mkalkbrenner/HVRawConnectorPHP/).
+[HVRawConnectorPHP](https://github.com/communitychair1/HVRawConnectorPHP).
 
 You can simply use composer to install HVRawConnectorPHP and it's dependencies.
 
@@ -23,7 +25,7 @@ the 'require' section of your `composer.json`:
 ```json
 {
   "require": {
-    "biologis/hv-client-lib": "dev-master"
+    "communitychair1/hv-client-lib": "dev-master"
   }
 }
 ```
@@ -157,8 +159,16 @@ By default it uses the US pre production instance of HealthVault.
 To get started, follow the install instructions above and put the demo_app folder
 on a web server and access "demo_app/index.php".
 
+Changes And Additions
+---------------------
+
+- Several things types have been added to the library, such as emotional state, sleep session, sleep related activity, and health journal entry. 
+- Helper methods have been created to export health vault thing types as JSON and to facilitate creation of various thing types.
+- The HV Connect function has been updated to support both online and offline connection modes.
+- The Get Things function has been updated to support putting of pictures and files
+- Unit tests have been created to test all of this functionality and some of the functionality of the original library.
 
 Licence
 -------
 
-[GPLv2](https://raw.github.com/mkalkbrenner/HVClientLibPHP/master/LICENSE.txt).
+[GPLv2](https://raw.github.com/communitychair1/HVClientLibPHP/master/LICENSE.txt).

@@ -158,11 +158,12 @@ class HVTrackerTest extends HVClientBaseTest
         $dateFilterStrMax = '-2 days';
         $dateFilterStrMin = '-5 days';
 
+        //Create the max date
         $timeMax = date(DATE_ATOM, mktime(0, 0, 0,
             date('m', strtotime($dateFilterStrMax)),
             date('d', strtotime($dateFilterStrMax)),
             date('Y', strtotime($dateFilterStrMax))));
-
+        //Create the min date
         $timeMin = date(DATE_ATOM, mktime(0, 0, 0,
             date('m', strtotime($dateFilterStrMin)),
             date('d', strtotime($dateFilterStrMin)),
@@ -191,6 +192,7 @@ class HVTrackerTest extends HVClientBaseTest
             false
         );
 
+        //Loop through all data and check for consistency.
         foreach ($response as $thing) {
             if ($thing->{'emotion'}) {
                 if ($thing->{'emotion'}->{'when'}->{'date'}->{'m'} == date('m', strtotime($dateFilterStrMax)))

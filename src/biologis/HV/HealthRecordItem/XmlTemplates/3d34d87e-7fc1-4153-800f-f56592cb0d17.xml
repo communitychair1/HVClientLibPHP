@@ -18,6 +18,7 @@
       </when>
       <value>
         <kg />
+        <display />
       </value>
     </weight>
   </data-xml>

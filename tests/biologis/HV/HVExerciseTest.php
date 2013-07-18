@@ -6,10 +6,12 @@ use Doctrine\Bundle\DoctrineBundle\Tests\DependencyInjection\TestDatetimeFunctio
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use biologis\HV\HVRawConnector;
 use biologis\HV\HVClient;
+use biologis\HV\HealthRecordItem\Exercise;
+use QueryPath\Query;
 
 require_once("HVClientBaseTest.php");
 
-class HVHealthJournalParserTest extends HVClientBaseTest
+class HVExerciseTest extends HVClientBaseTest
 {
 
     /**
@@ -29,13 +31,12 @@ class HVHealthJournalParserTest extends HVClientBaseTest
         $this->assertNotNull($this->hv);
     }
 
-
     /**
      * Test Tracker Request Max Min Date
      *
      *  Tests retrieving tracker data within a range of dates
      */
-    public function testHealthJournalParser()
+    public function testExerciseParser()
     {
 
         //Init array's for request
@@ -45,7 +46,7 @@ class HVHealthJournalParserTest extends HVClientBaseTest
         //Populate the Request group
         // Key = TypeName of Thing to request
         // Value = filter on that thing request
-        $requestGroup["Health Journal Entry"] = '';
+        $requestGroup["Exercise"] = '';
 
         //Make the request to health vault.
         $hvThingArr = $this->hv->getThings(
@@ -55,16 +56,20 @@ class HVHealthJournalParserTest extends HVClientBaseTest
             false
         );
 
-        //Assert all data is consistent
+        /* @var $hvThing HealthRecordItemData */
         foreach ($hvThingArr as $hvThing) {
             $dataArr = $hvThing->getItemJSONArray();
-            $this->assertArrayHasKey("content", $dataArr);
             $this->assertArrayHasKey("when", $dataArr);
-            $this->assertArrayHasKey("descriptive when", $dataArr);
-            $this->assertArrayHasKey("category text", $dataArr);
-            $this->assertArrayHasKey("type-id", $dataArr);
-            $this->assertArrayHasKey("version", $dataArr);
+            $this->assertArrayHasKey("title", $dataArr);
+            $this->assertArrayHasKey("distance", $dataArr);
+            $this->assertArrayHasKey("duration", $dataArr);
+            $this->assertArrayHasKey("activity", $dataArr);
         }
+
+        $exercise = Exercise::CreateFromData(time(), 'DodgeBall', 100, 200.0, 60, 'DodgeBall with Blazer and Lazer');
+        $xml = $exercise->getItemXml();
+        $this->hv->putThings($xml, $this->recordId);
+
     }
 
 

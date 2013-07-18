@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<thing>
+    <type-id name="Body Composition">18adc276-5144-4e7e-bf6c-e56d8250adf8</type-id>
+    <data-xml>
+        <body-composition>
+            <when>
+                <structured>
+                    <date>
+                        <y />
+                        <m />
+                        <d />
+                    </date>
+                    <time>
+                        <h />
+                        <m />
+                        <s />
+                        <f />
+                    </time>
+                </structured>
+            </when>
+            <measurement-name>
+                <text />
+            </measurement-name>
+            <value>
+                <mass-value>
+                    <kg />
+                    <display />
+                </mass-value>
+                <percent-value />
+            </value>
+        </body-composition>
+    </data-xml>
+</thing>

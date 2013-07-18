@@ -1,17 +1,24 @@
 <?xml version="1.0"?>
 <thing>
-  <type-id name="Sleep Session">11c52484-7f1a-11db-aeac-87d355d89593</type-id>
-  <data-xml>
-    <sleep-am>
-      <when>
-        <date/>
-        <time/>
-      </when>
-      <bed-time/>
-      <wake-time/>
-      <sleep-minutes/>
-      <settling-minutes/>
-      <wake-state/>
-    </sleep-am>
-  </data-xml>
+    <type-id name="Sleep Session">11c52484-7f1a-11db-aeac-87d355d89593</type-id>
+    <data-xml>
+        <sleep-am>
+          <when>
+            <date/>
+            <time/>
+          </when>
+          <bed-time/>
+          <wake-time/>
+          <sleep-minutes/>
+          <settling-minutes/>
+          <wake-state/>
+        </sleep-am>
+        <common>
+          <related-thing>
+              <thing-id></thing-id>
+              <version-stamp></version-stamp>
+              <relationship-type></relationship-type>
+          </related-thing>
+        </common>
+    </data-xml>
 </thing>
