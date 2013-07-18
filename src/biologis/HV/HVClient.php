@@ -466,8 +466,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
     }
 
     /**
-<<<<<<< HEAD
-     * @param mixed $appId
+     *     * @param mixed $appId
      */
     public function setAppId($appId)
     {
@@ -546,9 +545,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
         return $this->thumbPrint;
     }
 
-    
-
-=======
+    /**
      * @param $typeName - Health Vault Thing Type Name (Sleep Session, Peronsal Demographic Information, etc.)
      * @return string - Health Vault Thing ID (8375de98-7465-ae345-8ace-736af3b8e92c, etc.)
      *
@@ -565,17 +562,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
             }
         }
     }
-    /*
-     * @param $pid
-     *
-     * Sets the person ID.  Used by devices connecting to the portal
-     */
-    public function setPersonId($pid)
-    {
-        $this->personId = $pid;
-    }
 
->>>>>>> a63c7c9903fdd1eaef6fccd646cccbf0ab80dabd
 }
 
 
