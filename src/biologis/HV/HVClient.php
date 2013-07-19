@@ -332,7 +332,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
      * @param $hvItem
      * @param $usrRecordId
      * @param $base64
-     * @return SimpleXMLElement
+     * @return SimpleXMLElement if the item exists, otherwise returns false
      *
      * This function gets an item from HealthVault to use as a template and creates a simpleXML Object from it.
      */
@@ -343,9 +343,17 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
             $hvItem => ''
         );
         $itemObject = $this->getThings($typeId, $usrRecordId, array(), $base64);
-        $sxml = new SimpleXMLElement($itemObject[0]->getItemXml());
+        if($itemObject)
+        {
+            $sxml = new SimpleXMLElement($itemObject[0]->getItemXml());
+            return $sxml;
+        }
+        else
+        {
+            return false;
+        }
 
-        return $sxml;
+
     }
 
     /**
@@ -432,19 +440,25 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
      * @param $recordId
      * @param $typeId
      * @param bool $base64
-     * @return array
+     * @return array or false if there are no items of that type already
      */
     public function getThingId($recordId, $typeId, $base64 = FALSE)
     {
-        $sxml = $this->getItemTemplate($typeId, $recordId, $base64);
-        $array = array();
-        $thingId = $sxml->{'thing-id'};
-        $array[0] = $thingId[0];
-        foreach($thingId->attributes() as $key => $value)
+        if($sxml = $this->getItemTemplate($typeId, $recordId, $base64))
         {
-            $array[1] = $value;
+            $array = array();
+            $thingId = $sxml->{'thing-id'};
+            $array[0] = $thingId[0];
+            foreach($thingId->attributes() as $key => $value)
+            {
+                $array[1] = $value;
+            }
+            return $array;
         }
-        return $array;
+        else
+        {
+            return false;
+        }
     }
 
     /**
