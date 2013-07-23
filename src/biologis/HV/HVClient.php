@@ -208,17 +208,12 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
             }
             else
             {
-                $imgData = $qp->get('document')->textContent;
+                 $imgData = $qp->get('document')->textContent;
                 $img = substr($imgData, 73);
 
-                $imgData = base64_decode($img);
 
-                $f = finfo_open();
 
-                $mime_type = finfo_buffer($f, $imgData, FILEINFO_MIME_TYPE);
-
-                return "data:" . $mime_type . ";base64," . $img;
-            }
+                return $img;
 
 
         }
