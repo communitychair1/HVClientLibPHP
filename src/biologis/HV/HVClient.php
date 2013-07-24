@@ -208,14 +208,11 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
             }
             else
             {
-                 $imgData = $qp->get('document')->textContent;
+                $imgData = $qp->get('document')->textContent;
                 $img = substr($imgData, 73);
 
-
-
                 return $img;
-
-
+            }
         }
         else
         {
