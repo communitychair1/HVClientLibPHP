@@ -214,7 +214,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
 
 
                 return $img;
-
+            }
 
         }
         else

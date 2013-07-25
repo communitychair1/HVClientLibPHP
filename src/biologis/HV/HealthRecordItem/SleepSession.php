@@ -42,9 +42,7 @@ class SleepSession extends HealthRecordItemData
             $this->when = $this->getTimestamp('data-xml>sleep-am>when');
         }
 
-        $this->bedTime = $this->getTimestamp('data-xml bed-time');
-        $this->wakeTime = $this->getTimestamp('data-xml wake-time');
-        $this->sleepMinutes = $recordQp->find('wake-time')->text();
+        $this->setBedAndWakeTime();
         $this->sleepMinutes = $recordQp->find('sleep-minutes')->text();
         $this->settlingMinutes = $recordQp->find('settling-minutes')->text();
         $this->wakeState = $recordQp->find('wake-state')->text();
@@ -121,7 +119,6 @@ class SleepSession extends HealthRecordItemData
 
         $sleepSession->setTimestamp('sleep-am>when', $when);
         $sleepSession->setTime($sleepSession->getQp()->top()->find('bed-time'), $bedTime);
-        $sleepSession->setTime($sleepSession->getQp()->top()->find('wake-time'), $wakeTime);
         $sleepSession->getQp()->top()->find('sleep-minutes')->text($sleepMinutes);
         $sleepSession->getQp()->top()->find('settling-minutes')->text($settlingMinutes);
         $sleepSession->getQp()->top()->find('wake-state')->text($wakeState);
@@ -189,5 +186,38 @@ class SleepSession extends HealthRecordItemData
         }
 
         return array_merge($myData, $parentData);
+    }
+
+    private function setBedAndWakeTime()
+    {
+        $dateQP = $this->qp->top()->branch()->find('sleep-am when date');
+        $wakeTimeQP = $this->qp->top()->branch()->find('wake-time');
+        $bedTimeQP = $this->qp->top()->branch()->find('bed-time');
+
+        $wakeTimeHour = $wakeTimeQP->branch()->find('h')->text();
+        $bedTimeHour = $bedTimeQP->branch()->find('h')->text();
+
+        $this->wakeTime = mktime(
+            $wakeTimeHour,
+            $wakeTimeQP->branch()->find('m')->text(),
+            $wakeTimeQP->branch()->find('s')->text(),
+            $dateQP->branch()->find('date m')->text(),
+            $dateQP->branch()->find('d')->text(),
+            $dateQP->branch()->find('y')->text()
+        );
+
+        $this->bedTime = mktime(
+            $bedTimeHour,
+            $bedTimeQP->branch()->find('m')->text(),
+            $bedTimeQP->branch()->find('s')->text(),
+            $dateQP->branch()->find('date m')->text(),
+            $dateQP->branch()->find('d')->text(),
+            $dateQP->branch()->find('y')->text()
+        );
+
+        if($wakeTimeHour < $bedTimeHour)
+        {
+            $this->bedTime -= 86400;
+        }
     }
 }
