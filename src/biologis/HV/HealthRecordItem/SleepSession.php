@@ -198,21 +198,21 @@ class SleepSession extends HealthRecordItemData
         $bedTimeHour = $bedTimeQP->branch()->find('h')->text();
 
         $this->wakeTime = mktime(
-            $wakeTimeHour,
-            $wakeTimeQP->branch()->find('m')->text(),
-            $wakeTimeQP->branch()->find('s')->text(),
-            $dateQP->branch()->find('date m')->text(),
-            $dateQP->branch()->find('d')->text(),
-            $dateQP->branch()->find('y')->text()
+            (int)$wakeTimeHour,
+            (int)$wakeTimeQP->branch()->find('m')->text(),
+            (int)$wakeTimeQP->branch()->find('s')->text(),
+            (int)$dateQP->branch()->find('date m')->text(),
+            (int)$dateQP->branch()->find('d')->text(),
+            (int)$dateQP->branch()->find('y')->text()
         );
 
         $this->bedTime = mktime(
-            $bedTimeHour,
-            $bedTimeQP->branch()->find('m')->text(),
-            $bedTimeQP->branch()->find('s')->text(),
-            $dateQP->branch()->find('date m')->text(),
-            $dateQP->branch()->find('d')->text(),
-            $dateQP->branch()->find('y')->text()
+            (int)$bedTimeHour,
+            (int)$bedTimeQP->branch()->find('m')->text(),
+            (int)$bedTimeQP->branch()->find('s')->text(),
+            (int)$dateQP->branch()->find('date m')->text(),
+            (int)$dateQP->branch()->find('d')->text(),
+            (int)$dateQP->branch()->find('y')->text()
         );
 
         if($wakeTimeHour < $bedTimeHour)
