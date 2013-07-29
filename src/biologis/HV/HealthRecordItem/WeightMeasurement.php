@@ -21,7 +21,6 @@ use QueryPath;
 class WeightMeasurement extends HealthRecordItemData {
 
     protected $when = null;
-    protected $displayUnits = null;
     protected $weight = null;
     protected $displayWeight = null;
 
@@ -34,18 +33,7 @@ class WeightMeasurement extends HealthRecordItemData {
 
         $this->weight = $recordQp->find('value kg')->text();
 
-        $txt = $recordQp->find("weight value display")->text();
-        if(!empty($txt)){
-            $this->displayWeight = $txt;
-            $this->displayUnits = $recordQp->find('weight value display')->attr("units");
-
-        }
-        else
-        {
-            $this->displayUnits = "kgs.";
-            $this->displayWeight = $recordQp->find('value kg')->text();
-        }
-
+        $this->displayWeight = $this->weight * 2.20462;
     }
 
     /**
@@ -75,9 +63,8 @@ class WeightMeasurement extends HealthRecordItemData {
 
         $myData = array(
             "when" => $this->when,
-            "displayWeight" => $this->displayWeight,
-            "displayUnits" => $this->displayUnits,
-            "weight" => $this->weight
+            "kgWeight" => $this->weight,
+            "lbsWeight" => "$this->displayWeight"
         );
 
         return array_merge($myData, $parentData);
