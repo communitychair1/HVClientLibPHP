@@ -63,7 +63,7 @@ class WeightMeasurement extends HealthRecordItemData {
 
         $myData = array(
             "when" => $this->when,
-            "kgWeight" => $this->weight,
+            "kgsWeight" => $this->weight,
             "lbsWeight" => "$this->displayWeight"
         );
 
