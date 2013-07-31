@@ -11,14 +11,16 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\DependencyInjection\SimpleXMLElement;
 
+/**
+ * Class HVClient
+ * @package biologis\HV
+ * @var HVRawConnector $connector
+ */
 class HVClient implements HVClientInterface, LoggerAwareInterface
 {
 
     private $appId;
     private $config;
-    /**
-     * @var HVRawConnector
-     */
     private $connector = NULL;
     private $personId;
     private $logger = NULL;
@@ -27,19 +29,18 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
     private $thumbPrint = NULL;
     private $privateKey = NULL;
 
-    /**
+
+    /** CONSTRUCTOR
+     *  Certificate thumb print
      * @param $thumbPrint
+     *  Private key as string or file path to load private key from
      * @param $privateKey
      * @param $appId
-     * @param $personId
-     * @param bool $online
-     * @param array $config - Pass in optional items such as recordId, country, language.
+     * @param null $personId
+     * @param array $config
      */
-    public function __construct($thumbPrint,
-                                $privateKey,
-                                $appId,
-                                $personId = null,
-                                $config = array() )
+    public function __construct($thumbPrint, $privateKey, $appId,
+                                $personId = null, $config = array() )
     {
 
         $this->thumbPrint = $thumbPrint;
@@ -51,18 +52,10 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
         $this->logger = new NullLogger();
     }
 
-    /**
-     * @param string $thumbPrint
-     *   Certificate thumb print
-     * @param string $privateKey
-     *   Private key as string or file path to load private key from
-     * @param string $country
-     *   TODO reference to Microsoft documentation for valid countries
-     * @param string $languages
-     *   TODO reference to Microsoft documentation for valid languages
-     * Initializes the RawConnecter if there is not already one, and calls it's conncet function
+    /** Connect
+     *  Initializes the Raw Connecter if there is not already one, and calls it's conncet function
+     * @return mixed
      */
-
     public function connect()
     {
         //If there is no connector, generate one and set it's logger
@@ -220,9 +213,11 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
         }
     }
 
-    /**
+    /** PUT THING
+     *  Puts data of a particular 'thing' type onto Health vault.
      * @param $thing
      * @param $recordId
+     * @return string
      * @throws HVClientNotConnectedException
      */
     public function putThings($thing, $recordId)
@@ -320,7 +315,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
         $this->logger = $logger;
     }
 
-    /**
+    /** GET ITEM TEMPLATE
      * @param $hvItem
      * @param $usrRecordId
      * @param $base64
@@ -344,11 +339,9 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
         {
             return false;
         }
-
-
     }
 
-    /**
+    /** UPSERT ELEMENT IN TEMPALTE
      * @param $sxml
      * @param $elementPath
      * @param $updateVaule

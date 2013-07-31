@@ -49,7 +49,7 @@ class PersonInfo extends AbstractXmlEntity
         $recordBranch = $this->qp->top()->branch()->find('record');
         foreach ($recordBranch as $record) {
             $records[$index]['id'] = $record->attr('id');
-            $records[$index]['name'] = $record->attr('display-name');
+            $records[$index]['name'] = $record->attr('name');
             $records[$index]['rel-type'] = $record->attr('rel-type');
             $records[$index]['rel-name'] = $record->attr('rel-name');
             $index++;
