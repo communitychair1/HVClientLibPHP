@@ -7,6 +7,7 @@
           <sleepiness></sleepiness>
       </sleep-pm>
       <common>
+          <source />
           <related-thing>
               <thing-id></thing-id>
               <version-stamp></version-stamp>

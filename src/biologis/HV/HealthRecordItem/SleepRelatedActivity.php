@@ -23,6 +23,7 @@ class SleepRelatedActivity extends HealthRecordItemData
     protected $relatedThingId = null;
     protected $relatedThingVersion = null;
     protected $relatedThingRealationship = null;
+    protected $source = null;
 
     /**
      * @param Query Path of the object
@@ -90,6 +91,10 @@ class SleepRelatedActivity extends HealthRecordItemData
         {
             $this->relatedThingRealationship = $commonQp->find("related-thing relationship-type")->text();
         }
+        if($recordQp->find("common source")->text())
+        {
+            $this->source = $commonQp->find("source")->text();
+        }
     }
 
     /**
@@ -109,15 +114,14 @@ class SleepRelatedActivity extends HealthRecordItemData
         $alcohol = array(),
         $naps = array(),
         $exercises = array(),
-        $relatedThingId = null,
-        $relatedThingVersion = null,
-        $relatedThingRelationship = null
+        array $common = null
     )
     {
         /**
          * @var $sleepRelatedActivity SleepRelatedActivity
          */
         $sleepRelatedActivity = HealthRecordItemFactory::getThing('Sleep Related Activity');
+        $sleepRelatedActivity = parent::createFromData($common, $sleepRelatedActivity);
 
         $sleepRelatedActivity->setTimestamp('sleep-pm>when', $when);
 
@@ -155,14 +159,6 @@ class SleepRelatedActivity extends HealthRecordItemData
                 // Should be a time, so just add it.
                 $sleepRelatedActivity->addTime($parentNode, "caffeine", $tstamp);
             }
-        }
-
-        $sleepRelatedActivity->removeOrUpdateIfEmpty( "common related-thing thing-id", $relatedThingId);
-        $sleepRelatedActivity->removeOrUpdateIfEmpty( "common related-thing version-stamp", $relatedThingVersion);
-        $sleepRelatedActivity->removeOrUpdateIfEmpty( "common related-thing relationship-type", $relatedThingRelationship);
-        if(is_null($relatedThingId))
-        {
-            $sleepRelatedActivity->removeNode("common");
         }
 
         return $sleepRelatedActivity;
@@ -205,7 +201,7 @@ class SleepRelatedActivity extends HealthRecordItemData
         $parentData = parent::getItemJSONArray();
 
         $myData = array(
-            "when" => $this->when,
+            "timestamp" => $this->when,
             "caffeine" => $this->caffeine,
             "alcohol" => $this->alcohol,
             "nap" => $this->nap,
@@ -215,6 +211,10 @@ class SleepRelatedActivity extends HealthRecordItemData
             "relatedThingVersion" => $this->relatedThingVersion,
             "relatedThingRelationship" => $this->relatedThingRealationship
         );
+        if(isset($this->source))
+        {
+            $myData['source'] = $this->source;
+        }
         return array_merge($myData, $parentData);
     }
 

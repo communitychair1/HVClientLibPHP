@@ -89,7 +89,7 @@ class Exercise extends HealthRecordItemData
 
         // add all exercise data to the array
         $exerciseData = array(
-            "when" => $this->when,
+            "timestamp" => $this->when,
             "title" => $this->title,
             "distance" => $this->distance,
             "distanceDisplay" => $this->distanceDisplay,

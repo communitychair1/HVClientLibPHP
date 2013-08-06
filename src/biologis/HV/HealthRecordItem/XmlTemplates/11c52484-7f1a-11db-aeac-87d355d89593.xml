@@ -14,7 +14,8 @@
           <wake-state/>
         </sleep-am>
         <common>
-          <related-thing>
+            <source />
+            <related-thing>
               <thing-id></thing-id>
               <version-stamp></version-stamp>
               <relationship-type></relationship-type>

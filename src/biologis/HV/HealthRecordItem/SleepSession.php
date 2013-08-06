@@ -27,6 +27,7 @@ class SleepSession extends HealthRecordItemData
     protected $relatedThingId = null;
     protected $relatedThingVersion = null;
     protected $relatedThingRealationship = null;
+    protected $source = null;
 
     /**
      * @param Query Path of the object
@@ -73,6 +74,10 @@ class SleepSession extends HealthRecordItemData
         {
             $this->relatedThingRealationship = $commonQp->find("related-thing relationship-type")->text();
         }
+        if($recordQp->find("common source")->text())
+        {
+            $this->source = $commonQp->find("source")->text();
+        }
     }
 
 
@@ -89,23 +94,21 @@ class SleepSession extends HealthRecordItemData
      */
     public static function createFromData(
         $when,
-        $bedTime,
-        $wakeTime,
-        $sleepMinutes,
-        $settlingMinutes,
-        $wakeState,
+        $bedTime = null,
+        $wakeTime = null,
+        $sleepMinutes = null,
+        $settlingMinutes = null,
+        $wakeState = null,
         $awakening = null,
         $medications = null,
-        $relatedThingId = null,
-        $relatedThingVersion = null,
-        $relatedThingRelationship = null
+        array $common = null
     )
     {
         /**
          * @var $sleepSession SleepSession
          */
         $sleepSession = HealthRecordItemFactory::getThing('Sleep Session');
-
+        $sleepSession = parent::createFromData($common, $sleepSession);
 
         // Save member access
         $sleepSession->when  =$when;
@@ -146,14 +149,6 @@ class SleepSession extends HealthRecordItemData
             }
         }
 
-        $sleepSession->removeOrUpdateIfEmpty( "common related-thing thing-id", $relatedThingId);
-        $sleepSession->removeOrUpdateIfEmpty( "common related-thing version-stamp", $relatedThingVersion);
-        $sleepSession->removeOrUpdateIfEmpty( "common related-thing relationship-type", $relatedThingRelationship);
-        if(is_null($relatedThingId))
-        {
-            $sleepSession->removeNode("common");
-        }
-
         return $sleepSession;
     }
 
@@ -162,7 +157,7 @@ class SleepSession extends HealthRecordItemData
         $parentData = parent::getItemJSONArray();
 
         $myData = array(
-            "when" => $this->when,
+            "timestamp" => $this->when,
             "bedTime" => $this->bedTime,
             "wakeTime" => $this->wakeTime,
             "sleepMinutes" => $this->sleepMinutes,
@@ -184,6 +179,11 @@ class SleepSession extends HealthRecordItemData
         if ( !empty($this->medications))
         {
             $myData["medications"] = $this->medications->getItemJSONArray();
+        }
+
+        if(isset($this->source))
+        {
+            $myData['source'] = $this->source;
         }
 
         return array_merge($myData, $parentData);

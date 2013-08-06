@@ -74,7 +74,7 @@ class HealthJournalEntry extends HealthRecordItemData
         $parentData = parent::getItemJSONArray();
 
         $myData = array(
-            "when" => $this->when,
+            "timestamp" => $this->when,
             "descriptive when" => $this->descriptiveWhen,
             "content" => $this->content,
             "category text" => $this->category

@@ -19,6 +19,7 @@ class EmotionalState extends HealthRecordItemData
     protected $relatedThingId = null;
     protected $relatedThingVersion = null;
     protected $relatedThingRealationship = null;
+    protected $source = null;
 
 
     public function __construct(Query $qp) {
@@ -51,6 +52,10 @@ class EmotionalState extends HealthRecordItemData
         {
             $this->relatedThingRealationship = $commonQp->find("related-thing relationship-type")->text();
         }
+        if($recordQp->find("common source")->text())
+        {
+            $this->source = $commonQp->find("source")->text();
+        }
     }
 
     /**
@@ -64,29 +69,21 @@ class EmotionalState extends HealthRecordItemData
         $mood = null,
         $stress = null,
         $wellbeing = null,
-        $relatedThingId = null,
-        $relatedThingVersion = null,
-        $relatedThingRelationship = null
+        array $common = null
     )
     {
         /**
          * @var $emotionalState EmotionalState
          */
         $emotionalState = HealthRecordItemFactory::getThing('Emotional State');
+        $emotionalState = parent::createFromData($common, $emotionalState);
+
         // Save the time
         $emotionalState->setTimestamp('when', $when);
         // Add item or remove node if value is empty
         $emotionalState->removeOrUpdateIfEmpty( "mood", $mood);
         $emotionalState->removeOrUpdateIfEmpty( "stress", $stress);
         $emotionalState->removeOrUpdateIfEmpty( "wellbeing", $wellbeing);
-
-        $emotionalState->removeOrUpdateIfEmpty( "common related-thing thing-id", $relatedThingId);
-        $emotionalState->removeOrUpdateIfEmpty( "common related-thing version-stamp", $relatedThingVersion);
-        $emotionalState->removeOrUpdateIfEmpty( "common related-thing relationship-type", $relatedThingRelationship);
-        if(is_null($relatedThingId))
-        {
-            $emotionalState->removeNode("common");
-        }
 
         return $emotionalState;
     }
@@ -96,7 +93,7 @@ class EmotionalState extends HealthRecordItemData
         $parentData = parent::getItemJSONArray();
 
         $myData = array(
-            "when" => $this->when,
+            "timestamp" => $this->when,
             "mood" => $this->mood,
             "stress" => $this->stress,
             "wellbeing" => $this->wellbeing,
@@ -104,6 +101,10 @@ class EmotionalState extends HealthRecordItemData
             "relatedThingVersion" => $this->relatedThingVersion,
             "relatedThingRelationship" => $this->relatedThingRealationship
         );
+        if(isset($this->source))
+        {
+            $myData['source'] = $this->source;
+        }
         return array_merge($myData, $parentData);
     }
 }

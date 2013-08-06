@@ -188,4 +188,36 @@ class HealthRecordItemData extends AbstractXmlEntity
         return $data;
     }
 
+    /**
+     * This method will setup the common block of the HV Record. If there are no items
+     * for that record, the common block is removed from the xml record.
+     *
+     * @param $common - an array which contains the source, thing-id, version-stamp, and relationship-type
+     * @param $record - the HV record to be processed
+     * @return mixed - the HV record after processing
+     */
+    public static function createFromData($common, $record)
+    {
+        $record->removeOrUpdateIfEmpty( "common source", $common['source']);
+        $record->removeOrUpdateIfEmpty( "common related-thing thing-id", $common['thing-id']);
+        $record->removeOrUpdateIfEmpty( "common related-thing version-stamp", $common['version-stamp']);
+        $record->removeOrUpdateIfEmpty( "common related-thing relationship-type", $common['relationship-type']);
+
+        if(is_null($common['thing-id']))
+        {
+            $record->removeNode("common related-thing");
+        }
+
+        if(is_null($common['source']))
+        {
+            $record->removeNode("common source");
+        }
+
+        if(is_null($common['source']) && is_null($common['thing-id']))
+        {
+            $record->removeNode("common");
+        }
+
+        return $record;
+    }
 }
