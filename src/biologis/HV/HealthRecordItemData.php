@@ -16,12 +16,11 @@ use QueryPath\Query;
  */
 class HealthRecordItemData extends AbstractXmlEntity
 {
-
     protected $typeId;
     protected $version;
     protected $thingId;
 
-    /** Constructor
+    /** CONSTRUCTOR
      * @param Query $qp
      */
     public function __construct(Query $qp)
@@ -33,7 +32,7 @@ class HealthRecordItemData extends AbstractXmlEntity
         $this->payloadElement = 'data-xml';
     }
 
-    /**
+    /** GET TYPE ID
      * @return mixed
      */
     public function getTypeId()
@@ -41,9 +40,11 @@ class HealthRecordItemData extends AbstractXmlEntity
         return $this->typeId;
     }
 
-    /**
+    /** GET ITEM XML
      * @see http://msdn.microsoft.com/en-us/library/dd724732.aspx
      * @param string $element
+     * @return string
+     * @throws Exception
      */
     public function getItemXml($element = '')
     {
@@ -63,7 +64,7 @@ class HealthRecordItemData extends AbstractXmlEntity
         }
     }
 
-    /**
+    /** SET TIME STAMP
      * Helper function to set a timestamp in a Health Record Item.
      *
      * Using simple unix timestamps is easier than creating a something like a
@@ -87,7 +88,7 @@ class HealthRecordItemData extends AbstractXmlEntity
     }
 
 
-    /**
+    /** GET TIME STAMP
      * Helper function to get a timestamp from a Health Record Item.
      *
      * Using simple unix timestamps is easier than creating a something like a
@@ -112,7 +113,7 @@ class HealthRecordItemData extends AbstractXmlEntity
     }
 
 
-    /**
+    /** POPULATE TIME DATA
      * @param $elementBranch : Query path branch
      * @param $baseDate : QP of the timestamp of the entire item.
      * @return int
@@ -132,7 +133,7 @@ class HealthRecordItemData extends AbstractXmlEntity
         return $timeStamp;
     }
 
-    /**
+    /** REMOVE OR UPDATE IF EMPTY
      * Will remove the node if the value is empty. Otherwise, set the value.
      *
      * @param $nodeName - Name of the node to search for, using QueryPath
@@ -140,11 +141,8 @@ class HealthRecordItemData extends AbstractXmlEntity
      */
     public function removeOrUpdateIfEmpty($nodeName, $value)
     {
-        // echo "$nodeName , $value \n"
-        // Find the node
         $node = $this->getQp()->find($nodeName);
         if (!empty($node)) {
-            // No value, so remove the node
             if (empty($value)) {
                 $this->removeNode($nodeName);
             } else {
@@ -153,19 +151,18 @@ class HealthRecordItemData extends AbstractXmlEntity
         }
     }
 
-    /**
-     *  This metod will remove a node from the xml.
+    /** REMOVE NODE
+     *  This method will remove a node from the xml.
      *
      * @param $nodeName
      */
-
     public function removeNode($nodeName)
     {
         $node = $this->getQp()->find($nodeName);
         $node->remove();
     }
 
-    /**
+    /** SET TIME
      * Helper function to add the necessary XML for a time
      * @param int $node
      * @param $tstamp
@@ -175,8 +172,9 @@ class HealthRecordItemData extends AbstractXmlEntity
         $node->append(date('<\h>H</\h><\m>i</\m><\s>s</\s><\f>0</\f>', $tstamp));
     }
 
-    /**
-     * Helper function to load up the base json array. Child classes can add the additional record data as needed.
+    /** GET ITEM JSON ARRAY
+     * Helper function to load up the base json array. Child classes
+     * can add the additional record data as needed.
      */
     public function getItemJSONArray()
     {
