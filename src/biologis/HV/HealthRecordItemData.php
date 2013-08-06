@@ -194,7 +194,7 @@ class HealthRecordItemData extends AbstractXmlEntity
      * @param $record - the HV record to be processed
      * @return mixed - the HV record after processing
      */
-    public static function createFromData($common, $record)
+    public static function createCommonFromData($common, $record)
     {
         $record->removeOrUpdateIfEmpty( "common source", $common['source']);
         $record->removeOrUpdateIfEmpty( "common related-thing thing-id", $common['thing-id']);

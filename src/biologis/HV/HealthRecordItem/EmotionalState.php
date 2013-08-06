@@ -76,7 +76,7 @@ class EmotionalState extends HealthRecordItemData
          * @var $emotionalState EmotionalState
          */
         $emotionalState = HealthRecordItemFactory::getThing('Emotional State');
-        $emotionalState = parent::createFromData($common, $emotionalState);
+        $emotionalState = parent::createCommonFromData($common, $emotionalState);
 
         // Save the time
         $emotionalState->setTimestamp('when', $when);

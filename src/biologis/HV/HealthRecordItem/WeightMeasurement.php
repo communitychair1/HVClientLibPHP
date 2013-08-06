@@ -68,7 +68,7 @@ class WeightMeasurement extends HealthRecordItemData {
     public static function createFromData($timestamp, $weight, $units = null, $displayWeight = null, array $common = null)
     {
         $weightMeasurement = HealthRecordItemFactory::getThing('Weight Measurement');
-        $weightMeasurement = parent::createFromData($common, $weightMeasurement);
+        $weightMeasurement = parent::createCommonFromData($common, $weightMeasurement);
         $weightMeasurement->setTimestamp('when', $timestamp);
         $weightMeasurement->getQp()->find('kg')->text($weight);
 
