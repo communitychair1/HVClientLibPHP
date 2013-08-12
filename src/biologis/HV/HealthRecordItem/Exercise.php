@@ -56,7 +56,7 @@ class Exercise extends HealthRecordItemData
 
     }
 
-    public static function  CreateFromData(
+    public static function  createFromData(
         $when = null,
         $title = "",
         $distance = null,

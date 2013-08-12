@@ -52,9 +52,9 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
         $this->logger = new NullLogger();
     }
 
-    /** Connect
-     *  Initializes the Raw Connecter if there is not already one, and calls it's conncet function
-     * @return mixed
+    /**
+     *  Initialize the Raw Connector if there is not already one, and calls its connect function
+     * @return string HV Session Token
      */
     public function connect()
     {
@@ -69,6 +69,14 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
         $this->connector->setHealthVaultPlatform($this->healthVaultPlatform);
         $authToken = $this->connector->connect();
         return $authToken;
+    }
+
+    /**
+     * @return bool True is the client is connected.
+     */
+    public function isConnected()
+    {
+        return !empty($this->connector);
     }
 
     /**

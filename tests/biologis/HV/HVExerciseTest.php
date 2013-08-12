@@ -66,7 +66,7 @@ class HVExerciseTest extends HVClientBaseTest
             $this->assertArrayHasKey("activity", $dataArr);
         }
 
-        $exercise = Exercise::CreateFromData(time(), 'DodgeBall', 100, 200.0, 60, 'DodgeBall with Blazer and Lazer');
+        $exercise = Exercise::createFromData(time(), 'DodgeBall', 100, 200.0, 60, 'DodgeBall with Blazer and Lazer');
         $xml = $exercise->getItemXml();
         $this->hv->putThings($xml, $this->recordId);
 

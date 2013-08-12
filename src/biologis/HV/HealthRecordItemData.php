@@ -8,6 +8,7 @@
 
 namespace biologis\HV;
 
+use biologis\HV\HealthRecordItem\GenericTypes\Common;
 use QueryPath\Query;
 
 /**
@@ -23,19 +24,24 @@ class HealthRecordItemData extends AbstractXmlEntity
     protected $relatedThingId = null;
     protected $relatedThingVersion = null;
     protected $relatedThingRealationship = null;
+    /**
+     * @var Common
+     */
+    protected $common  = null;
 
     /** CONSTRUCTOR
      * @param Query $qp
      */
     public function __construct(Query $qp)
     {
-        $recordQp = $qp->top()->find("data-xml");
-        $commonQp = $qp->find('common');
+        // $recordQp = $qp->top()->find("data-xml");
+        $commonQp = $qp->find('thing > common');
         $this->qp = $qp;
         $this->typeId = $this->qp->top()->find('type-id')->text();
         $this->thingId = $this->qp->top()->find('thing-id')->first()->text();
         $this->version = $this->qp->top()->find('thing-id')->attr("version-stamp");
 
+        /*
         if($recordQp->find("common related-thing thing-id")->text())
         {
             $this->relatedThingId = $commonQp->find("related-thing thing-id")->text();
@@ -52,7 +58,12 @@ class HealthRecordItemData extends AbstractXmlEntity
         {
             $this->source = $commonQp->find("source")->text();
         }
-
+        */
+        $commonQpText = $commonQp->text();
+        if ( !empty( $commonQpText ) )
+        {
+            $this->common = new Common($commonQp->top());
+        }
         $this->payloadElement = 'data-xml';
     }
 
@@ -81,8 +92,14 @@ class HealthRecordItemData extends AbstractXmlEntity
             $this->qp->top();
         }
 
+
         if ($qpElement) {
-            return "<$element>" . $qpElement->innerXML() . "</$element>";
+            if (!empty($this->common))
+            {
+                $commonXML = $this->common->getObjectXml();
+                $qpElement->find($element . " > data-xml")->append($commonXML);
+                return $qpElement->xml(true);
+            }
         } else {
             throw new Exception();
         }
@@ -227,6 +244,7 @@ class HealthRecordItemData extends AbstractXmlEntity
      */
     public static function createCommonFromData($common, $record)
     {
+        /*
         $record->removeOrUpdateIfEmpty( "common source", $common['source']);
         $record->removeOrUpdateIfEmpty( "common related-thing thing-id", $common['thing-id']);
         $record->removeOrUpdateIfEmpty( "common related-thing version-stamp", $common['version-stamp']);
@@ -246,7 +264,25 @@ class HealthRecordItemData extends AbstractXmlEntity
         {
             $record->removeNode("common");
         }
-
+        */
         return $record;
     }
+
+    /**
+     * @param \biologis\HV\HealthRecordItem\GenericTypes\Common $common
+     */
+    public function setCommon($common)
+    {
+        $this->common = $common;
+    }
+
+    /**
+     * @return \biologis\HV\HealthRecordItem\GenericTypes\Common
+     */
+    public function getCommon()
+    {
+        return $this->common;
+    }
+
+
 }
