@@ -18,15 +18,10 @@ class HealthJournalEntry extends HealthRecordItemData
     protected $descriptiveWhen = null;
     protected $content = null;
     protected $category = null;
-    protected $source = null;
-    protected $relatedThingId = null;
-    protected $relatedThingVersion = null;
-    protected $relatedThingRealationship = null;
 
     public function __construct(Query $qp) {
         parent::__construct($qp);
         $recordQp = $qp->top()->find("data-xml");
-        $commonQp = $qp->find('common');
 
         if ($recordQp) {
             $text = $qp->top()->find("data-xml when date y")->xml();
@@ -38,23 +33,6 @@ class HealthJournalEntry extends HealthRecordItemData
            $this->descriptiveWhen = $qp->top()->find("data-xml descriptive")->text();
            $this->content = $qp->top()->find("data-xml content")->text();
            $this->category= $qp->top()->find("data-xml category text")->text();
-        }
-
-        if($recordQp->find("common related-thing thing-id")->text())
-        {
-            $this->relatedThingId = $commonQp->find("related-thing thing-id")->text();
-        }
-        if($recordQp->find("common related-thing version-stamp")->text())
-        {
-            $this->relatedThingVersion = $commonQp->find("related-thing version-stamp")->text();
-        }
-        if($recordQp->find("common related-thing relationship-type")->text())
-        {
-            $this->relatedThingRealationship = $commonQp->find("related-thing relationship-type")->text();
-        }
-        if($recordQp->find("common source")->text())
-        {
-            $this->source = $commonQp->find("source")->text();
         }
 
     }
@@ -71,7 +49,7 @@ class HealthJournalEntry extends HealthRecordItemData
         $content = null,
         $category = null,
         array $common = null
-)
+    )
     {
         /**
          * @var $journalEntry HealthJournalEntry
@@ -107,15 +85,8 @@ class HealthJournalEntry extends HealthRecordItemData
             "timestamp" => $this->when,
             "descriptive when" => $this->descriptiveWhen,
             "content" => $this->content,
-            "category text" => $this->category,
-            "relatedThingId" => $this->relatedThingId,
-            "relatedThingVersion" => $this->relatedThingVersion,
-            "relatedThingRelationship" => $this->relatedThingRealationship
+            "category text" => $this->category
         );
-        if(isset($this->source))
-        {
-            $myData['source'] = $this->source;
-        }
         return array_merge($myData, $parentData);
     }
 

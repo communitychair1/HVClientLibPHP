@@ -24,10 +24,6 @@ class SleepSession extends HealthRecordItemData
     protected $wakeState = null;
     protected $awakenings = null;
     protected $medications = null;
-    protected $relatedThingId = null;
-    protected $relatedThingVersion = null;
-    protected $relatedThingRealationship = null;
-    protected $source = null;
 
     /**
      * @param Query Path of the object
@@ -35,7 +31,6 @@ class SleepSession extends HealthRecordItemData
     public function __construct(Query $qp) {
         parent::__construct($qp);
 
-        $commonQp = $qp->find('common');
         $recordQp = $qp->find('data-xml');
         $txt = $recordQp->find("data-xml>sleep-am>when")->text();
         if ( !empty($txt) )
@@ -61,23 +56,6 @@ class SleepSession extends HealthRecordItemData
             $this->awakenings[] = Awakening::createFromXML($qpItem);
         }
 
-        //Populate the relationship stats from the HV XML
-        if($recordQp->find("common related-thing thing-id")->text())
-        {
-            $this->relatedThingId = $commonQp->find("related-thing thing-id")->text();
-        }
-        if($recordQp->find("common related-thing version-stamp")->text())
-        {
-            $this->relatedThingVersion = $commonQp->find("related-thing version-stamp")->text();
-        }
-        if($recordQp->find("common related-thing relationship-type")->text())
-        {
-            $this->relatedThingRealationship = $commonQp->find("related-thing relationship-type")->text();
-        }
-        if($recordQp->find("common source")->text())
-        {
-            $this->source = $commonQp->find("source")->text();
-        }
     }
 
 
@@ -163,9 +141,6 @@ class SleepSession extends HealthRecordItemData
             "sleepMinutes" => $this->sleepMinutes,
             "settlingMinutes" => $this->settlingMinutes,
             "wakeState" => $this->wakeState,
-            "relatedThingId" => $this->relatedThingId,
-            "relatedThingVersion" => $this->relatedThingVersion,
-            "relatedThingRelationship" => $this->relatedThingRealationship
         );
 
         // Loop over arrays and get their JSON data.
@@ -179,11 +154,6 @@ class SleepSession extends HealthRecordItemData
         if ( !empty($this->medications))
         {
             $myData["medications"] = $this->medications->getItemJSONArray();
-        }
-
-        if(isset($this->source))
-        {
-            $myData['source'] = $this->source;
         }
 
         return array_merge($myData, $parentData);

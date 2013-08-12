@@ -16,16 +16,11 @@ class EmotionalState extends HealthRecordItemData
     protected $mood = null;
     protected $stress = null;
     protected $wellbeing = null;
-    protected $relatedThingId = null;
-    protected $relatedThingVersion = null;
-    protected $relatedThingRealationship = null;
-    protected $source = null;
 
 
     public function __construct(Query $qp) {
         parent::__construct($qp);
         $recordQp = $qp->top()->find("data-xml");
-        $commonQp = $qp->find('common');
 
         if ($recordQp) {
             $text = $qp->top()->find("when date y")->text();
@@ -37,24 +32,6 @@ class EmotionalState extends HealthRecordItemData
             $this->mood = $qp->top()->find("mood")->text();
             $this->stress = $qp->top()->find("stress")->text();
             $this->wellbeing= $qp->top()->find("wellbeing")->text();
-        }
-
-        //Populate the relationship stats from the HV XML
-        if($recordQp->find("common related-thing thing-id")->text())
-        {
-            $this->relatedThingId = $commonQp->find("related-thing thing-id")->text();
-        }
-        if($recordQp->find("common related-thing version-stamp")->text())
-        {
-            $this->relatedThingVersion = $commonQp->find("related-thing version-stamp")->text();
-        }
-        if($recordQp->find("common related-thing relationship-type")->text())
-        {
-            $this->relatedThingRealationship = $commonQp->find("related-thing relationship-type")->text();
-        }
-        if($recordQp->find("common source")->text())
-        {
-            $this->source = $commonQp->find("source")->text();
         }
     }
 
@@ -96,15 +73,9 @@ class EmotionalState extends HealthRecordItemData
             "timestamp" => $this->when,
             "mood" => $this->mood,
             "stress" => $this->stress,
-            "wellbeing" => $this->wellbeing,
-            "relatedThingId" => $this->relatedThingId,
-            "relatedThingVersion" => $this->relatedThingVersion,
-            "relatedThingRelationship" => $this->relatedThingRealationship
+            "wellbeing" => $this->wellbeing
         );
-        if(isset($this->source))
-        {
-            $myData['source'] = $this->source;
-        }
+
         return array_merge($myData, $parentData);
     }
 }

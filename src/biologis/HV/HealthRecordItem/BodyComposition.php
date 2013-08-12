@@ -19,10 +19,6 @@ class BodyComposition extends HealthRecordItemData
     protected $measurementPercentage = null;
     protected $mesaurementDisplayUnits = null;
     protected $mesaurementDisplayValue = null;
-    protected $relatedThingId = null;
-    protected $relatedThingVersion = null;
-    protected $relatedThingRealationship = null;
-    protected $source = null;
 
     public function __construct(Query $qp) {
         parent::__construct($qp);
@@ -72,25 +68,6 @@ class BodyComposition extends HealthRecordItemData
         else{
             $this->measurementPercentage = null;
         }
-
-        //Populate the relationship stats from the HV XML
-        if($recordQp->find("common related-thing thing-id")->text())
-        {
-            $this->relatedThingId = $commonQp->find("related-thing thing-id")->text();
-        }
-        if($recordQp->find("common related-thing version-stamp")->text())
-        {
-            $this->relatedThingVersion = $commonQp->find("related-thing version-stamp")->text();
-        }
-        if($recordQp->find("common related-thing relationship-type")->text())
-        {
-            $this->relatedThingRealationship = $commonQp->find("related-thing relationship-type")->text();
-        }
-        if($recordQp->find("common source")->text())
-        {
-            $this->source = $commonQp->find("source")->text();
-        }
-
     }
 
     public static function createFromData(
@@ -158,15 +135,8 @@ class BodyComposition extends HealthRecordItemData
             "measurementName" => $this->measurementName,
             "measurementValue" => $this->measurementValue,
             "measurementPercentage" => $this->measurementPercentage,
-            "measurementDisplayUnits" => $this->measurementDisplayUnits,
-            "relatedThingId" => $this->relatedThingId,
-            "relatedThingVersion" => $this->relatedThingVersion,
-            "relatedThingRelationship" => $this->relatedThingRealationship
+            "measurementDisplayUnits" => $this->measurementDisplayUnits
         );
-        if(isset($this->source))
-        {
-            $myData['source'] = $this->source;
-        }
         return array_merge($myData, $parentData);
     }
 }

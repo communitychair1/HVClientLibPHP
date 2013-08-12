@@ -19,16 +19,40 @@ class HealthRecordItemData extends AbstractXmlEntity
     protected $typeId;
     protected $version;
     protected $thingId;
+    protected $source = null;
+    protected $relatedThingId = null;
+    protected $relatedThingVersion = null;
+    protected $relatedThingRealationship = null;
 
     /** CONSTRUCTOR
      * @param Query $qp
      */
     public function __construct(Query $qp)
     {
+        $recordQp = $qp->top()->find("data-xml");
+        $commonQp = $qp->find('common');
         $this->qp = $qp;
         $this->typeId = $this->qp->top()->find('type-id')->text();
         $this->thingId = $this->qp->top()->find('thing-id')->first()->text();
         $this->version = $this->qp->top()->find('thing-id')->attr("version-stamp");
+
+        if($recordQp->find("common related-thing thing-id")->text())
+        {
+            $this->relatedThingId = $commonQp->find("related-thing thing-id")->text();
+        }
+        if($recordQp->find("common related-thing version-stamp")->text())
+        {
+            $this->relatedThingVersion = $commonQp->find("related-thing version-stamp")->text();
+        }
+        if($recordQp->find("common related-thing relationship-type")->text())
+        {
+            $this->relatedThingRealationship = $commonQp->find("related-thing relationship-type")->text();
+        }
+        if($recordQp->find("common source")->text())
+        {
+            $this->source = $commonQp->find("source")->text();
+        }
+
         $this->payloadElement = 'data-xml';
     }
 
@@ -181,8 +205,15 @@ class HealthRecordItemData extends AbstractXmlEntity
         $data = array(
             "type-id" => $this->typeId,
             "version" => $this->version,
-            "thing-id" => $this->thingId
+            "thing-id" => $this->thingId,
+            "relatedThingId" => $this->relatedThingId,
+            "relatedThingVersion" => $this->relatedThingVersion,
+            "relatedThingRelationship" => $this->relatedThingRealationship
         );
+        if(isset($this->source))
+        {
+            $data['source'] = $this->source;
+        }
         return $data;
     }
 
