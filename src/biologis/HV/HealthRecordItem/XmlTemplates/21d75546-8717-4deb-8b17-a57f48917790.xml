@@ -11,7 +11,9 @@
               <descriptive></descriptive>
           </when>
           <content></content>
-          <category><text></text></category>
+          <category>
+              <text />
+          </category>
       </health-journal-entry>
       <common>
           <source />
