@@ -13,5 +13,13 @@
           <content></content>
           <category><text></text></category>
       </health-journal-entry>
+      <common>
+          <source />
+          <related-thing>
+              <thing-id></thing-id>
+              <version-stamp></version-stamp>
+              <relationship-type></relationship-type>
+          </related-thing>
+      </common>
   </data-xml>
 </thing>
