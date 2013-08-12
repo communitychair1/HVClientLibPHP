@@ -98,8 +98,8 @@ class HealthRecordItemData extends AbstractXmlEntity
             {
                 $commonXML = $this->common->getObjectXml();
                 $qpElement->find($element . " > data-xml")->append($commonXML);
-                return $qpElement->xml(true);
             }
+            return $qpElement->xml(true);
         } else {
             throw new Exception();
         }
