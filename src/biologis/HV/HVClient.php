@@ -141,7 +141,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
     /**
      * @param $groupAndFilter : associative array of Type ID : and filter
      * @param $recordId
-     * @param array $options
+     * @param array $options (Pass in an array of 'thing-ids' if you want to search for specific items in HV.
      * @param bool $base64
      * @return array
      * @throws HVClientNotConnectedException
@@ -174,6 +174,15 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
                         '<group max="' . $options['group max'] . '">
                         <filter><type-id>' . $id . '</type-id>'. $filter . '</filter>
                         <format><section>core</section><xml/></format></group>';
+                }
+                // Maybe the user passed in a list of specific thing ids ?
+                if (!empty($options["thing-ids"]))
+                {
+                    foreach($options["thing-ids"] as $thingId )
+                    {
+                        $info .=
+                            '<group max="' . $options['group max'] . '"><id>' . $thingId . '</id><format><section>core</section><xml/></format></group>';
+                    }
                 }
                 $version = '3';
             }
