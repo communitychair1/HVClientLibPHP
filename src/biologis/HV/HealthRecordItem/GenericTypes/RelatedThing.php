@@ -25,10 +25,10 @@ class RelatedThing {
         {
             return;
         }
-        $this->thingId = $qp->top()->find("thing-id")->text();
-        $this->versionStamp = $qp->top()->find("version-stamp")->text();
-        $this->clientThingId = $qp->top()->find("client-thing-id")->text();
-        $this->relationshipType = $qp->top()->find("relationshipType")->text();
+        $this->thingId = $qp->find("thing-id")->text();
+        $this->versionStamp = $qp->find("version-stamp")->text();
+        $this->clientThingId = $qp->find("client-thing-id")->text();
+        $this->relationshipType = $qp->find("relationship-type")->text();
     }
 
 

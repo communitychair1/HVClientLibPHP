@@ -27,15 +27,15 @@ class Common {
         {
             return;
         }
-        $this->source = $qp->top()->find("source")->text();
-        $this->note = $qp->top()->find("note")->text();
-        $this->tags = $qp->top()->find("tags")->text();
+        $this->source = $qp->top()->find("source")->first()->text();
+        $this->note = $qp->top()->find("note")->first()->text();
+        $this->tags = $qp->top()->find("tags")->first()->text();
         // TODO: Am I grabbing this correctly ?
-        $this->extensionXML = $qp->top()->find("extension")->xml();
-        $this->clientThingId = $qp->top()->find("client-thing-id")->text();
+        $this->extensionXML = $qp->top()->find("extension")->first()->xml();
+        $this->clientThingId = $qp->top()->find("client-thing-id")->first()->text();
 
         // Loop through each related thing
-        $relatedThingArr = $qp->find('related-thing');
+        $relatedThingArr = $qp->top()->find('related-thing');
         if ( !empty($relatedThingArr))
         {
             foreach($relatedThingArr as $relatedThing)
