@@ -48,14 +48,15 @@ class HealthJournalEntry extends HealthRecordItemData
         $descriptiveWhen = null,
         $content = null,
         $category = null,
-        array $common = null
+        $common = null
     )
     {
         /**
          * @var $journalEntry HealthJournalEntry
          */
         $journalEntry = HealthRecordItemFactory::getThing('Health Journal Entry');
-        $journalEntry = parent::createCommonFromData($common, $journalEntry);
+        $journalEntry->setCommon($common);
+
         // Either $when or $descriptiveWhen needs to be set. We'll remove the node that we don't use.
         if ( !empty($when) )
         {

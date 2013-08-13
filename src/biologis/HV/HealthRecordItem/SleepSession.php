@@ -79,14 +79,14 @@ class SleepSession extends HealthRecordItemData
         $wakeState = null,
         $awakening = null,
         $medications = null,
-        array $common = null
+        $common = null
     )
     {
         /**
          * @var $sleepSession SleepSession
          */
         $sleepSession = HealthRecordItemFactory::getThing('Sleep Session');
-        $sleepSession = parent::createCommonFromData($common, $sleepSession);
+        $sleepSession->setCommon($common);
 
         // Save member access
         $sleepSession->when  =$when;

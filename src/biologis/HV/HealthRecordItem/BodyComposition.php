@@ -76,12 +76,12 @@ class BodyComposition extends HealthRecordItemData
         $measurementValue = null,
         $measurementPercentage = null,
         $measurementDisplayUnits = null,
-        array $common = null
+        $common = null
     )
     {
         //Create a Body Composition Object
         $bodyComposition = HealthRecordItemFactory::getThing('Body Composition');
-        $bodyComposition = parent::createCommonFromData($common, $bodyComposition);
+        $bodyComposition->setCommon($common);
 
         //Set the object's varibles to the passed variables
         $bodyComposition->when = $when;

@@ -20,10 +20,6 @@ class HealthRecordItemData extends AbstractXmlEntity
     protected $typeId;
     protected $version;
     protected $thingId;
-    protected $source = null;
-    protected $relatedThingId = null;
-    protected $relatedThingVersion = null;
-    protected $relatedThingRealationship = null;
     /**
      * @var Common
      */
@@ -222,50 +218,11 @@ class HealthRecordItemData extends AbstractXmlEntity
         $data = array(
             "type-id" => $this->typeId,
             "version" => $this->version,
-            "thing-id" => $this->thingId,
-            "relatedThingId" => $this->relatedThingId,
-            "relatedThingVersion" => $this->relatedThingVersion,
-            "relatedThingRelationship" => $this->relatedThingRealationship
+            "thing-id" => $this->thingId
         );
-        if(isset($this->source))
-        {
-            $data['source'] = $this->source;
-        }
-        return $data;
-    }
+        $commonData = $this->common->getItemJSONArray();
 
-    /**
-     * This method will setup the common block of the HV Record. If there are no items
-     * for that record, the common block is removed from the xml record.
-     *
-     * @param $common - an array which contains the source, thing-id, version-stamp, and relationship-type
-     * @param $record - the HV record to be processed
-     * @return mixed - the HV record after processing
-     */
-    public static function createCommonFromData($common, $record)
-    {
-        /*
-        $record->removeOrUpdateIfEmpty( "common source", $common['source']);
-        $record->removeOrUpdateIfEmpty( "common related-thing thing-id", $common['thing-id']);
-        $record->removeOrUpdateIfEmpty( "common related-thing version-stamp", $common['version-stamp']);
-        $record->removeOrUpdateIfEmpty( "common related-thing relationship-type", $common['relationship-type']);
-
-        if(is_null($common['thing-id']))
-        {
-            $record->removeNode("common related-thing");
-        }
-
-        if(is_null($common['source']))
-        {
-            $record->removeNode("common source");
-        }
-
-        if(is_null($common['source']) && is_null($common['thing-id']))
-        {
-            $record->removeNode("common");
-        }
-        */
-        return $record;
+        return array_merge($data, $commonData);
     }
 
     /**

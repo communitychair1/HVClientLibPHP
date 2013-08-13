@@ -91,14 +91,14 @@ class SleepRelatedActivity extends HealthRecordItemData
         $alcohol = array(),
         $naps = array(),
         $exercises = array(),
-        array $common = null
+        $common = null
     )
     {
         /**
          * @var $sleepRelatedActivity SleepRelatedActivity
          */
         $sleepRelatedActivity = HealthRecordItemFactory::getThing('Sleep Related Activity');
-        $sleepRelatedActivity = parent::createCommonFromData($common, $sleepRelatedActivity);
+        $sleepRelatedActivity->setCommon($common);
 
         $sleepRelatedActivity->setTimestamp('sleep-pm>when', $when);
 

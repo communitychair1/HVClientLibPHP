@@ -46,14 +46,14 @@ class EmotionalState extends HealthRecordItemData
         $mood = null,
         $stress = null,
         $wellbeing = null,
-        array $common = null
+        $common = null
     )
     {
         /**
          * @var $emotionalState EmotionalState
          */
         $emotionalState = HealthRecordItemFactory::getThing('Emotional State');
-        $emotionalState = parent::createCommonFromData($common, $emotionalState);
+        $emotionalState->setCommon($common);
 
         // Save the time
         $emotionalState->setTimestamp('when', $when);
