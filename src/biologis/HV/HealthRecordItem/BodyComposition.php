@@ -25,7 +25,6 @@ class BodyComposition extends HealthRecordItemData
 
         //Grab the data-xml section fo the record
         $recordQp = $qp->find('data-xml');
-        $commonQp = $qp->find('common');
         //Check for a timestamp and set the when based on the timestamp
         $txt = $recordQp->find("data-xml body-composition when")->text();
         if ( !empty($txt) )

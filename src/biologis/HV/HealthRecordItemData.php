@@ -31,7 +31,7 @@ class HealthRecordItemData extends AbstractXmlEntity
     public function __construct(Query $qp)
     {
         // $recordQp = $qp->top()->find("data-xml");
-        $commonQp = $qp->find('thing > common');
+        $commonQp = $qp->find('common');
         $this->qp = $qp;
         $this->typeId = $this->qp->top()->find('type-id')->text();
         $this->thingId = $this->qp->top()->find('thing-id')->first()->text();
@@ -220,9 +220,12 @@ class HealthRecordItemData extends AbstractXmlEntity
             "version" => $this->version,
             "thing-id" => $this->thingId
         );
-        $commonData = $this->common->getItemJSONArray();
-
-        return array_merge($data, $commonData);
+        if(!is_null($this->common))
+        {
+            $commonData = $this->common->getItemJSONArray();
+            $data = array_merge($data, $commonData);
+        }
+        return $data;
     }
 
     /**
