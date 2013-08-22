@@ -17,7 +17,6 @@ class EmotionalState extends HealthRecordItemData
     protected $stress = null;
     protected $wellbeing = null;
 
-
     public function __construct(Query $qp) {
         parent::__construct($qp);
         $recordQp = $qp->top()->find("data-xml");
@@ -78,4 +77,5 @@ class EmotionalState extends HealthRecordItemData
 
         return array_merge($myData, $parentData);
     }
+
 }

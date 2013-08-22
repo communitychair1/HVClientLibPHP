@@ -45,6 +45,11 @@ abstract class AbstractXmlEntity
         return null;
     }
 
+    public function setAssessmentKeyValue($assessmentKey, $value)
+    {
+        $this->$assessmentKey = $value;
+    }
+
     /** GET QUERY PATH
      *      Returns a query path to the top of the current query
      * @return \QueryPath

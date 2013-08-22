@@ -122,7 +122,7 @@ class Common {
         }
         if ( !empty($this->note))
         {
-            $myData["note"] = $this->note;
+            $myData["comment"] = $this->note;
         }
         if ( !empty($this->tags))
         {

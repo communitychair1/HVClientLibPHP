@@ -195,8 +195,21 @@ class HealthRecordItemData extends AbstractXmlEntity
      */
     public function removeNode($nodeName)
     {
-        $node = $this->getQp()->find($nodeName);
+        $node = $this->getQp()->top()->find($nodeName);
         $node->remove();
+    }
+
+    /**Remove Attribute
+     *
+     * Removes an attribute from a specific node.
+     *
+     * @param $nodeName
+     * @param $attrName
+     */
+    public function removeAttr($nodeName, $attrName)
+    {
+        $node = $this->getQp()->find($nodeName);
+        $node->attr($attrName, '');
     }
 
     /** SET TIME
@@ -244,5 +257,8 @@ class HealthRecordItemData extends AbstractXmlEntity
         return $this->common;
     }
 
-
+    public function getThingId()
+    {
+        return $this->thingId;
+    }
 }
