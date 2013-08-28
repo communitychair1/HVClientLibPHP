@@ -37,24 +37,6 @@ class HealthRecordItemData extends AbstractXmlEntity
         $this->thingId = $this->qp->top()->find('thing-id')->first()->text();
         $this->version = $this->qp->top()->find('thing-id')->attr("version-stamp");
 
-        /*
-        if($recordQp->find("common related-thing thing-id")->text())
-        {
-            $this->relatedThingId = $commonQp->find("related-thing thing-id")->text();
-        }
-        if($recordQp->find("common related-thing version-stamp")->text())
-        {
-            $this->relatedThingVersion = $commonQp->find("related-thing version-stamp")->text();
-        }
-        if($recordQp->find("common related-thing relationship-type")->text())
-        {
-            $this->relatedThingRealationship = $commonQp->find("related-thing relationship-type")->text();
-        }
-        if($recordQp->find("common source")->text())
-        {
-            $this->source = $commonQp->find("source")->text();
-        }
-        */
         $commonQpText = $commonQp->text();
         if ( !empty( $commonQpText ) )
         {
@@ -260,5 +242,22 @@ class HealthRecordItemData extends AbstractXmlEntity
     public function getThingId()
     {
         return $this->thingId;
+    }
+
+    public function setHeaders(
+        $thingId = null,
+        $version = null
+    )
+    {
+        if ( !is_null($thingId))
+        {
+            $this->qp
+                ->top()
+                ->prepend("<thing-id/>")
+                ->find("thing-id")
+                ->text($thingId);
+
+            $this->qp->top()->find('thing-id')->attr("version-stamp", $version);
+        }
     }
 }
