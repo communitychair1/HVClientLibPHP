@@ -10,6 +10,7 @@ namespace biologis\HV\HealthRecordItem;
 
 use biologis\HV\HealthRecordItemData;
 use biologis\HV\HealthRecordItemFactory;
+use biologis\HV\HealthRecordItem\GenericTypes\Common;
 
 /**
  * Class File.

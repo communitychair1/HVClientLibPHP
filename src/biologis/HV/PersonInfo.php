@@ -45,14 +45,15 @@ class PersonInfo extends AbstractXmlEntity
     public function getRecordsFormatted()
     {
         $records = array();
-        $index = 0;
         $recordBranch = $this->qp->top()->branch()->find('record');
-        foreach ($recordBranch as $record) {
-            $records[$index]['id'] = $record->attr('id');
-            $records[$index]['name'] = $record->text(); //$record->attr('name');
-            $records[$index]['rel-type'] = $record->attr('rel-type');
-            $records[$index]['rel-name'] = $record->attr('rel-name');
-            $index++;
+        foreach ($recordBranch as $recordQP) {
+            $record = array();
+            $record['id'] = $recordQP->attr('id');
+            $record['name'] = $recordQP->text(); //$record->attr('name');
+            $record['rel-type'] = $recordQP->attr('rel-type');
+            $record['rel-name'] = $recordQP->attr('rel-name');
+            $record['display-name'] = $recordQP->attr('display-name');
+            $records[] = $record;
         }
         return $records;
     }
