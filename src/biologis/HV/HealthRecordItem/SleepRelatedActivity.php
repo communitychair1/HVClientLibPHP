@@ -5,6 +5,7 @@ namespace biologis\HV\HealthRecordItem;
 use biologis\HV\HealthRecordItemData;
 use biologis\HV\HealthRecordItemFactory;
 use biologis\HV\HealthRecordItem\SleepRelatedActivity\Activity;
+use Mentis\BaseBundle\Services\MentisLogger;
 use QueryPath\Query;
 
 /**
@@ -123,19 +124,22 @@ class SleepRelatedActivity extends HealthRecordItemData
                 $sleepRelatedActivity->addActivity($parentNode, "nap", $item);
             }
         }
-
-        if (!(is_null($alcohol))) {
+        if (!(is_null($alcohol)) && is_array($alcohol) || is_object($alcohol)) {
             foreach ($alcohol as $tstamp) {
                 // Should be a time, so just add it.
                 $sleepRelatedActivity->addTime($parentNode, "alcohol", $tstamp);
             }
+        }else if (!(is_null($alcohol))){
+            $sleepRelatedActivity->addTime($parentNode, "alcohol", $alcohol);
         }
 
-        if (!(is_null($caffeine))) {
+        if (!(is_null($caffeine)) && is_array($caffeine) || is_object($caffeine)) {
             foreach ($caffeine as $tstamp) {
                 // Should be a time, so just add it.
                 $sleepRelatedActivity->addTime($parentNode, "caffeine", $tstamp);
             }
+        }else if (!(is_null($caffeine))){
+            $sleepRelatedActivity->addTime($parentNode, "caffeine", $caffeine);
         }
 
         return $sleepRelatedActivity;
