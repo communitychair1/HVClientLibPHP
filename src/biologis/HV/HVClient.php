@@ -173,7 +173,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
                     $info .=
                         '<group max="' . $options['group max'] . '">
                         <filter><type-id>' . $id . '</type-id>'. $filter . '</filter>
-                        <format><section>core</section><xml/></format></group>';
+                        <format><section>core</section><section>audits</section><xml/></format></group>';
                 }
                 // Maybe the user passed in a list of specific thing ids ?
                 if (!empty($options["thing-ids"]))
@@ -181,7 +181,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
                     foreach($options["thing-ids"] as $thingId )
                     {
                         $info .=
-                            '<group max="' . $options['group max'] . '"><id>' . $thingId . '</id><format><section>core</section><xml/></format></group>';
+                            '<group max="' . $options['group max'] . '"><id>' . $thingId . '</id><format><section>core</section><section>audits</section><xml/></format></group>';
                     }
                 }
                 $version = '3';
