@@ -20,6 +20,7 @@ class HealthRecordItemData extends AbstractXmlEntity
     protected $typeId;
     protected $version;
     protected $thingId;
+    protected $author;
     /**
      * @var Common
      */
@@ -36,6 +37,7 @@ class HealthRecordItemData extends AbstractXmlEntity
         $this->typeId = $this->qp->top()->find('type-id')->text();
         $this->thingId = $this->qp->top()->find('thing-id')->first()->text();
         $this->version = $this->qp->top()->find('thing-id')->attr("version-stamp");
+        $this->author = $this->qp->top()->find('updated')->find('person-id')->attr('name');
 
         $commonQpText = $commonQp->text();
         if ( !empty( $commonQpText ) )
@@ -213,7 +215,8 @@ class HealthRecordItemData extends AbstractXmlEntity
         $data = array(
             "type-id" => $this->typeId,
             "version" => $this->version,
-            "thing-id" => $this->thingId
+            "thing-id" => $this->thingId,
+            "author"  => $this->author
         );
         if(!is_null($this->common))
         {
