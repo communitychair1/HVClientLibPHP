@@ -1,4 +1,3 @@
-<!-- Incomplete, needs to understand there could be multiple <answer> elements within the <question-answer> node. -->
 <?xml version="1.0"?>
 <thing>
   <type-id name="Question Answer">55d33791-58de-4cae-8c78-819e12ba5059</type-id>
@@ -21,14 +20,6 @@
           <text/>
           <code/>
       </question>
-        <answer-choice>
-            <text/>
-            <code/>
-        </answer-choice>
-        <answer>
-            <text/>
-            <code/>
-        </answer>
     </question-answer>
   </data-xml>
 </thing>

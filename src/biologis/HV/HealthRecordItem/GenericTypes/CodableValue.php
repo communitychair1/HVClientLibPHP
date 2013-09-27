@@ -38,7 +38,7 @@ class CodableValue extends HealthRecordItemData
         return $cv;
     }
 
-    public static function createFromData($text,  $codes)
+    public static function createFromData($text,  array $codes)
     {
         $item = new CodableValue(QueryPath::withXML());
 
