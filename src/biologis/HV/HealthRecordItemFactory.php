@@ -85,6 +85,9 @@ class HealthRecordItemFactory
                     return strtoupper($matches[1]);
                 }, $className);
 
+            // Remove any trailing whitespaces
+            $className = trim($className);
+
             $fullClassName = 'biologis\\HV\\HealthRecordItem\\' . $className;
 
             if (!is_readable(__DIR__ . '/HealthRecordItem/' . $className . '.php')) {
