@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<thing>
+  <type-id name="Comment">9f4e0fcd-10d7-416d-855a-90514ce2016b</type-id>
+  <data-xml>
+    <comment>
+      <when>
+        <structured>
+          <date>
+            <y />
+            <m />
+            <d />
+          </date>
+          <time>
+            <h />
+            <m />
+            <s />
+            <f />
+          </time>
+        </structured>
+      </when>
+      <content />
+    </comment>
+  </data-xml>
+</thing>

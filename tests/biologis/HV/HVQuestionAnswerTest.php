@@ -31,6 +31,7 @@ class HVQuestionAnswerTest extends HVClientBaseTest
 
     public function testCreateQuestionAnswer()
     {
+        //Make some basic codable values to use to QA object
         $code = CodedValue::createFromData('1','2');
         $question = CodableValue::createFromData('Dose this unit test work?', array());
         $answer1 = CodableValue::createFromData('Answer 1', array($code));
@@ -38,7 +39,7 @@ class HVQuestionAnswerTest extends HVClientBaseTest
         $answerChoice1 = CodableValue::createFromData('Answer Choice 1', array($code));
         $answerChoice2 = CodableValue::createFromData('Answer Choice 2', array($code));
 
-
+        //Create a QA object from the base data
         $qa = QuestionAnswer::createFromData(
             time(),
             $question,
@@ -46,11 +47,14 @@ class HVQuestionAnswerTest extends HVClientBaseTest
             array($answerChoice1, $answerChoice2)
         );
 
+        //Make sure that the object was created
         $this->assertNotEmpty($qa, "Question Answer object empty.");
 
+        //Make sure that the object can return XML
         $xml = $qa->getItemXml();
         $this->assertNotEmpty($xml, "Question Answer itemXml empty");
 
+        //Test putting the thing into HV and make sure that we get a response back
         $this->hv->putThings($xml, $this->recordId);
         $this->assertNotEmpty($this->hv->getConnector()->getRawResponse(), "No response received from HV");
         $this->assertContains("version", $this->hv->getConnector()->getRawResponse(), "Missing version identifier from response");

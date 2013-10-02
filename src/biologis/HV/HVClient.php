@@ -149,7 +149,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
      * Works in both Online and Offline mode, and picks the appropriate request depending on which is active.
      */
 
-    public function getThings($groupAndFilter = array(), $recordId, $options = array(), $base64 = false)
+    public function getThings($groupAndFilter = array(), $recordId, $options = array(), $base64 = false, $audit = true)
     {
         if ($this->connector)
         {
@@ -173,7 +173,12 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
                     $info .=
                         '<group max="' . $options['group max'] . '">
                         <filter><type-id>' . $id . '</type-id>'. $filter . '</filter>
-                        <format><section>core</section><section>audits</section><xml/></format></group>';
+                        <format><section>core</section>';
+                        if($audit === true)
+                        {
+                            $info .= '<section>audits</section>';
+                        }
+                        $info .= '<xml/></format></group>';
                 }
                 // Maybe the user passed in a list of specific thing ids ?
                 if (!empty($options["thing-ids"]))
@@ -346,7 +351,7 @@ class HVClient implements HVClientInterface, LoggerAwareInterface
         $typeId = array(
             $hvItem => ''
         );
-        $itemObject = $this->getThings($typeId, $usrRecordId, array(), $base64);
+        $itemObject = $this->getThings($typeId, $usrRecordId, array(), $base64, false);
         if($itemObject)
         {
             $sxml = new SimpleXMLElement($itemObject[0]->getItemXml());
