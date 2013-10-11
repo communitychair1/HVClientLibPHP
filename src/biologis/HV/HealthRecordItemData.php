@@ -247,6 +247,11 @@ class HealthRecordItemData extends AbstractXmlEntity
         return $this->thingId;
     }
 
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
     public function setHeaders(
         $thingId = null,
         $version = null
