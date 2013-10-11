@@ -3,7 +3,7 @@
 namespace biologis\HV;
 
 use biologis\HV\HVClientBaseTest;
-use biologis\HV\HealthRecordItem\CCD;
+use biologis\HV\HealthRecordItem\ContinuityOfCareDocumentCCD;
 
 require_once("HVClientBaseTest.php");
 

@@ -26,7 +26,7 @@ class ContinuityOfCareRecordCCR extends HealthRecordItemData
 
         $this->xmlData = $qp->find('data-xml ContinuityOfCareRecord')->xml();
         $this->xmlFrom = $qp->find('data-xml ContinuityOfCareRecord From ActorLink ActorRole Text')->innerXml();
-        $this->xmlCreated = $qp->find('data-xml ClinicalDocument effectiveTime')->xml();
+        $this->xmlDate = $qp->find('data-xml ContinuityOfCareRecord DateTime ExactDateTime')->innerXml();
         $this->xmlUpdated = $qp->find('eff-date')->innerXml();
     }
 
@@ -60,6 +60,22 @@ class ContinuityOfCareRecordCCR extends HealthRecordItemData
     public function getXmlFrom()
     {
         return $this->xmlFrom;
+    }
+
+    /**
+     * @param null CCR XML Data
+     */
+    public function setXmlDate($xmlDate)
+    {
+        $this->xmlDate = $xmlDate;
+    }
+
+    /**
+     * @return CCR XML Data
+     */
+    public function getXmlDate()
+    {
+        return $this->xmlDate;
     }
 
     /**
