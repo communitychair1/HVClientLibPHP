@@ -78,7 +78,7 @@ class Common {
         {
             $qp->top()
                 ->last()
-                ->append($this->extensionXML);
+                ->append("<extension source=\"" . $this->source ."\">" . $this->extensionXML . "</extension>");
         }
         if ( !empty($this->relatedThings))
         {
