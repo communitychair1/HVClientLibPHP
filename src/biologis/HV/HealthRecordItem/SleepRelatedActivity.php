@@ -72,7 +72,7 @@ class SleepRelatedActivity extends HealthRecordItemData
         $this->when = $this->getTimestamp("sleep-pm>when");
 
         //Populate the Sleepiness Data from HV
-        $this->sleepiness = $recordQp->find("sleepiness")->text();
+        $this->sleepiness = $recordQp->find("sleep-pm sleepiness")->text();
     }
 
     /**

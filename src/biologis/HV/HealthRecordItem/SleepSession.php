@@ -41,7 +41,7 @@ class SleepSession extends HealthRecordItemData
         $this->setBedAndWakeTime();
         $this->sleepMinutes = $recordQp->find('sleep-minutes')->text();
         $this->settlingMinutes = $recordQp->find('settling-minutes')->text();
-        $this->wakeState = $recordQp->find('wake-state')->text();
+        $this->wakeState = $recordQp->find('data-xml sleep-am wake-state')->text();
 
         $txt = $recordQp->find("data-xml medications")->text();
 

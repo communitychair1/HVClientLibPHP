@@ -129,9 +129,21 @@ class Common {
             $myData["tags"] = $this->tags;
         }
 
-        if ( !empty($this->extension))
+        if ( !empty($this->extensionXML))
         {
-            $myData["extension"] = $this->extension;
+            $extensionXML = QueryPath::withXML("<xml>" . $this->extensionXML . "</xml>");
+            $extensionXMLDOMElement = $extensionXML->top()->find("extension")->toArray();
+
+            $extensionXMLArray = array();
+            foreach ($extensionXMLDOMElement[0]->childNodes as $node)
+            {
+                if($node->nodeName !== '#text')
+                {
+                    $extensionXMLArray[$node->nodeName] = $node->nodeValue;
+                }
+            }
+
+            $myData["extension"] = $extensionXMLArray;
         }
 
         if ( !empty($this->clientThingId))
