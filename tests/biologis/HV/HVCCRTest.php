@@ -3,11 +3,11 @@
 namespace biologis\HV;
 
 use biologis\HV\HVClientBaseTest;
-use biologis\HV\HealthRecordItem\ContinuityOfCareDocumentCCD;
+use biologis\HV\HealthRecordItem\ContinuityOfCareRecordCCR;
 
 require_once("HVClientBaseTest.php");
 
-class HVCCDTest extends HVClientBaseTest
+class HVCCRTest extends HVClientBaseTest
 {
 
     /**
@@ -30,14 +30,14 @@ class HVCCDTest extends HVClientBaseTest
     /**
      * Function will get CCD XML for pdf parsing
      */
-    public function testCreateCCD()
+    public function testCreateCCR()
     {
         /**
-         * @var $CCD CCD
+         * @var $CCR CCR
          */
 
         $xmlResponse = $this->hv->getThings(
-            array("Continuity of Care Document (CCD)"=>""),
+            array("Continuity of Care Record (CCR)"=>""),
             $this->recordId,
             array(),
             false
